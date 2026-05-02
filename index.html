@@ -14,10 +14,8 @@
 <!-- Firebase -->
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-  import {
-    getFirestore, collection, addDoc, getDocs, deleteDoc, doc,
-    query, orderBy, where, Timestamp, updateDoc, onSnapshot
-  } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
   // ─── CONFIGURACIÓN FIREBASE ──────────────────────────────
   // Reemplaza estos valores con los de tu proyecto Firebase
@@ -33,8 +31,11 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  const auth = getAuth(app);
   window.__db = db;
-  window.__fb = { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, where, Timestamp, updateDoc, onSnapshot };
+  window.__auth = auth;
+  window.__prov = new GoogleAuthProvider();
+  window.__fb = { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, onSnapshot, signInWithPopup, onAuthStateChanged, signOut };
   window.__dbReady = true;
   document.dispatchEvent(new Event('db-ready'));
 </script>
@@ -722,6 +723,19 @@ canvas { width:100% !important; }
 <body>
 
 <!-- LOADER -->
+<!-- LOGIN SCREEN -->
+<div id="login-screen" style="display:none;position:fixed;inset:0;z-index:998;background:var(--bg);align-items:center;justify-content:center;padding:22px;flex-direction:column;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:28px 22px;width:100%;max-width:360px;text-align:center;">
+    <div style="font-family:var(--font-display);font-size:26px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;">💰 Finanzas</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:4px;margin-bottom:22px;">Control financiero personal</div>
+    <button id="btn-google-login" style="width:100%;padding:13px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;">
+      <svg width="17" height="17" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Entrar con Google
+    </button>
+    <p style="font-size:10px;color:var(--muted);margin-top:12px;">Solo tu cuenta autorizada tiene acceso</p>
+  </div>
+</div>
+
 <div id="loader">
   <div class="loader-logo">💰 Finanzas</div>
   <div class="loader-spinner"></div>
@@ -780,6 +794,20 @@ canvas { width:100% !important; }
         </div>
       </div>
 
+      
+      <!-- Comparativo mes -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:13px;">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Mes pasado</div>
+          <div id="last-month-exp" style="font-family:var(--font-display);font-size:19px;font-weight:800;color:var(--red);">$0</div>
+          <div id="last-month-nm" style="font-size:11px;color:var(--muted);margin-top:2px;">—</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:13px;">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Este mes</div>
+          <div id="this-month-exp" style="font-family:var(--font-display);font-size:19px;font-weight:800;color:var(--yellow);">$0</div>
+          <div id="this-month-nm" style="font-size:11px;color:var(--muted);margin-top:2px;">—</div>
+        </div>
+      </div>
       <!-- Alertas créditos -->
       <div id="loans-home-alert" style="display:none;margin-bottom:16px"></div>
 
@@ -795,6 +823,12 @@ canvas { width:100% !important; }
       <div class="cat-row" id="cat-filter-row"></div>
 
       <!-- Transacciones -->
+      
+      <!-- Buscador -->
+      <div style="display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:9px 13px;margin-bottom:12px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="color:var(--muted);flex-shrink:0"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input id="search-input" style="flex:1;background:none;border:none;color:var(--text);font-family:var(--font-body);font-size:13px;outline:none;" placeholder="Buscar por nombre, categoría, fecha…" oninput="renderHome()"/>
+      </div>
       <div class="section-title">
         <span>Transacciones</span>
         <span id="tx-count" style="font-size:12px;font-weight:500"></span>
@@ -933,6 +967,16 @@ canvas { width:100% !important; }
         <svg class="settings-chevron" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
       </div>
 
+      
+      <!-- Tema -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px;margin-bottom:14px;">
+        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Apariencia</div>
+        <div style="display:flex;gap:6px;" id="theme-btns">
+          <button class="theme-option-btn" data-theme="dark" onclick="setTheme('dark')" style="flex:1;padding:8px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;cursor:pointer;transition:.2s;">🌙 Oscuro</button>
+          <button class="theme-option-btn" data-theme="light" onclick="setTheme('light')" style="flex:1;padding:8px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;cursor:pointer;transition:.2s;">☀️ Claro</button>
+          <button class="theme-option-btn" data-theme="auto" onclick="setTheme('auto')" style="flex:1;padding:8px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;cursor:pointer;transition:.2s;">⚙️ Auto</button>
+        </div>
+      </div>
       <div class="settings-item" onclick="navTo('accounts')">
         <div class="settings-item-icon" style="background:rgba(96,165,250,.15)">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color:#60a5fa"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
@@ -1064,6 +1108,10 @@ canvas { width:100% !important; }
     <button class="nav-item" data-screen="reports">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
       Reportes
+    </button>
+    <button class="nav-item" data-screen="ai">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"/></svg>
+      IA
     </button>
     <button class="nav-item" data-screen="profile">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
@@ -1469,7 +1517,28 @@ document.addEventListener('DOMContentLoaded', () => {
   if (window.__dbReady) {
     initApp();
   } else {
-    document.addEventListener('db-ready', initApp);
+    document.addEventListener('db-ready', () => {
+    const AUTH = window.__auth;
+    const FB = window.__fb;
+    if (!AUTH || !FB) { initApp(); return; }
+    FB.onAuthStateChanged(AUTH, async user => {
+      document.getElementById('loader').style.display = 'none';
+      if (user) {
+        window.__uid = user.uid;
+        const av = document.getElementById('profile-avatar');
+        if (av) { if (user.photoURL) av.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover"/>`; else av.textContent = (user.displayName||'H')[0].toUpperCase(); }
+        const pn = document.getElementById('profile-name'); if (pn) pn.textContent = user.displayName||'Usuario';
+        const pe = document.getElementById('profile-email'); if (pe) pe.textContent = user.email||'';
+        const ls = document.getElementById('login-screen'); if (ls) ls.style.display = 'none';
+        const ap = document.getElementById('app'); if (ap) ap.style.display = 'flex';
+        await initApp();
+      } else {
+        window.__uid = null;
+        const ls = document.getElementById('login-screen'); if (ls) ls.style.display = 'flex';
+        const ap = document.getElementById('app'); if (ap) ap.style.display = 'none';
+      }
+    });
+  });
     // Si Firebase no carga en 3s, asumir no configurado
     setTimeout(() => {
       if (!window.__dbReady) {
@@ -1512,6 +1581,15 @@ function saveFirebaseConfig() {
 }
 
 async function initApp() {
+    // Si no hay uid, mostrar login
+    if (!window.__uid) {
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('app').style.display = 'none';
+      return;
+    }
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+
   document.getElementById('loader').style.display = 'none';
   loadAccounts();
   loadLoans();               // ← NUEVO
@@ -1608,7 +1686,7 @@ async function saveTransaction(prefill) {
 
   try {
     const { collection, addDoc } = window.__fb;
-    const docRef = await addDoc(collection(window.__db,'transactions'), tx);
+    const docRef = await addDoc(collection(window.__db,`users/${window.__uid}/transactions`), tx);
     transactions.unshift({id:docRef.id,...tx});
 
     // ── Descontar/sumar de la cuenta ──
@@ -2191,7 +2269,7 @@ async function clearAllData() {
   if (!confirm('¿Borrar TODAS las transacciones? Esta acción no se puede deshacer.')) return;
   try {
     const { collection, getDocs, deleteDoc, doc } = window.__fb;
-    const snap = await getDocs(collection(window.__db,'transactions'));
+    const snap = await getDocs(collection(window.__db,`users/${window.__uid}/transactions`));
     for (const d of snap.docs) await deleteDoc(doc(window.__db,'transactions',d.id));
     transactions = [];
     renderHome();
@@ -2896,6 +2974,267 @@ function showToast(msg, type='success') {
   t.className = `show ${type}`;
   setTimeout(() => t.className = '', 2800);
 }
+
+
+// ═══════════════════════════════════════════
+//  AUTH + LOGIN
+// ═══════════════════════════════════════════
+let currentUser = null;
+
+document.addEventListener('db-ready', () => {
+  const auth = window.__auth;
+  const FB = window.__fb;
+  
+  // Aplicar tema guardado
+  const savedTheme = localStorage.getItem('fp_theme') || 'auto';
+  applyTheme(savedTheme);
+  
+  // Service Worker
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  
+  // Listener de autenticación
+  FB.onAuthStateChanged(auth, user => {
+    document.getElementById('loader').style.display = 'none';
+    if (user) {
+      currentUser = user;
+      window.__uid = user.uid;
+      showMainApp(user);
+    } else {
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('app').style.display = 'none';
+    }
+  });
+  
+  // Botón login Google
+  document.getElementById('btn-google-login').addEventListener('click', () => {
+    FB.signInWithPopup(auth, window.__prov).catch(e => showToast('Error al iniciar sesión', 'error'));
+  });
+});
+
+function showMainApp(user) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  
+  // Perfil
+  const avatar = document.getElementById('avatar-letter');
+  if (avatar) {
+    if (user.photoURL) {
+      avatar.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover"/>`;
+    } else {
+      avatar.textContent = (user.displayName || 'H')[0].toUpperCase();
+    }
+  }
+  const nameEl = document.getElementById('profile-name-display');
+  if (nameEl) nameEl.textContent = user.displayName || 'Usuario';
+  const emailEl = document.getElementById('profile-email-display');
+  if (emailEl) emailEl.textContent = user.email || '';
+  
+  // Reemplazar el listener de Firestore para usar UID
+  setupFirestoreListener(user.uid);
+}
+
+function setupFirestoreListener(uid) {
+  const { collection, query, orderBy, onSnapshot } = window.__fb;
+  const db = window.__db;
+  const q = query(collection(db, `users/${uid}/transactions`), orderBy('date', 'desc'));
+  onSnapshot(q, snap => {
+    transactions = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    renderHome();
+    if (document.getElementById('screen-reports').classList.contains('active')) renderReports();
+    renderAccountsTxList();
+  });
+}
+
+function doSignOut() {
+  if (confirm('¿Cerrar sesión?')) {
+    window.__fb.signOut(window.__auth).then(() => {
+      currentUser = null;
+      window.__uid = null;
+      transactions = [];
+      document.getElementById('app').style.display = 'none';
+      document.getElementById('login-screen').style.display = 'flex';
+    });
+  }
+}
+
+// ═══════════════════════════════════════════
+//  TEMA OSCURO / CLARO / AUTO
+// ═══════════════════════════════════════════
+function setTheme(mode) {
+  localStorage.setItem('fp_theme', mode);
+  applyTheme(mode);
+  document.querySelectorAll('.theme-option-btn').forEach(b => {
+    const isActive = b.dataset.theme === mode;
+    b.style.background = isActive ? 'var(--accent)' : 'transparent';
+    b.style.borderColor = isActive ? 'var(--accent)' : 'var(--border)';
+    b.style.color = isActive ? '#fff' : 'var(--muted)';
+  });
+}
+
+function applyTheme(mode) {
+  let theme = mode;
+  if (mode === 'auto') {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      theme = 'dark';
+    } else {
+      const h = new Date().getHours();
+      theme = (h >= 8 && h < 19) ? 'light' : 'dark';
+    }
+  }
+  document.documentElement.setAttribute('data-theme', theme);
+}
+
+// Auto-actualizar tema
+window.matchMedia?.('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if ((localStorage.getItem('fp_theme') || 'auto') === 'auto') applyTheme('auto');
+});
+setInterval(() => {
+  if ((localStorage.getItem('fp_theme') || 'auto') === 'auto') applyTheme('auto');
+}, 3600000);
+
+// ═══════════════════════════════════════════
+//  MODO CLARO — CSS variables
+// ═══════════════════════════════════════════
+const lightThemeStyle = document.createElement('style');
+lightThemeStyle.textContent = `
+  [data-theme="light"] {
+    --bg: #f4f4f8;
+    --surface: #ffffff;
+    --surface2: #efeff5;
+    --border: #d8d8e8;
+    --text: #0a0a0f;
+    --muted: #888899;
+  }
+`;
+document.head.appendChild(lightThemeStyle);
+
+// ═══════════════════════════════════════════
+//  BÚSQUEDA DE TRANSACCIONES
+// ═══════════════════════════════════════════
+// Parchear renderHome para incluir búsqueda
+const _origRenderHome = renderHome;
+renderHome = function() {
+  const searchQ = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
+  if (!searchQ) { _origRenderHome(); return; }
+  
+  const filtered = filterByPeriod(transactions, currentPeriod).filter(t =>
+    (t.desc || '').toLowerCase().includes(searchQ) ||
+    (t.catName || '').toLowerCase().includes(searchQ) ||
+    (t.date || '').includes(searchQ) ||
+    (t.accountName || '').toLowerCase().includes(searchQ) ||
+    (t.note || '').toLowerCase().includes(searchQ)
+  );
+  const inc = filtered.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
+  const exp = filtered.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
+  const bal = inc - exp;
+  const balEl = document.getElementById('balance-total');
+  if (balEl) { balEl.textContent = fmt(bal); balEl.className = 'balance-amount ' + (bal>=0?'positive':'negative'); }
+  document.getElementById('balance-inc') && (document.getElementById('balance-inc').textContent = fmt(inc));
+  document.getElementById('balance-exp') && (document.getElementById('balance-exp').textContent = fmt(exp));
+  document.getElementById('tx-count') && (document.getElementById('tx-count').textContent = filtered.length + ' resultados');
+  renderTxList(filtered, 'tx-list');
+};
+
+// ═══════════════════════════════════════════
+//  COMPARATIVO MES
+// ═══════════════════════════════════════════
+function renderMonthComp() {
+  const now = new Date();
+  const lm = new Date(now.getFullYear(), now.getMonth()-1, 1);
+  const thisExp = transactions.filter(t => {
+    const d = new Date(t.date+'T12:00:00');
+    return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear() && t.type==='expense';
+  }).reduce((s,t)=>s+t.amount, 0);
+  const lastExp = transactions.filter(t => {
+    const d = new Date(t.date+'T12:00:00');
+    return d.getMonth()===lm.getMonth() && d.getFullYear()===lm.getFullYear() && t.type==='expense';
+  }).reduce((s,t)=>s+t.amount, 0);
+  const te = document.getElementById('this-month-exp');
+  const le = document.getElementById('last-month-exp');
+  const tn = document.getElementById('this-month-nm');
+  const ln = document.getElementById('last-month-nm');
+  if (te) te.textContent = fmt(thisExp);
+  if (le) le.textContent = fmt(lastExp);
+  if (tn) tn.textContent = now.toLocaleDateString('es-MX',{month:'long'});
+  if (ln) ln.textContent = lm.toLocaleDateString('es-MX',{month:'long'});
+}
+
+// Hook en el snapshot de Firestore
+const _origSetupRT = setupRealtimeListener;
+if (typeof setupRealtimeListener !== 'undefined') {
+  setupRealtimeListener = function() {
+    _origSetupRT();
+  };
+}
+
+// ═══════════════════════════════════════════
+//  FIX: saveTransaction usa UID correcto
+// ═══════════════════════════════════════════
+const _origSaveTx = typeof saveTransaction !== 'undefined' ? saveTransaction : null;
+
+// Guardar transacción con path correcto
+async function saveTxFixed(prefill) {
+  const uid = window.__uid;
+  if (!uid) { showToast('Inicia sesión primero', 'error'); return; }
+  const amount = prefill ? prefill.amount : parseFloat(document.getElementById('amount-input').value);
+  const desc   = prefill ? prefill.desc   : document.getElementById('desc-input').value.trim();
+  const date   = prefill ? (prefill.date||todayStr()) : document.getElementById('date-input').value;
+  const cat    = prefill ? prefill.cat    : selectedCat;
+  const note   = prefill ? (prefill.note||'') : document.getElementById('note-input').value.trim();
+  const type   = prefill ? prefill.type   : currentType;
+  const accId  = prefill ? (prefill.accountId||'') : selectedAccount;
+  if (!amount||amount<=0) { showToast('Ingresa un monto válido','error'); return; }
+  if (!desc)              { showToast('Escribe una descripción','error'); return; }
+  if (!cat)               { showToast('Selecciona una categoría','error'); return; }
+  const catObj = categories.find(c=>c.id===cat)||categories[0];
+  const acc    = accId ? accounts.find(a=>a.id===accId) : null;
+  const tx = {
+    amount, desc, date, cat, note, type,
+    catIcon: catObj.iconData||catObj.icon||catObj.emoji||'📌',
+    catName: catObj.name,
+    accountId: accId, accountName: acc?.name||'',
+    createdAt: new Date().toISOString()
+  };
+  try {
+    const {collection:col, addDoc:add} = window.__fb;
+    await add(col(window.__db, `users/${uid}/transactions`), tx);
+    if (accId) adjustAccountBalance(accId, amount, type);
+    showToast(type==='income'?'✓ Ingreso guardado':'✓ Gasto guardado','success');
+    closeModal('modal-add'); resetForm();
+  } catch(e) { showToast('Error: '+e.message,'error'); }
+}
+
+// Override saveTransaction con la versión con UID
+if (typeof saveTransaction !== 'undefined') {
+  saveTransaction = saveTxFixed;
+}
+
+// ═══════════════════════════════════════════
+//  FIX: Selector de cuenta en formulario
+// ═══════════════════════════════════════════
+// Asegurar que renderAccountSelectorInForm se llame al abrir modal
+const _origOpenModal = openModal;
+openModal = function(id) {
+  _origOpenModal(id);
+  if (id === 'modal-add') {
+    setTimeout(() => {
+      renderAccountSelectorInForm();
+      renderCatGrid();
+    }, 50);
+  }
+};
+
+// ═══════════════════════════════════════════
+//  LOGOUT en Perfil
+// ═══════════════════════════════════════════
+// Buscar si ya hay botón de logout, si no añadir
+document.addEventListener('DOMContentLoaded', () => {
+  // Aplicar tema guardado al cargar
+  applyTheme(localStorage.getItem('fp_theme') || 'auto');
+  
+  // Conectar comparativo mes al render
+  const origSnap = setupRealtimeListener;
+});
 </script>
 </body>
 </html>
