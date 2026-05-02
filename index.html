@@ -736,6 +736,18 @@ canvas { width:100% !important; }
   </div>
 </div>
 
+<!-- LOGIN -->
+<div id="login-screen" style="position:fixed;inset:0;z-index:998;background:var(--bg);display:none;align-items:center;justify-content:center;padding:24px;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px 24px;width:100%;max-width:380px;text-align:center">
+    <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px">💰 Finanzas</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:28px">Control financiero personal</div>
+    <button onclick="loginGoogle()" style="width:100%;padding:14px;border-radius:13px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Entrar con Google
+    </button>
+    <p style="font-size:11px;color:var(--muted);margin-top:14px">Solo tu cuenta autorizada tiene acceso</p>
+  </div>
+</div>
 <div id="loader">
   <div class="loader-logo">💰 Finanzas</div>
   <div class="loader-spinner"></div>
@@ -1084,7 +1096,33 @@ canvas { width:100% !important; }
       </div>
     </div>
 
-  </div><!-- /screen-container -->
+  
+    <!-- RECURRENTES -->
+    <div id="screen-recurring" class="screen">
+      <div class="screen-header">
+        <div class="screen-title">Cargos fijos</div>
+        <button onclick="openModal('modal-add-rec')" class="btn-sm">+ Nuevo</button>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:15px;margin-bottom:14px">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Total cargos mensuales</div>
+        <div id="rec-total" style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--red)">$0</div>
+      </div>
+      <div id="rec-list"></div>
+    </div>
+
+    <!-- INSTINTO -->
+    <div id="screen-instinto" class="screen">
+      <div class="screen-header">
+        <div class="screen-title">Instinto</div>
+        <button onclick="openModal('modal-add-instinto')" class="btn-sm">+ Préstamo</button>
+      </div>
+      <div style="background:linear-gradient(135deg,#12122a,#1e1e3a);border:1px solid rgba(108,99,255,.18);border-radius:16px;padding:18px;margin-bottom:14px">
+        <div style="font-size:10px;color:rgba(200,200,255,.45);text-transform:uppercase;letter-spacing:1.4px;margin-bottom:3px">Instinto me debe en total</div>
+        <div id="instinto-total" style="font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--accent2)">$0</div>
+      </div>
+      <div id="instinto-list"></div>
+    </div>
+</div><!-- /screen-container -->
 
   <!-- FAB -->
   <button id="fab" onclick="openModal('modal-method')">
@@ -1112,6 +1150,14 @@ canvas { width:100% !important; }
     <button class="nav-item" data-screen="ai">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"/></svg>
       IA
+    </button>
+    <button class="nav-item" data-screen="recurring">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/></svg>
+      Cargos
+    </button>
+    <button class="nav-item" data-screen="instinto">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+      Instinto
     </button>
     <button class="nav-item" data-screen="profile">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
@@ -3235,6 +3281,309 @@ document.addEventListener('DOMContentLoaded', () => {
   // Conectar comparativo mes al render
   const origSnap = setupRealtimeListener;
 });
+
+// ═══ FUNCIONES NUEVAS v2 ═══
+
+// AUTH
+function loginGoogle() {
+  const FB = window.__fb;
+  const AUTH = window.__auth;
+  const provider = new FB.GoogleAuthProvider();
+  FB.signInWithPopup(AUTH, provider).catch(e => showToast('Error: ' + e.message, 'error'));
+}
+function doSignOut() {
+  if (confirm('¿Cerrar sesión?')) {
+    window.__fb.signOut(window.__auth);
+  }
+}
+
+// TEMA
+function setTheme(mode) {
+  localStorage.setItem('fp_theme', mode);
+  applyThemeMode(mode);
+  document.querySelectorAll('[data-th]').forEach(b => {
+    const active = b.dataset.th === mode;
+    b.style.background = active ? 'var(--accent)' : 'transparent';
+    b.style.borderColor = active ? 'var(--accent)' : 'var(--border)';
+    b.style.color = active ? '#fff' : 'var(--muted)';
+  });
+}
+function applyThemeMode(mode) {
+  let t = mode;
+  if (mode === 'auto') {
+    const h = new Date().getHours();
+    t = (h >= 8 && h < 19) ? 'light' : 'dark';
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches) t = 'dark';
+  }
+  document.documentElement.setAttribute('data-theme', t);
+}
+(function(){ applyThemeMode(localStorage.getItem('fp_theme')||'dark'); })();
+setInterval(() => { if((localStorage.getItem('fp_theme')||'dark')==='auto') applyThemeMode('auto'); }, 3600000);
+window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>{if((localStorage.getItem('fp_theme')||'dark')==='auto')applyThemeMode('auto');});
+
+// RECURRENTES
+let recsV2 = JSON.parse(localStorage.getItem('fp_recs_v2')||'[]');
+let selRecAcc = '';
+function saveRecsV2(){ localStorage.setItem('fp_recs_v2', JSON.stringify(recsV2)); }
+
+function renderRecurring() {
+  const el = document.getElementById('rec-list'); if (!el) return;
+  const tot = recsV2.reduce((s,r)=>s+(r.freq==='yearly'?r.amount/12:r.freq==='biweekly'?r.amount*2:r.amount),0);
+  const te = document.getElementById('rec-total'); if(te) te.textContent = fmt(tot);
+  if (!recsV2.length) { el.innerHTML = '<div style="text-align:center;padding:36px;color:var(--muted)"><p>Sin cargos recurrentes.<br>Toca + Nuevo para agregar.</p></div>'; return; }
+  el.innerHTML = recsV2.map(r => {
+    const acc = accounts.find(a=>a.id===r.accountId);
+    const av = acc ? (acc.type==='credit'?(acc.limit||0)-(acc.balance||0):(acc.balance||0)) : null;
+    const nf = av !== null && av < r.amount;
+    const days = daysUntilDay(r.day);
+    const freqL = {monthly:'Mensual',biweekly:'Quincenal',yearly:'Anual'}[r.freq]||'';
+    return `<div style="background:var(--surface);border:1px solid ${nf?'rgba(255,95,126,.4)':'var(--border)'};border-radius:13px;padding:13px;margin-bottom:7px;cursor:pointer" onclick="openRecEdit('${r.id}')">
+      <div style="display:flex;align-items:center;gap:11px">
+        <div style="width:38px;height:38px;border-radius:10px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${r.icon||'🔄'}</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;color:var(--text)">${escHtml(r.name)}</div>
+          <div style="font-size:10px;color:var(--muted)">${freqL} · Día ${r.day||'—'}${acc?' · '+escHtml(acc.name):''}</div>
+          ${nf?`<div style="font-size:10px;color:var(--red);margin-top:1px">⚠️ Sin saldo (disponible: ${fmt(av)})</div>`:''}
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--red)">${fmt(r.amount)}</div>
+          <div style="font-size:9px;color:${days<=3?'var(--red)':'var(--muted)'}">${days<=0?'¡Hoy!':days===1?'Mañana':'En '+days+'d'}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function openRecEdit(id){
+  const r = recsV2.find(x=>x.id===id);
+  if (!r) return;
+  if (!confirm(`${r.name} - ${fmt(r.amount)}\n¿Eliminar este cargo recurrente?`)) return;
+  recsV2 = recsV2.filter(x=>x.id!==id);
+  saveRecsV2(); renderRecurring();
+}
+function saveRec() {
+  const nm = document.getElementById('rec-name')?.value?.trim();
+  const amt = parseFloat(document.getElementById('rec-amount')?.value||0);
+  const freq = document.getElementById('rec-freq')?.value||'monthly';
+  const day = parseInt(document.getElementById('rec-day')?.value||0)||null;
+  if (!nm) { showToast('Escribe un nombre','error'); return; }
+  if (!amt) { showToast('Ingresa el monto','error'); return; }
+  recsV2.push({id:'rec_'+Date.now(),name:nm,amount:amt,freq,day,accountId:selRecAcc,icon:'🔄',createdAt:new Date().toISOString()});
+  saveRecsV2(); renderRecurring(); closeModal('modal-add-rec');
+  document.getElementById('rec-name').value='';
+  document.getElementById('rec-amount').value='';
+  showToast('✓ Cargo agregado','success');
+}
+function daysUntilDay(day) {
+  if (!day) return 999;
+  const n = new Date();
+  let c = new Date(n.getFullYear(), n.getMonth(), day);
+  if (c <= n) c.setMonth(c.getMonth()+1);
+  return Math.ceil((c-n)/(1000*60*60*24));
+}
+
+// INSTINTO
+let instList = JSON.parse(localStorage.getItem('fp_instinto_v2')||'[]');
+let selInstAcc = '';
+function saveInstList(){ localStorage.setItem('fp_instinto_v2', JSON.stringify(instList)); }
+
+function renderInstinto() {
+  const el = document.getElementById('instinto-list'); if (!el) return;
+  const tot = instList.reduce((s,i)=>s+(i.pending!==undefined?i.pending:i.amount||0),0);
+  const te = document.getElementById('instinto-total'); if(te) te.textContent = fmt(tot);
+  if (!instList.length) { el.innerHTML = '<div style="text-align:center;padding:36px;color:var(--muted)"><p>Sin préstamos registrados.</p></div>'; return; }
+  el.innerHTML = instList.map(inst => {
+    const pend = inst.pending !== undefined ? inst.pending : inst.amount;
+    const paid = inst.amount - pend;
+    const pct = inst.amount>0 ? Math.min(100,Math.round(paid/inst.amount*100)) : 0;
+    const acc = accounts.find(a=>a.id===inst.accountId);
+    const done = pend <= 0;
+    const pays = inst.payments||[];
+    return `<div style="background:linear-gradient(135deg,#12122a,#1e1e3a);border:1px solid rgba(108,99,255,.2);border-radius:15px;padding:16px;margin-bottom:9px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div style="flex:1">
+          <div style="font-size:10px;color:rgba(200,200,255,.45);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">${inst.date||''}${acc?' · '+escHtml(acc.name):''}</div>
+          <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:5px;color:#f0f0f5">${escHtml(inst.desc)}</div>
+        </div>
+        <div style="text-align:right;margin-left:12px">
+          <div style="font-size:9px;color:rgba(255,255,255,.35)">Pendiente</div>
+          <div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:${done?'var(--green)':'var(--accent2)'}">${fmt(pend)}</div>
+        </div>
+      </div>
+      <div style="height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin:7px 0 3px"><div style="height:4px;border-radius:2px;background:var(--accent);width:${pct}%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.35);margin-bottom:${pays.length?'9px':'0'}">
+        <span>Pagado: ${fmt(paid)} de ${fmt(inst.amount)}</span><span>${pct}%${done?' ✓ Liquidado':''}</span>
+      </div>
+      ${pays.length?`<div style="border-top:1px solid rgba(255,255,255,.06);padding-top:7px">${pays.slice(-3).map(p=>`<div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.5);margin-bottom:1px"><span>${p.date}${p.note?' · '+escHtml(p.note):''}</span><span style="color:var(--green)">+${fmt(p.amount)}</span></div>`).join('')}</div>`:''}
+      ${!done?`<button onclick="openInstPay('${inst.id}')" style="margin-top:9px;width:100%;padding:8px;border-radius:9px;background:rgba(108,99,255,.18);border:1px solid rgba(108,99,255,.35);color:var(--accent2);font-size:12px;font-weight:600;cursor:pointer">💰 Registrar abono</button>`:''}
+      <button onclick="deleteInst('${inst.id}')" style="margin-top:5px;width:100%;padding:7px;border-radius:9px;background:rgba(255,95,126,.1);border:1px solid rgba(255,95,126,.3);color:var(--red);font-size:11px;font-weight:600;cursor:pointer">✕ Eliminar</button>
+    </div>`;
+  }).join('');
+}
+function saveInstinto() {
+  const desc = document.getElementById('inst-desc')?.value?.trim();
+  const amt = parseFloat(document.getElementById('inst-amount')?.value||0);
+  const date = document.getElementById('inst-date')?.value || todayStr();
+  const note = document.getElementById('inst-note')?.value?.trim()||'';
+  if (!desc) { showToast('Escribe descripción','error'); return; }
+  if (!amt) { showToast('Ingresa monto','error'); return; }
+  instList.push({id:'inst_'+Date.now(),desc,amount:amt,pending:amt,date,note,accountId:selInstAcc,payments:[],createdAt:new Date().toISOString()});
+  saveInstList(); renderInstinto(); closeModal('modal-add-instinto');
+  ['inst-desc','inst-amount','inst-note'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  showToast('✓ Préstamo registrado','success');
+}
+function openInstPay(id) {
+  const inst = instList.find(x=>x.id===id); if (!inst) return;
+  const pend = inst.pending !== undefined ? inst.pending : inst.amount;
+  const raw = prompt(`${inst.desc}\nPendiente: ${fmt(pend)}\n\nMonto del abono ($):`);
+  if (!raw) return;
+  const amt = parseFloat(raw);
+  if (isNaN(amt)||amt<=0) { showToast('Monto inválido','error'); return; }
+  const i = instList.findIndex(x=>x.id===id);
+  instList[i].pending = Math.max(0, pend-amt);
+  if (!instList[i].payments) instList[i].payments=[];
+  const note = prompt('Nota (opcional, ej: "Venta perfume X"):') || '';
+  instList[i].payments.push({amount:amt, date:todayStr(), note, createdAt:new Date().toISOString()});
+  // Sumar a cuenta si hay seleccionada (pregunta al usuario)
+  saveInstList(); renderInstinto();
+  showToast(`✓ Abono de ${fmt(amt)} registrado`,'success');
+}
+function deleteInst(id){
+  if(!confirm('¿Eliminar este préstamo?'))return;
+  instList=instList.filter(x=>x.id!==id); saveInstList(); renderInstinto();
+}
+
+// SOBRESCRIBIR navTo para incluir nuevas pantallas
+const _navToOrig = window.navTo;
+window.navTo = function(screen) {
+  if (typeof _navToOrig === 'function') _navToOrig(screen);
+  if (screen==='recurring') { renderRecurring(); fillRecChips(); }
+  if (screen==='instinto') { renderInstinto(); }
+};
+function fillRecChips(){
+  const el=document.getElementById('rec-account-chips');
+  if(!el||!accounts||!accounts.length){if(el)el.innerHTML='<p style="font-size:10px;color:var(--muted)">Sin cuentas</p>';return;}
+  el.innerHTML=accounts.map(a=>{
+    const av=a.type==='credit'?(a.limit||0)-(a.balance||0):(a.balance||0);
+    const sel=selRecAcc===a.id;
+    const ico=a.iconData?`<img src="${a.iconData}" style="width:100%;height:100%;object-fit:cover;border-radius:4px"/>`:( a.icon||'💳');
+    return`<div onclick="selRecAccFn('${a.id}')" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 11px;border-radius:10px;border:2px solid ${sel?'var(--accent)':'var(--border)'};background:${sel?'rgba(108,99,255,.18)':'var(--surface2)'};cursor:pointer;min-width:64px;text-align:center"><div style="width:20px;height:20px;border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:14px">${ico}</div><div style="font-size:9px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60px">${escHtml(a.name)}</div><div style="font-size:9px;color:var(--muted)">${fmt(av)}</div></div>`;
+  }).join('');
+}
+function selRecAccFn(id){selRecAcc=id;fillRecChips();}
+function fillInstChips(){
+  const el=document.getElementById('inst-account-chips');
+  if(!el||!accounts||!accounts.length){if(el)el.innerHTML='<p style="font-size:10px;color:var(--muted)">Sin cuentas</p>';return;}
+  el.innerHTML=accounts.map(a=>{
+    const av=a.type==='credit'?(a.limit||0)-(a.balance||0):(a.balance||0);
+    const sel=selInstAcc===a.id;
+    const ico=a.iconData?`<img src="${a.iconData}" style="width:100%;height:100%;object-fit:cover;border-radius:4px"/>`:( a.icon||'💳');
+    return`<div onclick="selInstAccFn('${a.id}')" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 11px;border-radius:10px;border:2px solid ${sel?'var(--accent)':'var(--border)'};background:${sel?'rgba(108,99,255,.18)':'var(--surface2)'};cursor:pointer;min-width:64px;text-align:center"><div style="width:20px;height:20px;border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:14px">${ico}</div><div style="font-size:9px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60px">${escHtml(a.name)}</div><div style="font-size:9px;color:var(--muted)">${fmt(av)}</div></div>`;
+  }).join('');
+}
+function selInstAccFn(id){selInstAcc=id;fillInstChips();}
+
+// SOBRESCRIBIR openModal para nuevos modales
+const _openModalOrig = window.openModal;
+window.openModal = function(id) {
+  if (typeof _openModalOrig === 'function') _openModalOrig(id);
+  if (id==='modal-add-rec') { setTimeout(fillRecChips, 100); }
+  if (id==='modal-add-instinto') {
+    const di = document.getElementById('inst-date');
+    if (di) di.value = todayStr();
+    setTimeout(fillInstChips, 100);
+  }
+};
+
+// FIX: Patrimonio negativo - override renderAccountsScreen
+const _renderAccOrig = window.renderAccountsScreen;
+window.renderAccountsScreen = function() {
+  if (typeof _renderAccOrig === 'function') _renderAccOrig();
+  setTimeout(() => {
+    const pt = document.getElementById('patrimonio-total');
+    if (pt) {
+      const val = parseFloat(pt.textContent.replace(/[^0-9.-]/g,''));
+      if (!isNaN(val)) pt.style.color = val < 0 ? 'var(--red)' : 'var(--green)';
+    }
+  }, 50);
+};
+
+// COMPARATIVO MES y BÚSQUEDA - override renderHome
+const _renderHomeOrig = window.renderHome;
+window.renderHome = function() {
+  if (typeof _renderHomeOrig === 'function') _renderHomeOrig();
+  // Comparativo mes
+  const now = new Date();
+  const lm = new Date(now.getFullYear(), now.getMonth()-1, 1);
+  const tArr = typeof transactions !== 'undefined' ? transactions : [];
+  const thisExp = tArr.filter(t=>{const d=new Date((t.date||'')+'T12:00:00');return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()&&t.type==='expense';});
+  const lastExp = tArr.filter(t=>{const d=new Date((t.date||'')+'T12:00:00');return d.getMonth()===lm.getMonth()&&d.getFullYear()===lm.getFullYear()&&t.type==='expense';});
+  const tme = document.getElementById('this-month-exp'); if(tme) tme.textContent = fmt(thisExp.reduce((s,t)=>s+t.amount,0));
+  const lme = document.getElementById('last-month-exp'); if(lme) lme.textContent = fmt(lastExp.reduce((s,t)=>s+t.amount,0));
+  const tmn = document.getElementById('this-month-name'); if(tmn) tmn.textContent = now.toLocaleDateString('es-MX',{month:'long'});
+  const lmn = document.getElementById('last-month-name'); if(lmn) lmn.textContent = lm.toLocaleDateString('es-MX',{month:'long'});
+  // Alertas recurrentes
+  renderRecAlerts();
+};
+function renderRecAlerts() {
+  const alEL = document.getElementById('recurring-alerts');
+  if (!alEL) return;
+  let h = '';
+  recsV2.forEach(r => {
+    const days = daysUntilDay(r.day);
+    if (days > 7) return;
+    const acc = accounts ? accounts.find(a=>a.id===r.accountId) : null;
+    const av = acc ? (acc.type==='credit'?(acc.limit||0)-(acc.balance||0):(acc.balance||0)) : null;
+    const nf = av !== null && av < r.amount;
+    if (days <= 5 || nf) {
+      h += `<div style="display:flex;align-items:center;gap:9px;padding:10px 12px;background:rgba(255,95,126,.07);border:1px solid rgba(255,95,126,.22);border-radius:10px;margin-bottom:7px;cursor:pointer" onclick="navTo('recurring')">
+        <span style="font-size:17px">${r.icon||'🔄'}</span>
+        <div style="flex:1"><div style="font-size:12px;font-weight:600">${escHtml(r.name)}</div>
+        <div style="font-size:10px;color:${nf?'var(--red)':'var(--muted)'}">${nf?'⚠️ Sin saldo':days<=0?'¡Hoy!':'En '+days+'d'}</div></div>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--red);font-size:13px">${fmt(r.amount)}</div>
+      </div>`;
+    }
+  });
+  alEL.innerHTML = h;
+}
+
+// CSS MODO CLARO
+const tStyle = document.createElement('style');
+tStyle.textContent = \`
+[data-theme="light"] {
+  --bg:#f2f2f7;--surface:#ffffff;--surface2:#f0f0f5;
+  --border:#e0e0ea;--text:#0a0a0f;--muted:#888899;
+}
+\`;
+document.head.appendChild(tStyle);
+
 </script>
+
+  <!-- MODAL: Cargo recurrente -->
+  <div class="modal-overlay" id="modal-add-rec" onclick="if(event.target===this)closeModal('modal-add-rec')">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Cargo recurrente</div>
+      <div class="form-group"><label class="form-label">Nombre del servicio</label><input class="form-input" id="rec-name" placeholder="Spotify, Netflix, Amazon…"/></div>
+      <div class="form-group"><label class="form-label">Monto ($)</label><input class="form-input" id="rec-amount" type="number" inputmode="decimal" placeholder="0.00"/></div>
+      <div class="form-group"><label class="form-label">Frecuencia</label><select class="form-select" id="rec-freq"><option value="monthly">Mensual</option><option value="biweekly">Quincenal</option><option value="yearly">Anual</option></select></div>
+      <div class="form-group"><label class="form-label">Día de cobro del mes</label><input class="form-input" id="rec-day" type="number" inputmode="numeric" placeholder="15" min="1" max="31"/></div>
+      <div class="form-group"><label class="form-label">Cuenta donde se carga</label><div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none" id="rec-account-chips"></div></div>
+      <button class="btn-primary" onclick="saveRec()">Guardar cargo</button>
+    </div>
+  </div>
+
+  <!-- MODAL: Préstamo a Instinto -->
+  <div class="modal-overlay" id="modal-add-instinto" onclick="if(event.target===this)closeModal('modal-add-instinto')">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Préstamo a Instinto</div>
+      <div class="form-group"><label class="form-label">Descripción (qué se compró)</label><input class="form-input" id="inst-desc" placeholder="Esencias proveedor, frascos…"/></div>
+      <div class="form-group"><label class="form-label">Monto prestado ($)</label><input class="form-input" id="inst-amount" type="number" inputmode="decimal" placeholder="0.00"/></div>
+      <div class="form-group"><label class="form-label">Fecha</label><input class="form-input" id="inst-date" type="date"/></div>
+      <div class="form-group"><label class="form-label">Cuenta/tarjeta usada</label><div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none" id="inst-account-chips"></div></div>
+      <div class="form-group"><label class="form-label">Notas</label><textarea class="form-textarea" id="inst-note" rows="2" placeholder="Detalles del pedido…"></textarea></div>
+      <button class="btn-primary" onclick="saveInstinto()">Registrar préstamo</button>
+    </div>
+  </div>
 </body>
 </html>
