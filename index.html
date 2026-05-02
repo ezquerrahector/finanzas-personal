@@ -224,7 +224,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v3.7</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v3.8</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -384,16 +384,6 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
     </div>
   </div>
   <div class="profile-group">
-    <div class="profile-group-title">Módulos</div>
-    <div class="profile-actions-grid">
-      <div class="profile-action" onclick="nav('accounts')"><div class="setic">💳</div><span>Cuentas</span></div>
-      <div class="profile-action" onclick="nav('loans')"><div class="setic">💰</div><span>Créditos</span></div>
-      <div class="profile-action" onclick="nav('rec')"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">🔁</div><span>Cargos recurrentes</span></div>
-      <div class="profile-action" onclick="nav('inst')"><div class="setic" style="background:rgba(167,139,250,.1);color:var(--ac2)">🧴</div><span>Instinto</span></div>
-    </div>
-  </div>
-
-  <div class="profile-group">
     <div class="profile-group-title">Archivos</div>
     <div class="profile-actions-grid">
       <div class="profile-action" onclick="expExcel()"><div class="setic" style="background:rgba(34,211,160,.1);color:var(--gn)">📊</div><span>Excel completo</span></div>
@@ -416,7 +406,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v3.7 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v3.8 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -1358,14 +1348,48 @@ async function callAIBackend(payload){
   return data;
 }
 
+function normalizeAITransactions(data){
+  let list = [];
+  if(Array.isArray(data?.transactions)){
+    list = data.transactions;
+  }else if(Array.isArray(data?.result)){
+    list = data.result;
+  }else if(typeof data?.result === 'string'){
+    const limpio = data.result.replace(/```json|```/g, '').trim();
+    try{ list = JSON.parse(limpio || '[]'); }catch(e){ list = []; }
+  }
+  return (list || []).map(t=>{
+    const rawType = String(t.type || t.tipo || '').toLowerCase();
+    const type = rawType.includes('income') || rawType.includes('ingreso') ? 'income' : 'expense';
+    const desc = t.desc || t.description || t.descripcion || t.comercio || t.merchant || 'Movimiento IA';
+    const catText = t.cat || t.category || t.categoria || (type==='income'?'Salario':'Otro');
+    const catObj = cats.find(c=>String(c.name).toLowerCase()===String(catText).toLowerCase())
+      || cats.find(c=>String(c.id).toLowerCase()===String(catText).toLowerCase())
+      || cats.find(c=>c.id==='other')
+      || cats[0];
+    return {
+      type,
+      amount: Number(t.amount ?? t.monto ?? 0),
+      desc,
+      date: t.date || t.fecha || today(),
+      cat: catObj?.id || 'other',
+      catName: catObj?.name || catText || 'Otro',
+      catIcon: catObj?.idata || catObj?.icon || '📌',
+      note: t.note || t.nota || 'Registrado con IA'
+    };
+  }).filter(t=>t.amount>0);
+}
+
 async function testAIBackend(){
   const el = document.getElementById('ai-key-status');
   if(el){ el.textContent='⏳ Probando backend de IA…'; el.style.color='var(--yl)'; }
   try{
     const data = await callAIBackend({mode:'text', text:'Gasté 250 en comida hoy', date:today()});
+    const list = normalizeAITransactions(data);
+    if(!list.length) throw new Error('La IA respondió, pero no regresó transacciones válidas');
     if(el){ el.textContent='✅ Backend IA funcionando'; el.style.color='var(--gn)'; }
     toast('✅ IA funcionando','s');
-    console.log('AI test:', data);
+    console.log('AI test:', data, list);
   }catch(e){
     if(el){ el.textContent='❌ Backend IA no disponible: '+e.message.slice(0,80); el.style.color='var(--rd)'; }
     toast('IA no disponible','e');
@@ -1391,7 +1415,7 @@ async function scanAI(b64,mime){
   document.getElementById('scanres').style.display='block';
   try{
     const data = await callAIBackend({mode:'image', image:{data:b64, mime}, date:today()});
-    scanP = (data.transactions && data.transactions[0]) || null;
+    scanP = normalizeAITransactions(data)[0] || null;
     if(!scanP){ document.getElementById('scantxt').textContent='No detecté datos claros en el ticket.'; return; }
     scanP.date=scanP.date||today();
     document.getElementById('scantxt').textContent=`🏪 ${scanP.desc}
@@ -1409,7 +1433,7 @@ async function parseAI(text,src){
   statusEl.textContent = '⏳ Conectando con IA…';
   try{
     const data = await callAIBackend({mode:'text', text, date:today()});
-    const list = Array.isArray(data.transactions) ? data.transactions : [];
+    const list = normalizeAITransactions(data);
     if(!list.length){ statusEl.textContent='No detecté transacciones. Intenta: "Gasté 250 en comida"'; return; }
     if(src==='voice'){
       voiceP=list[0]||null;
