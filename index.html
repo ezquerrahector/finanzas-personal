@@ -214,7 +214,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v3.3</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v3.4</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -306,9 +306,9 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <div id="s-ai" class="scr">
   <div class="sh">
     <div class="st">IA Financiero</div>
-    <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🔑 API Key</button>
+    <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
-  <div id="ai-key-status" style="font-size:11px;padding:8px 12px;border-radius:9px;background:var(--sf);border:1px solid var(--bd);margin-bottom:12px;cursor:pointer" onclick="om('m-aikey')">⚠️ Sin API key — toca aquí para configurar</div>
+  <div id="ai-key-status" style="font-size:11px;padding:8px 12px;border-radius:9px;background:var(--sf);border:1px solid var(--bd);margin-bottom:12px;cursor:pointer" onclick="om('m-aikey')">🧠 IA vía Firebase Functions</div>
   <div class="aic2">
     <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><div class="aid" style="background:var(--ac)"></div><b style="font-family:'Syne',sans-serif;font-size:13px">🎤 Mic AI</b></div>
     <p style="font-size:11px;color:var(--mu);margin-bottom:12px">Di: "Gasté 250 en comida" o "Cobré 5000 de salario"</p>
@@ -380,7 +380,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   <div class="seti" onclick="om('m-cats')"><div class="setic"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><span style="flex:1">Categorías</span></div>
   <div class="seti" onclick="expCSV()"><div class="setic" style="background:rgba(34,211,160,.1);color:var(--gn)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></div><span style="flex:1">Exportar CSV</span></div>
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg></div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v3.3 · Firebase + Claude AI</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v3.4 · Firebase + Claude AI</div>
 </div>
 
 </div><!-- /sc -->
@@ -561,25 +561,24 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   <div class="egrid" id="epgrid"></div>
 </div>
 
-<!-- Modal API Key -->
+<!-- Modal Backend IA -->
 <div class="mo" id="m-aikey" onclick="cox(event,'m-aikey')">
   <div class="ms">
     <div class="mh"></div>
-    <div class="mt">🔑 Configurar API Key</div>
+    <div class="mt">🧠 IA real con Firebase Functions</div>
     <div style="background:rgba(108,99,255,.08);border:1px solid rgba(108,99,255,.2);border-radius:10px;padding:12px;margin-bottom:14px;font-size:12px;line-height:1.7;color:var(--tx)">
-      <b>¿Cómo obtener tu API key?</b><br>
-      1. Ve a <b>console.anthropic.com</b><br>
-      2. Inicia sesión o crea cuenta<br>
-      3. Click en "API Keys" → "Create Key"<br>
-      4. Copia la key y pégala aquí
+      La IA ya no usa API key en el navegador. Ahora llama a una función segura de Firebase:<br>
+      <b>analyzeFinance</b><br><br>
+      Sube la carpeta <b>functions</b> incluida en la v3.4 y ejecuta:<br>
+      <code>firebase deploy --only functions</code>
     </div>
     <div class="fg">
-      <label class="fl">Tu API Key de Anthropic</label>
-      <input class="fi" id="ai-key-input" type="password" placeholder="sk-ant-api03-…" autocomplete="off"/>
+      <label class="fl">Endpoint activo</label>
+      <input class="fi" id="ai-endpoint-input" readonly value="https://us-central1-finanzas-personal-99b1f.cloudfunctions.net/analyzeFinance"/>
     </div>
-    <button class="bp" onclick="saveAIKey()">Guardar API Key</button>
-    <button onclick="localStorage.removeItem('fp_aikey');updateAIKeyStatus();toast('Key borrada','s');document.getElementById('m-aikey').classList.remove('on')" style="width:100%;padding:10px;border-radius:10px;background:transparent;border:1px solid var(--rd);color:var(--rd);font-size:13px;cursor:pointer;margin-top:7px">Borrar API Key</button>
-    <p style="font-size:10px;color:var(--mu);text-align:center;margin-top:10px">La key se guarda solo en este dispositivo</p>
+    <button class="bp" onclick="testAIBackend()">Probar IA</button>
+    <button onclick="document.getElementById('m-aikey').classList.remove('on')" style="width:100%;padding:10px;border-radius:10px;background:transparent;border:1px solid var(--bd);color:var(--tx);font-size:13px;cursor:pointer;margin-top:7px">Cerrar</button>
+    <p style="font-size:10px;color:var(--mu);text-align:center;margin-top:10px">Tu API key vive solo en Firebase Functions, no en el HTML.</p>
   </div>
 </div>
 <div id="toast"></div>
@@ -1136,6 +1135,39 @@ function resetTxForm(){['ai-amt','ai-desc','ai-note'].forEach(id=>{const e=docum
 function hdlImg(inp,prevId,dataId){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{document.getElementById(dataId).value=e.target.result;const p=document.getElementById(prevId);p.innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:10px"/>`;};r.readAsDataURL(f);}
 
 // ═══ AI ═══
+const AI_ENDPOINT = 'https://us-central1-finanzas-personal-99b1f.cloudfunctions.net/analyzeFinance';
+
+async function callAIBackend(payload){
+  const res = await fetch(AI_ENDPOINT, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  });
+  const txt = await res.text();
+  let data = {};
+  try { data = JSON.parse(txt || '{}'); }
+  catch(e){ throw new Error('Respuesta no JSON del backend: ' + txt.slice(0,120)); }
+  if(!res.ok || data.error){
+    throw new Error(data.error || ('HTTP '+res.status));
+  }
+  return data;
+}
+
+async function testAIBackend(){
+  const el = document.getElementById('ai-key-status');
+  if(el){ el.textContent='⏳ Probando backend de IA…'; el.style.color='var(--yl)'; }
+  try{
+    const data = await callAIBackend({mode:'text', text:'Gasté 250 en comida hoy', date:today()});
+    if(el){ el.textContent='✅ Backend IA funcionando'; el.style.color='var(--gn)'; }
+    toast('✅ IA funcionando','s');
+    console.log('AI test:', data);
+  }catch(e){
+    if(el){ el.textContent='❌ Backend IA no disponible: '+e.message.slice(0,80); el.style.color='var(--rd)'; }
+    toast('IA no disponible','e');
+    console.error(e);
+  }
+}
+
 function toggleVoice(){
   if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){toast('Navegador no soporta voz','e');return;}
   if(isRec){recog?.stop();return;}
@@ -1149,48 +1181,37 @@ function toggleVoice(){
 }
 function stopVoice(){isRec=false;document.getElementById('vbtn')?.classList.remove('rec');}
 async function doScan(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=async e=>{const p=document.getElementById('scanprev');p.src=e.target.result;p.style.display='block';await scanAI(e.target.result.split(',')[1],f.type);};r.readAsDataURL(f);}
-async function scanAI(b64,mime){document.getElementById('scantxt').textContent='⏳ Analizando ticket…';document.getElementById('scanres').style.display='block';
-  try{const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mime,data:b64}},{type:'text',text:'Analiza el ticket. Responde SOLO JSON sin markdown: {"amount":NUMERO,"desc":"texto","date":"YYYY-MM-DD","cat":"food|housing|transport|health|ent|shop|edu|other","type":"expense"}'}]}]})});
-  const d=await res.json();scanP=JSON.parse((d.content?.[0]?.text||'{}').replace(/```json|```/g,'').trim());scanP.date=scanP.date||today();document.getElementById('scantxt').textContent=`🏪 ${scanP.desc}\n💰 ${fmt(scanP.amount)}\n📅 ${scanP.date}`;}catch(e){document.getElementById('scantxt').textContent='No pude leer el ticket. Intenta de nuevo.';scanP=null;}}
+async function scanAI(b64,mime){
+  document.getElementById('scantxt').textContent='⏳ Analizando ticket…';
+  document.getElementById('scanres').style.display='block';
+  try{
+    const data = await callAIBackend({mode:'image', image:{data:b64, mime}, date:today()});
+    scanP = (data.transactions && data.transactions[0]) || null;
+    if(!scanP){ document.getElementById('scantxt').textContent='No detecté datos claros en el ticket.'; return; }
+    scanP.date=scanP.date||today();
+    document.getElementById('scantxt').textContent=`🏪 ${scanP.desc}
+💰 ${fmt(scanP.amount)}
+📅 ${scanP.date}`;
+  }catch(e){
+    console.error('Scan AI error:', e);
+    document.getElementById('scantxt').textContent='No pude leer el ticket: '+e.message;
+    scanP=null;
+  }
+}
 async function doNotes(){const t=document.getElementById('noteinp').value.trim();if(!t){toast('Escribe algo','e');return;}document.getElementById('noteparsed').textContent='⏳ Analizando con IA…';document.getElementById('noteres').style.display='block';await parseAI(t,'notes');}
 async function parseAI(text,src){
   const statusEl = src==='voice' ? document.getElementById('vstat') : document.getElementById('noteparsed');
   statusEl.textContent = '⏳ Conectando con IA…';
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key': getAIKey(),
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-ipc':'true'
-      },
-      body:JSON.stringify({
-        model:'claude-haiku-4-5-20251001',
-        max_tokens:600,
-        messages:[{role:'user',content:`Eres asistente de finanzas personales en México. Analiza este texto y extrae TODAS las transacciones mencionadas: "${text}". 
-Responde ÚNICAMENTE con un JSON array válido, sin markdown, sin explicaciones:
-[{"amount":NUMERO_SIN_COMAS,"desc":"descripción corta","type":"expense o income","cat":"food|housing|transport|health|ent|shop|edu|salary|inv|sav|bills|other","date":"${today()}"}]
-Si no hay transacciones claras responde: []`}]
-      })
-    });
-    if(!res.ok){
-      const errTxt = await res.text();
-      console.error('AI HTTP error:', res.status, errTxt);
-      statusEl.textContent = `Error ${res.status}: ${res.status===401?'API key inválida':res.status===403?'Sin acceso':errTxt.slice(0,80)}`;
-      return;
-    }
-    const d=await res.json();
-    const raw=(d.content?.[0]?.text||'[]').replace(/```json|```/g,'').trim();
-    let list=[];
-    try{ const arr=JSON.parse(raw); list=Array.isArray(arr)?arr:[arr]; }
-    catch(pe){ console.error('JSON parse error:', raw); statusEl.textContent='La IA no devolvió formato válido. Intenta con texto más claro.'; return; }
+    const data = await callAIBackend({mode:'text', text, date:today()});
+    const list = Array.isArray(data.transactions) ? data.transactions : [];
     if(!list.length){ statusEl.textContent='No detecté transacciones. Intenta: "Gasté 250 en comida"'; return; }
     if(src==='voice'){
       voiceP=list[0]||null;
       if(voiceP){
         document.getElementById('vres').style.display='block';
-        document.getElementById('vres').textContent=`${voiceP.type==='income'?'💚':'🔴'} ${voiceP.desc}\n${fmt(voiceP.amount)}`;
+        document.getElementById('vres').textContent=`${voiceP.type==='income'?'💚':'🔴'} ${voiceP.desc}
+${fmt(voiceP.amount)}`;
         document.getElementById('vconf').style.display='block';
         document.getElementById('vstat').textContent='✓ Listo para registrar';
       }
@@ -1199,9 +1220,9 @@ Si no hay transacciones claras responde: []`}]
       document.getElementById('noteparsed').textContent=list.map(t=>`${t.type==='income'?'💚':'🔴'} ${t.desc}: ${fmt(t.amount)}`).join('\n');
     }
   }catch(e){
-    console.error('AI fetch error:', e);
-    statusEl.textContent='Sin conexión con IA. Verifica tu API key en Ajustes o tu conexión a internet.';
-    if(src==='voice') document.getElementById('vstat').textContent='Sin conexión. ¿Tienes API key configurada?';
+    console.error('AI backend error:', e);
+    statusEl.textContent='Sin conexión con IA: '+e.message;
+    if(src==='voice') document.getElementById('vstat').textContent='Sin conexión con IA. Revisa Firebase Functions.';
   }
 }
 async function confVoice(){if(!voiceP)return;await saveTxAI(voiceP);document.getElementById('vres').style.display='none';document.getElementById('vconf').style.display='none';voiceP=null;}
@@ -1380,29 +1401,14 @@ function getIconValue(prevId, dataId) {
 }
 
 
-// ═══ API KEY GESTIÓN ═══
-function getAIKey(){
-  return localStorage.getItem('fp_aikey') || '';
-}
-function saveAIKey(){
-  const k = document.getElementById('ai-key-input').value.trim();
-  if(!k){ toast('Pega tu API key primero','e'); return; }
-  localStorage.setItem('fp_aikey', k);
-  toast('✅ API key guardada','s');
-  document.getElementById('m-aikey').classList.remove('on');
-  updateAIKeyStatus();
-}
+// ═══ ESTADO BACKEND IA ═══
+function getAIKey(){ return ''; }
+function saveAIKey(){ toast('La v3.4 usa Firebase Functions; no pegues API key en el navegador','s'); }
 function updateAIKeyStatus(){
-  const key = getAIKey();
   const el = document.getElementById('ai-key-status');
   if(!el) return;
-  if(key){
-    el.textContent = '✅ API key configurada (' + key.slice(0,8) + '…)';
-    el.style.color = 'var(--gn)';
-  } else {
-    el.textContent = '⚠️ Sin API key — la IA no funcionará';
-    el.style.color = 'var(--yl)';
-  }
+  el.textContent = '🧠 IA vía Firebase Functions — toca para probar/configurar';
+  el.style.color = 'var(--ac)';
 }
 
 // Exponer funciones al window para que los onclick inline funcionen desde el HTML.
@@ -1493,6 +1499,7 @@ Object.assign(window, {
   toast: typeof toast!=="undefined"?toast:undefined,
   today: typeof today!=="undefined"?today:undefined,
   toggleVoice: typeof toggleVoice!=="undefined"?toggleVoice:undefined,
+  testAIBackend: typeof testAIBackend!=="undefined"?testAIBackend:undefined,
   updateAIKeyStatus: typeof updateAIKeyStatus!=="undefined"?updateAIKeyStatus:undefined,
   updateDbg: typeof updateDbg!=="undefined"?updateDbg:undefined
 });

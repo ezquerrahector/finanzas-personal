@@ -1,16 +1,59 @@
-# Finanzas PWA — v3.3 Sync Real
+# Finanzas v3.4 — IA real con Firebase Functions
 
-Cambios incluidos:
+Esta versión mantiene el sync en tiempo real de la v3.3 y mueve la IA a un backend seguro en Firebase Functions.
 
-- Sincronización en tiempo real con Firestore para transacciones.
-- Sincronización en tiempo real para cuentas, créditos, cargos recurrentes, Instinto y categorías.
-- Las acciones de botones inline quedan expuestas al `window` para funcionar desde GitHub Pages.
-- Service Worker actualizado a v3.3 con estrategia network-first para reducir caché viejo.
+## Archivos modificados
 
-## Archivos a reemplazar en GitHub
+- `index.html`: ahora llama al endpoint `analyzeFinance` en Firebase Functions.
+- `sw.js`: evita cache agresivo para que veas cambios recientes.
+- `functions/index.js`: backend que llama a Claude/Anthropic.
+- `functions/package.json`: dependencias del backend.
+- `functions/.env.example`: ejemplo para configurar tu API key.
 
-- `index_v3_3_sync_real.html` → renombrar a `index.html`
-- `sw_v3_3_sync_real.js` → renombrar a `sw.js`
-- `manifest_v3_3_sync_real.json` → renombrar a `manifest.json`
+## Instalación
 
-Después de subirlos, cerrar y abrir la PWA. En móvil, si sigue cargando una versión anterior, eliminar la app instalada y volverla a instalar desde Safari/Chrome.
+1. Copia estos archivos a tu repositorio.
+2. En la carpeta `functions`, crea un archivo `.env` con:
+
+```env
+ANTHROPIC_API_KEY=sk-ant-api03-tu_api_key_aqui
+ANTHROPIC_MODEL=claude-sonnet-4-20250514
+```
+
+3. Instala Firebase CLI si no lo tienes:
+
+```bash
+npm install -g firebase-tools
+```
+
+4. Inicia sesión:
+
+```bash
+firebase login
+```
+
+5. Vincula tu proyecto si hace falta:
+
+```bash
+firebase use finanzas-personal-99b1f
+```
+
+6. Instala dependencias:
+
+```bash
+cd functions
+npm install
+cd ..
+```
+
+7. Publica la función:
+
+```bash
+firebase deploy --only functions
+```
+
+8. Sube `index.html`, `sw.js` y `manifest.json` a GitHub Pages.
+
+## Nota importante
+
+Firebase Functions normalmente requiere que el proyecto tenga habilitado billing/plan Blaze. La API key no debe ir en `index.html` ni en GitHub.

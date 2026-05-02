@@ -1,30 +1,22 @@
-// Finanzas v3.3 — actualización agresiva + network first
-const CACHE = 'finanzas-v3.3';
+// Finanzas v3.4 — sin cache agresivo para evitar versiones viejas en GitHub Pages
+const CACHE = 'finanzas-v3.4';
 
-self.addEventListener('install', event => {
+self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-self.addEventListener('activate', event => {
+self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then((keys) => Promise.all(keys.map((key) => caches.delete(key))))
       .then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', event => {
-  if (event.request.method !== 'GET') return;
-  const url = new URL(event.request.url);
-  if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
-
+self.addEventListener('fetch', (event) => {
+  const req = event.request;
+  if (req.method !== 'GET') return;
   event.respondWith(
-    fetch(event.request, { cache: 'no-store' })
-      .then(response => {
-        const copy = response.clone();
-        caches.open(CACHE).then(cache => cache.put(event.request, copy)).catch(() => {});
-        return response;
-      })
-      .catch(() => caches.match(event.request))
+    fetch(req, { cache: 'no-store' }).catch(() => caches.match(req))
   );
 });
