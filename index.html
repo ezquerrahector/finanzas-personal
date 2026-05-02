@@ -575,7 +575,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
     </div>
     <div class="fg">
       <label class="fl">Endpoint activo</label>
-      <input class="fi" id="ai-endpoint-input" readonly value="Llamada directa a api.anthropic.com (sin backend)"/>
+      <input class="fi" id="ai-endpoint-input" readonly value="api.anthropic.com (directo desde browser)"/>
     </div>
     <button class="bp" onclick="testAIBackend()">Probar IA</button>
     <button onclick="document.getElementById('m-aikey').classList.remove('on')" style="width:100%;padding:10px;border-radius:10px;background:transparent;border:1px solid var(--bd);color:var(--tx);font-size:13px;cursor:pointer;margin-top:7px">Cerrar</button>
@@ -1224,39 +1224,43 @@ function resetTxForm(){editingTxId=null;['ai-amt','ai-desc','ai-note'].forEach(i
 function hdlImg(inp,prevId,dataId){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{document.getElementById(dataId).value=e.target.result;const p=document.getElementById(prevId);p.innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:10px"/>`;};r.readAsDataURL(f);}
 
 // ═══ AI — llamada directa a Anthropic ═══
-const AI_MODEL = 'claude-haiku-4-5-20251001';
+function getAIKey(){ return localStorage.getItem('fp_aikey')||''; }
 
-function getAIKey(){
-  return localStorage.getItem('fp_aikey') || '';
-}
-
-async function callAI(messages, maxTokens=600){
+async function callAIBackend(payload){
   const key = getAIKey();
-  if(!key) throw new Error('Sin API key. Configúrala en la pantalla IA → 🔑 API Key');
+  if(!key) throw new Error('Sin API key. Configúrala en IA → 🔑 API Key');
+  let messages;
+  if(payload.mode==='image'){
+    messages=[{role:'user',content:[
+      {type:'image',source:{type:'base64',media_type:payload.image.mime,data:payload.image.data}},
+      {type:'text',text:'Analiza este ticket. Responde SOLO JSON sin markdown: {"amount":NUMERO,"desc":"comercio o producto","date":"'+payload.date+'","cat":"food|transport|health|ent|shop|other","type":"expense"}'}
+    ]}];
+  } else {
+    messages=[{role:'user',content:
+      'Finanzas México. Texto: "'+payload.text+'". Extrae transacciones. SOLO JSON array sin markdown:\n'+
+      '[{"amount":NUMERO,"desc":"texto","type":"expense|income","cat":"food|housing|transport|health|ent|shop|edu|salary|inv|sav|bills|other","date":"'+payload.date+'"}]\n'+
+      'Si no hay transacciones: []'
+    }];
+  }
   const res = await fetch('https://api.anthropic.com/v1/messages',{
     method:'POST',
     headers:{
       'Content-Type':'application/json',
-      'x-api-key': key,
+      'x-api-key':key,
       'anthropic-version':'2023-06-01',
       'anthropic-dangerous-direct-browser-ipc':'true'
     },
-    body:JSON.stringify({model:AI_MODEL, max_tokens:maxTokens, messages})
+    body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:600,messages})
   });
   if(!res.ok){
-    const err = await res.text();
-    const parsed = JSON.parse(err || '{}');
-    throw new Error(parsed?.error?.message || 'HTTP '+res.status);
+    const e=await res.json().catch(()=>({}));
+    throw new Error(e?.error?.message||'HTTP '+res.status);
   }
-  const d = await res.json();
-  return d.content?.[0]?.text || '';
-}
-
-function parseJSONFromAI(raw){
-  // Limpiar markdown y extraer JSON
-  const clean = raw.replace(/```json|```/g,'').trim();
-  const match = clean.match(/\[.*\]/s) || clean.match(/\{.*\}/s);
-  return JSON.parse(match ? match[0] : clean);
+  const d=await res.json();
+  const raw=(d.content?.[0]?.text||'').replace(/```json|```/g,'').trim();
+  const parsed=JSON.parse(raw);
+  if(payload.mode==='image') return {transactions:[parsed]};
+  return {transactions:Array.isArray(parsed)?parsed:[parsed]};
 }
 
 async function testAIBackend(){
@@ -1267,12 +1271,12 @@ async function testAIBackend(){
   }
   if(el){ el.textContent='⏳ Probando conexión…'; el.style.color='var(--yl)'; }
   try{
-    const raw = await callAI([{role:'user',content:'Responde solo: OK'}], 10);
+    const data = await callAIBackend({mode:'text', text:'Gasté 250 en comida hoy', date:today()});
     if(el){ el.textContent='✅ IA conectada y lista'; el.style.color='var(--gn)'; }
     toast('✅ IA funcionando','s');
   }catch(e){
-    if(el){ el.textContent='❌ Error: '+e.message.slice(0,70); el.style.color='var(--rd)'; }
-    toast('Error IA: '+e.message.slice(0,40),'e');
+    if(el){ el.textContent='❌ '+e.message.slice(0,70); el.style.color='var(--rd)'; }
+    toast('Error: '+e.message.slice(0,40),'e');
     console.error(e);
   }
 }
@@ -1294,41 +1298,33 @@ async function scanAI(b64,mime){
   document.getElementById('scantxt').textContent='⏳ Analizando ticket…';
   document.getElementById('scanres').style.display='block';
   try{
-    const raw = await callAI([{role:'user',content:[
-      {type:'image',source:{type:'base64',media_type:mime,data:b64}},
-      {type:'text',text:'Analiza este ticket de compra. Responde SOLO JSON válido sin markdown:\n{"amount":NUMERO,"desc":"nombre comercio o producto","date":"YYYY-MM-DD","cat":"food|housing|transport|health|ent|shop|edu|other","type":"expense"}'}
-    ]}], 300);
-    scanP = parseJSONFromAI(raw);
-    scanP.date = scanP.date || today();
-    document.getElementById('scantxt').textContent=`🏪 ${scanP.desc}\n💰 ${fmt(scanP.amount)}\n📅 ${scanP.date}`;
+    const data = await callAIBackend({mode:'image', image:{data:b64, mime}, date:today()});
+    scanP = (data.transactions && data.transactions[0]) || null;
+    if(!scanP){ document.getElementById('scantxt').textContent='No detecté datos claros en el ticket.'; return; }
+    scanP.date=scanP.date||today();
+    document.getElementById('scantxt').textContent=`🏪 ${scanP.desc}
+💰 ${fmt(scanP.amount)}
+📅 ${scanP.date}`;
   }catch(e){
-    console.error('Scan error:', e);
-    document.getElementById('scantxt').textContent='Error: '+e.message;
+    console.error('Scan AI error:', e);
+    document.getElementById('scantxt').textContent='No pude leer el ticket: '+e.message;
     scanP=null;
   }
 }
 async function doNotes(){const t=document.getElementById('noteinp').value.trim();if(!t){toast('Escribe algo','e');return;}document.getElementById('noteparsed').textContent='⏳ Analizando con IA…';document.getElementById('noteres').style.display='block';await parseAI(t,'notes');}
 async function parseAI(text,src){
   const statusEl = src==='voice' ? document.getElementById('vstat') : document.getElementById('noteparsed');
-  statusEl.textContent = '⏳ Analizando con IA…';
+  statusEl.textContent = '⏳ Conectando con IA…';
   try{
-    const raw = await callAI([{role:'user',content:
-      `Finanzas personales México. Extrae transacciones de: "${text}".
-Responde SOLO con JSON array válido sin markdown, sin explicación:
-[{"amount":NUMERO,"desc":"texto corto","type":"expense o income","cat":"food|housing|transport|health|ent|shop|edu|salary|inv|sav|bills|other","date":"${today()}"}]
-Si no hay transacciones responde: []`
-    }], 600);
-    const arr = parseJSONFromAI(raw);
-    const list = Array.isArray(arr) ? arr : [arr];
-    if(!list.length || !list[0].amount){
-      statusEl.textContent='No detecté transacciones. Intenta: "Gasté 250 en comida"';
-      return;
-    }
+    const data = await callAIBackend({mode:'text', text, date:today()});
+    const list = Array.isArray(data.transactions) ? data.transactions : [];
+    if(!list.length){ statusEl.textContent='No detecté transacciones. Intenta: "Gasté 250 en comida"'; return; }
     if(src==='voice'){
       voiceP=list[0]||null;
       if(voiceP){
         document.getElementById('vres').style.display='block';
-        document.getElementById('vres').textContent=`${voiceP.type==='income'?'💚':'🔴'} ${voiceP.desc}\n${fmt(voiceP.amount)}`;
+        document.getElementById('vres').textContent=`${voiceP.type==='income'?'💚':'🔴'} ${voiceP.desc}
+${fmt(voiceP.amount)}`;
         document.getElementById('vconf').style.display='block';
         document.getElementById('vstat').textContent='✓ Listo para registrar';
       }
@@ -1337,10 +1333,9 @@ Si no hay transacciones responde: []`
       document.getElementById('noteparsed').textContent=list.map(t=>`${t.type==='income'?'💚':'🔴'} ${t.desc}: ${fmt(t.amount)}`).join('\n');
     }
   }catch(e){
-    console.error('AI error:', e);
-    const msg = e.message.includes('API key') ? e.message : 'Error: '+e.message.slice(0,80);
-    statusEl.textContent = msg;
-    if(src==='voice') document.getElementById('vstat').textContent = msg;
+    console.error('AI backend error:', e);
+    statusEl.textContent='Sin conexión con IA: '+e.message;
+    if(src==='voice') document.getElementById('vstat').textContent='Sin conexión con IA. Revisa Firebase Functions.';
   }
 }
 async function confVoice(){if(!voiceP)return;await saveTxAI(voiceP);document.getElementById('vres').style.display='none';document.getElementById('vconf').style.display='none';voiceP=null;}
@@ -1537,6 +1532,7 @@ Object.assign(window, {
   applyTheme: typeof applyTheme!=="undefined" ? applyTheme : undefined,
   bootApp: typeof bootApp!=="undefined" ? bootApp : undefined,
   calcLnP: typeof calcLnP!=="undefined" ? calcLnP : undefined,
+  callAIBackend: typeof callAIBackend!=="undefined" ? callAIBackend : undefined,
   closeEpickerOutside: typeof closeEpickerOutside!=="undefined" ? closeEpickerOutside : undefined,
   cm: typeof cm!=="undefined" ? cm : undefined,
   confNotes: typeof confNotes!=="undefined" ? confNotes : undefined,
