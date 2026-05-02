@@ -81,8 +81,8 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .tia{font-family:var(--fh);font-weight:700;font-size:13px;white-space:nowrap;}
 .tia.inc{color:var(--gn);}
 .tia.exp{color:var(--rd);}
-.tdl{padding:3px 7px;border-radius:6px;background:rgba(255,95,126,.1);border:none;color:var(--rd);font-size:10px;cursor:pointer;display:none;}
-.ti:hover .tdl{display:block;}
+.tdl{padding:3px 7px;border-radius:6px;background:rgba(255,95,126,.1);border:none;color:var(--rd);font-size:10px;cursor:pointer;display:inline-block;}
+.ti:hover .tdl{display:inline-block;}
 /* ACCOUNT CARDS */
 .acard{border-radius:14px;padding:15px;margin-bottom:10px;cursor:pointer;border:1px solid rgba(255,255,255,.07);}
 .acd{background:linear-gradient(135deg,#1a2535,#0d1520);}
@@ -417,6 +417,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
     <div class="fg"><label class="fl">¿Con qué cuenta pagas?</label><div class="acs" id="acs-tx"></div><div id="acc-warn" style="display:none;font-size:10px;color:var(--rd);margin-top:3px">⚠️ Saldo insuficiente</div></div>
     <div class="fg"><label class="fl">Nota (opcional)</label><textarea class="fta" id="ai-note" rows="2"></textarea></div>
     <button class="bp" onclick="saveTx()">Guardar</button>
+    <button class="bd" id="tx-dbtn" style="display:none" onclick="delEditingTx()">Eliminar transacción</button>
   </div>
 </div>
 
@@ -860,6 +861,8 @@ function editTx(id){
   rChips('acs-tx','tx');
   const title=document.querySelector('#m-add .mt');
   if(title)title.textContent='Editar transacción';
+  const delBtn=document.getElementById('tx-dbtn');
+  if(delBtn)delBtn.style.display='block';
   const w=document.getElementById('acc-warn');
   if(w)w.style.display='none';
   om('m-add');
@@ -877,7 +880,28 @@ async function saveTxAI(t){
     toast('Firebase: '+e.message,'e');
   }
 }
-async function delTx(id){if(!confirm('¿Eliminar?'))return;await deleteDoc(firestoreDoc(DB,`users/${UID}/transactions`,id));toast('Eliminado','s');}
+async function delTx(id){
+  if(!UID){toast('Inicia sesión primero','e');return;}
+  const t=txs.find(x=>x.id===id);
+  if(!confirm('¿Eliminar esta transacción?'))return;
+  try{
+    if(t){
+      reverseTxBalance(t);
+      await saveAccsL();
+    }
+    await deleteDoc(firestoreDoc(DB,`users/${UID}/transactions`,id));
+    if(editingTxId===id){ editingTxId=null; cm('m-add'); resetTxForm(); }
+    toast('Transacción eliminada','s');
+  }catch(e){
+    console.error('Error eliminando transacción:', e);
+    toast('No pude eliminar: '+(e.message||e),'e');
+  }
+}
+
+async function delEditingTx(){
+  if(!editingTxId){toast('No hay transacción seleccionada','e');return;}
+  await delTx(editingTxId);
+}
 
 // ═══ RENDER ALL (llamado por onSnapshot) ═══
 function renderAll(){
@@ -1194,7 +1218,7 @@ function selAcc(id,cid,ctx){
 
 // ═══ FORM TYPE ═══
 function sType(t){curT=t;document.getElementById('btn-e').className='tb'+(t==='expense'?' ae':'');document.getElementById('btn-i').className='tb'+(t==='income'?' ai':'');}
-function resetTxForm(){editingTxId=null;['ai-amt','ai-desc','ai-note'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('ai-date').value=today();sCat='';sAcc='';curT='expense';sType('expense');rCatGrid();rChips('acs-tx','tx');const title=document.querySelector('#m-add .mt');if(title)title.textContent='Nueva transacción';const w=document.getElementById('acc-warn');if(w)w.style.display='none';}
+function resetTxForm(){editingTxId=null;['ai-amt','ai-desc','ai-note'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('ai-date').value=today();sCat='';sAcc='';curT='expense';sType('expense');rCatGrid();rChips('acs-tx','tx');const title=document.querySelector('#m-add .mt');if(title)title.textContent='Nueva transacción';const delBtn=document.getElementById('tx-dbtn');if(delBtn)delBtn.style.display='none';const w=document.getElementById('acc-warn');if(w)w.style.display='none';}
 
 // ═══ ICON UPLOAD ═══
 function hdlImg(inp,prevId,dataId){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{document.getElementById(dataId).value=e.target.result;const p=document.getElementById(prevId);p.innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:10px"/>`;};r.readAsDataURL(f);}
@@ -1497,6 +1521,7 @@ Object.assign(window, {
   delLoan: typeof delLoan!=="undefined" ? delLoan : undefined,
   delRec: typeof delRec!=="undefined" ? delRec : undefined,
   delTx: typeof delTx!=="undefined" ? delTx : undefined,
+  delEditingTx: typeof delEditingTx!=="undefined" ? delEditingTx : undefined,
   doLogout: typeof doLogout!=="undefined" ? doLogout : undefined,
   doNotes: typeof doNotes!=="undefined" ? doNotes : undefined,
   doScan: typeof doScan!=="undefined" ? doScan : undefined,
