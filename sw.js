@@ -1,5 +1,5 @@
-// Finanzas v3.4 — sin cache agresivo para evitar versiones viejas en GitHub Pages
-const CACHE = 'finanzas-v3.4';
+// Finanzas v3.4.1 — sin cache agresivo para evitar versiones viejas en GitHub Pages
+const CACHE = 'finanzas-v3.4.1.1';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
