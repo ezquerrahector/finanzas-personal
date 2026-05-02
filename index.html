@@ -214,7 +214,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v3.4</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v3.5</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -254,7 +254,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- CUENTAS -->
 <div id="s-accounts" class="scr">
-  <div class="sh"><div class="st">Cuentas</div><button class="bsm" onclick="oNewAcc()">+ Nueva</button></div>
+  <div class="sh"><div class="st">Cuentas</div><div style="display:flex;gap:6px"><button class="bsm" onclick="openOrder('accounts')">Ordenar</button><button class="bsm" onclick="oNewAcc()">+ Nueva</button></div></div>
   <div style="background:linear-gradient(135deg,#12121e,#1a1a2e);border:1px solid rgba(108,99,255,.2);border-radius:15px;padding:16px;margin-bottom:14px">
     <div style="font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:2px">Patrimonio disponible</div>
     <div id="pat-tot" style="font-family:'Syne',sans-serif;font-size:30px;font-weight:800">$0.00</div>
@@ -268,7 +268,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- CRÉDITOS -->
 <div id="s-loans" class="scr">
-  <div class="sh"><div class="st">Créditos</div><button class="bsm" onclick="oNewLoan()">+ Nuevo</button></div>
+  <div class="sh"><div class="st">Créditos</div><div style="display:flex;gap:6px"><button class="bsm" onclick="openOrder('loans')">Ordenar</button><button class="bsm" onclick="oNewLoan()">+ Nuevo</button></div></div>
   <div style="background:linear-gradient(135deg,#1e0e0e,#2a1010);border:1px solid rgba(255,95,126,.18);border-radius:15px;padding:16px;margin-bottom:14px">
     <div style="font-size:9px;color:rgba(255,150,150,.55);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:2px">Deuda total</div>
     <div id="l-tot" style="font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:#ff8fa3">$0</div>
@@ -283,7 +283,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- RECURRENTES -->
 <div id="s-rec" class="scr">
-  <div class="sh"><div class="st">Recurrentes</div><button class="bsm" onclick="oNewRec()">+ Nuevo</button></div>
+  <div class="sh"><div class="st">Recurrentes</div><div style="display:flex;gap:6px"><button class="bsm" onclick="openOrder('recs')">Ordenar</button><button class="bsm" onclick="oNewRec()">+ Nuevo</button></div></div>
   <div style="background:var(--sf);border:1px solid var(--bd);border-radius:13px;padding:13px;margin-bottom:13px">
     <div style="font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">Total mensual estimado</div>
     <div id="rec-tot" style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--rd)">$0</div>
@@ -293,7 +293,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- INSTINTO -->
 <div id="s-inst" class="scr">
-  <div class="sh"><div class="st">Instinto 🧴</div><button class="bsm" onclick="oNewInst()">+ Préstamo</button></div>
+  <div class="sh"><div class="st">Instinto 🧴</div><div style="display:flex;gap:6px"><button class="bsm" onclick="openOrder('insts')">Ordenar</button><button class="bsm" onclick="oNewInst()">+ Préstamo</button></div></div>
   <div style="background:linear-gradient(135deg,#12122a,#1e1e3a);border:1px solid rgba(108,99,255,.2);border-radius:15px;padding:15px;margin-bottom:13px">
     <div style="font-size:9px;color:rgba(200,200,255,.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:2px">Instinto me debe</div>
     <div id="inst-tot" style="font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--ac2)">$0</div>
@@ -379,8 +379,13 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   <div class="seti" onclick="nav('inst')"><div class="setic" style="background:rgba(167,139,250,.1);color:var(--ac2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div><span style="flex:1">Instinto Fragancias</span></div>
   <div class="seti" onclick="om('m-cats')"><div class="setic"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><span style="flex:1">Categorías</span></div>
   <div class="seti" onclick="expCSV()"><div class="setic" style="background:rgba(34,211,160,.1);color:var(--gn)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></div><span style="flex:1">Exportar CSV</span></div>
+  <div class="seti" onclick="expExcel()"><div class="setic" style="background:rgba(34,211,160,.1);color:var(--gn)">📊</div><span style="flex:1">Descargar Excel completo</span></div>
+  <div class="seti" onclick="dlTemplate()"><div class="setic" style="background:rgba(96,165,250,.12);color:#60a5fa">📄</div><span style="flex:1">Descargar plantilla de carga</span></div>
+  <div class="seti" onclick="document.getElementById('imp-file').click()"><div class="setic" style="background:rgba(167,139,250,.12);color:var(--ac2)">⬆️</div><span style="flex:1">Subir registros desde plantilla</span></div>
+  <input id="imp-file" type="file" accept=".csv,text/csv" style="display:none" onchange="impTemplate(this)"/>
+  <div class="seti" onclick="openOrder('accounts')"><div class="setic">↕️</div><span style="flex:1">Ordenar cuentas y selector de pago</span></div>
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg></div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v3.4 · Firebase + Claude AI</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v3.5 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -635,7 +640,7 @@ async function initApp(){
   // Mostrar estado de API key al cargar
   setTimeout(updateAIKeyStatus, 500);
   applyTheme(localStorage.getItem('fp_thm')||'auto');
-  if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=3.4.1').catch(()=>{});
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=3.5').catch(()=>{});
   
   onAuthStateChanged(AUTH, u=>{
     document.getElementById('ld').style.display='none';
@@ -1334,6 +1339,57 @@ function cm(id){document.getElementById(id)?.classList.remove('on');}
 function cox(e,id){if(e.target.id===id)cm(id);}
 
 // ═══ CSV ═══
+
+// ═══ EXPORTAR / IMPORTAR Y ORDENAR ═══
+function csvEsc(v){v=v===undefined||v===null?'':String(v);return '"'+v.replace(/"/g,'""')+'"';}
+function downloadText(name, text, type='text/csv;charset=utf-8;'){
+  const b=new Blob([text],{type});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=name;a.click();URL.revokeObjectURL(u);
+}
+function expExcel(){
+  const escHtml=v=>String(v??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const table=(title, headers, rows)=>`<h2>${escHtml(title)}</h2><table border="1"><tr>${headers.map(h=>`<th>${escHtml(h)}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>`<td>${escHtml(c)}</td>`).join('')}</tr>`).join('')}</table><br/>`;
+  const html=`<html><head><meta charset="utf-8"></head><body>`+
+    table('Transacciones',['Fecha','Tipo','Descripción','Categoría','Cuenta','Monto','Nota'],txs.map(t=>[t.date,t.type==='income'?'Ingreso':'Gasto',t.desc,t.catName||'',t.accountName||'',t.amount,t.note||'']))+
+    table('Cuentas',['Tipo','Nombre','Banco','Saldo/Deuda','Límite','Disponible'],accs.map(a=>[a.type,a.name,a.bank||'',a.balance||0,a.limit||0,getAv(a)]))+
+    table('Créditos',['Tipo','Nombre','Deuda actual','Monto original','Pago','Plazo','Pagos realizados','Fecha fin'],loans.map(l=>[l.type,l.name,l.balance||0,l.orig||0,l.pay||0,l.tp||'',l.pc||'',l.end||'']))+
+    table('Recurrentes',['Nombre','Monto','Frecuencia','Día','Cuenta'],recs.map(r=>[r.name,r.amount,r.freq,r.day,(accs.find(a=>a.id===r.accountId)||{}).name||'']))+
+    table('Instinto',['Descripción','Monto','Pendiente','Fecha','Cuenta'],insts.map(i=>[i.desc,i.amount,i.pending??i.amount,i.date||'',(accs.find(a=>a.id===i.accountId)||{}).name||'']))+
+    `</body></html>`;
+  downloadText(`finanzas_completo_${today()}.xls`,html,'application/vnd.ms-excel;charset=utf-8;');toast('✓ Excel descargado','s');
+}
+function dlTemplate(){
+  const tpl=['Fecha,Tipo,Descripcion,Categoria,Cuenta,Monto,Nota',`${today()},Gasto,Oxxo,Comida,${accs[0]?.name||'Efectivo'},120,Ejemplo`,`${today()},Ingreso,Nomina,Salario,${accs[0]?.name||'Efectivo'},1000,Ejemplo`].join('\n');
+  downloadText('plantilla_carga_finanzas.csv',tpl);toast('✓ Plantilla descargada','s');
+}
+function parseCSVLine(line){
+  const out=[];let cur='',q=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(q&&line[i+1]==='"'){cur+='"';i++;}else q=!q;}else if(ch===','&&!q){out.push(cur);cur='';}else cur+=ch;}out.push(cur);return out.map(x=>x.trim());
+}
+async function impTemplate(inp){
+  const f=inp.files&&inp.files[0]; if(!f)return; if(!UID){toast('Inicia sesión primero','e');return;}
+  const txt=await f.text(); const lines=txt.split(/\r?\n/).filter(x=>x.trim()); if(lines.length<2){toast('Plantilla vacía','e');return;}
+  const head=parseCSVLine(lines[0]).map(h=>h.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''));
+  const idx=n=>head.indexOf(n);
+  let ok=0,err=0;
+  for(const line of lines.slice(1)){
+    const c=parseCSVLine(line); if(!c.length)continue;
+    const fecha=c[idx('fecha')]||today(),tipo=(c[idx('tipo')]||'Gasto').toLowerCase(),desc=c[idx('descripcion')]||'',catName=c[idx('categoria')]||'Otro',accName=c[idx('cuenta')]||'',monto=parseFloat(String(c[idx('monto')]||'0').replace(',','.'))||0,nota=c[idx('nota')]||'';
+    if(!desc||!monto){err++;continue;}
+    const cat=cats.find(x=>x.name.toLowerCase()===catName.toLowerCase())||cats.find(x=>x.id==='other')||cats[0];
+    const acc=accs.find(x=>x.name.toLowerCase()===accName.toLowerCase());
+    const tx={amount:monto,desc,date:fecha,cat:cat.id,note:nota,type:tipo.startsWith('ing')?'income':'expense',catIcon:cat.idata||cat.icon||'📌',catName:cat.name,accountId:acc?.id||'',accountName:acc?.name||'',createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+    try{await addDoc(collection(DB,`users/${UID}/transactions`),tx); if(acc){applyTxBalance(tx); await saveAccsL();} ok++;}catch(e){console.error(e);err++;}
+  }
+  inp.value=''; rHome(); toast(`✓ Importados: ${ok}${err?` · errores: ${err}`:''}` , err?'e':'s');
+}
+let ordKind='accounts';
+function getOrderArray(kind){return kind==='accounts'?accs:kind==='loans'?loans:kind==='recs'?recs:insts;}
+function getOrderTitle(kind){return {accounts:'Ordenar cuentas',loans:'Ordenar créditos',recs:'Ordenar cargos recurrentes',insts:'Ordenar Instinto'}[kind]||'Ordenar';}
+async function saveOrderArray(kind){if(kind==='accounts')await saveAccsL();else if(kind==='loans')await saveLoansL();else if(kind==='recs')await saveRecsL();else await saveInstsL();}
+function itemOrderName(kind,it){return it.name||it.desc||it.description||'Sin nombre';}
+function openOrder(kind='accounts'){ordKind=kind;document.getElementById('ord-title').textContent=getOrderTitle(kind);rOrder();om('m-order');}
+function rOrder(){const el=document.getElementById('ord-list');if(!el)return;const arr=getOrderArray(ordKind);if(!arr.length){el.innerHTML='<div class="es">Sin elementos para ordenar</div>';return;}el.innerHTML=arr.map((it,i)=>`<div style="display:flex;align-items:center;gap:8px;background:var(--sf2);border:1px solid var(--bd);border-radius:10px;padding:10px;margin-bottom:7px"><span style="font-size:11px;color:var(--mu);width:20px">${i+1}</span><span style="flex:1;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(itemOrderName(ordKind,it))}</span><button class="bsm" onclick="moveOrder('${ordKind}','${it.id}',-1)" ${i===0?'disabled':''}>↑</button><button class="bsm" onclick="moveOrder('${ordKind}','${it.id}',1)" ${i===arr.length-1?'disabled':''}>↓</button></div>`).join('');}
+async function moveOrder(kind,id,dir){const arr=getOrderArray(kind);const i=arr.findIndex(x=>x.id===id);if(i<0)return;const j=i+dir;if(j<0||j>=arr.length)return;[arr[i],arr[j]]=[arr[j],arr[i]];await saveOrderArray(kind);rOrder();renderAll();rChips('acs-tx','tx');}
+
 function expCSV(){if(!txs.length){toast('Sin transacciones','e');return;}const h='Fecha,Tipo,Descripción,Categoría,Cuenta,Monto,Nota';const rows=txs.map(t=>`${t.date},${t.type==='income'?'Ingreso':'Gasto'},"${t.desc}","${t.catName||''}","${t.accountName||''}",${t.amount},"${t.note||''}"`);const b=new Blob([[h,...rows].join('\n')],{type:'text/csv;charset=utf-8;'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=`finanzas_${today()}.csv`;a.click();URL.revokeObjectURL(u);toast('✓ CSV descargado','s');}
 
 // ═══ UTILS ═══
@@ -1618,6 +1674,13 @@ Object.assign(window, {
   today: typeof today!=="undefined" ? today : undefined,
   toggleVoice: typeof toggleVoice!=="undefined" ? toggleVoice : undefined,
   updateAIKeyStatus: typeof updateAIKeyStatus!=="undefined" ? updateAIKeyStatus : undefined,
+
+  expExcel: typeof expExcel!=="undefined" ? expExcel : undefined,
+  dlTemplate: typeof dlTemplate!=="undefined" ? dlTemplate : undefined,
+  impTemplate: typeof impTemplate!=="undefined" ? impTemplate : undefined,
+  openOrder: typeof openOrder!=="undefined" ? openOrder : undefined,
+  rOrder: typeof rOrder!=="undefined" ? rOrder : undefined,
+  moveOrder: typeof moveOrder!=="undefined" ? moveOrder : undefined,
   updateDbg: typeof updateDbg!=="undefined" ? updateDbg : undefined
 });
 </script>
