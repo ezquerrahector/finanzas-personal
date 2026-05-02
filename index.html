@@ -176,6 +176,17 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 /* EMPTY */
 .es{text-align:center;padding:32px 14px;color:var(--mu);}
 .es svg{width:48px;height:48px;margin-bottom:9px;opacity:.28;}
+
+/* EMOJI PICKER */
+.epicker{position:absolute;z-index:300;background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:12px;box-shadow:0 8px 32px rgba(0,0,0,.4);width:280px;max-height:320px;overflow-y:auto;}
+.epicker-cats{display:flex;gap:4px;margin-bottom:9px;overflow-x:auto;scrollbar-width:none;padding-bottom:3px;}
+.epicker-cats::-webkit-scrollbar{display:none;}
+.ecat-btn{flex-shrink:0;padding:4px 8px;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--mu);font-size:11px;cursor:pointer;white-space:nowrap;}
+.ecat-btn.on{background:var(--ac);border-color:var(--ac);color:#fff;}
+.egrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.ebtn{width:34px;height:34px;border-radius:7px;border:none;background:transparent;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.1s;}
+.ebtn:hover{background:var(--sf2);}
+.epicker-search{width:100%;padding:7px 10px;background:var(--sf2);border:1px solid var(--bd);border-radius:8px;color:var(--tx);font-family:var(--fb);font-size:13px;outline:none;margin-bottom:8px;}
 </style>
 </head>
 <body>
@@ -434,9 +445,9 @@ document.dispatchEvent(new Event('fb-ready'));
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px">
       <div>
         <label class="fl">Ícono / Logo</label>
-        <div class="iu" id="acc-iprev" onclick="document.getElementById('acc-ifile').click()">💳</div>
-        <input type="file" id="acc-ifile" accept="image/*" style="display:none" onchange="hdlImg(this,'acc-iprev','acc-idata')"/>
+        <div class="iu" id="acc-iprev" onclick="openEpicker('acc-iprev','acc-idata',event)" style="cursor:pointer;position:relative">💳</div>
         <input type="hidden" id="acc-idata"/>
+        <div style="font-size:9px;color:var(--mu);margin-top:3px;text-align:center">Toca para cambiar</div>
       </div>
       <div style="flex:1"><label class="fl">Nombre</label><input class="fi" id="acc-nm" placeholder="Ej: BBVA Débito"/></div>
     </div>
@@ -490,9 +501,9 @@ document.dispatchEvent(new Event('fb-ready'));
     <input type="hidden" id="rec-eid"/>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px">
       <div><label class="fl">Ícono</label>
-        <div class="iu" id="rec-iprev" onclick="document.getElementById('rec-ifile').click()">🔄</div>
-        <input type="file" id="rec-ifile" accept="image/*" style="display:none" onchange="hdlImg(this,'rec-iprev','rec-idata')"/>
+        <div class="iu" id="rec-iprev" onclick="openEpicker('rec-iprev','rec-idata',event)" style="cursor:pointer">🔄</div>
         <input type="hidden" id="rec-idata"/>
+        <div style="font-size:9px;color:var(--mu);margin-top:3px;text-align:center">Toca para cambiar</div>
       </div>
       <div style="flex:1"><label class="fl">Nombre</label><input class="fi" id="rec-nm" placeholder="Spotify, Netflix, Amazon…"/></div>
     </div>
@@ -541,8 +552,7 @@ document.dispatchEvent(new Event('fb-ready'));
     <div class="mh"></div><div class="mt">Categorías</div>
     <div id="cats-list"></div>
     <div style="display:flex;gap:7px;align-items:center;margin-top:9px">
-      <div class="iu" id="nc-iprev" onclick="document.getElementById('nc-ifile').click()" style="width:42px;height:42px;border-radius:9px;font-size:17px">📌</div>
-      <input type="file" id="nc-ifile" accept="image/*" style="display:none" onchange="hdlImg(this,'nc-iprev','nc-idata')"/>
+      <div class="iu" id="nc-iprev" onclick="openEpicker('nc-iprev','nc-idata',event)" style="cursor:pointer;width:42px;height:42px;border-radius:9px;font-size:17px">📌</div>
       <input type="hidden" id="nc-idata"/>
       <input class="fi" id="nc-nm" placeholder="Nueva categoría" style="flex:1"/>
       <button onclick="addCat()" style="padding:9px 12px;border-radius:9px;background:var(--ac);border:none;color:#fff;font-weight:600;cursor:pointer;font-size:12px;white-space:nowrap">+ Agregar</button>
@@ -550,6 +560,13 @@ document.dispatchEvent(new Event('fb-ready'));
   </div>
 </div>
 
+
+<!-- EMOJI PICKER GLOBAL -->
+<div id="epicker" class="epicker" style="display:none">
+  <div class="epicker-cats" id="epcats"></div>
+  <input class="epicker-search" id="epsearch" placeholder="Buscar emoji…" oninput="filterEmojis()"/>
+  <div class="egrid" id="epgrid"></div>
+</div>
 <div id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -615,10 +632,14 @@ function bootApp(u){
   insts=JSON.parse(localStorage.getItem('fp_insts3')||'[]');
   // REALTIME LISTENER — sincronización con UID correcto
   const q=FB.query(FB.collection(DB,`users/${UID}/transactions`),FB.orderBy('date','desc'));
-  FB.onSnapshot(q,snap=>{
-    txs=snap.docs.map(d=>({id:d.id,...d.data()}));
-    rHome(); rAccTxList();
-    if(document.getElementById('s-rep').classList.contains('on')) rReports();
+  FB.onSnapshot(q, snap=>{
+    txs = snap.docs.map(d=>({id:d.id,...d.data()}));
+    console.log('[Firestore] onSnapshot recibido:', txs.length, 'docs, UID:', UID);
+    // Re-renderizar TODAS las pantallas activas en tiempo real
+    renderAll();
+  }, err=>{
+    console.error('[Firestore] onSnapshot error:', err);
+    toast('Error sync: '+err.code,'e');
   });
   setupNav();
   applyTheme(localStorage.getItem('fp_thm')||'auto');
@@ -693,6 +714,16 @@ async function saveTxAI(t){
   }
 }
 async function delTx(id){if(!confirm('¿Eliminar?'))return;await FB.deleteDoc(FB.doc(DB,`users/${UID}/transactions`,id));toast('Eliminado','s');}
+
+// ═══ RENDER ALL (llamado por onSnapshot) ═══
+function renderAll(){
+  // Siempre actualizar home y alertas
+  rHome();
+  // Actualizar la pantalla que esté activa en ese momento
+  const active = document.querySelector('.scr.on')?.id;
+  if(active==='s-rep') rReports();
+  if(active==='s-accounts') rAccTxList();
+}
 
 // ═══ HOME ═══
 function rHome(){
@@ -815,7 +846,9 @@ function rAccs(){
 }
 function rAccTxList(){const el=document.getElementById('acc-txl');if(!el)return;const r=txs.filter(t=>t.accountId).slice(0,8);if(!r.length)return;rTxList(r,'acc-txl');}
 function oNewAcc(){document.getElementById('acc-mtit').textContent='Nueva cuenta';document.getElementById('acc-eid').value='';document.getElementById('acc-dbtn').style.display='none';['acc-nm','acc-bal','acc-lim','acc-bnk'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('acc-idata').value='';document.getElementById('acc-iprev').innerHTML='💳';sAccT('debit');om('m-acc');}
-function oEditAcc(id){const a=accs.find(x=>x.id===id);if(!a)return;document.getElementById('acc-mtit').textContent='Editar cuenta';document.getElementById('acc-eid').value=id;document.getElementById('acc-nm').value=a.name;document.getElementById('acc-bal').value=a.balance||0;document.getElementById('acc-bnk').value=a.bank||'';document.getElementById('acc-idata').value=a.idata||'';const p=document.getElementById('acc-iprev');p.innerHTML=a.idata?`<img src="${a.idata}" style="width:100%;height:100%;object-fit:cover;border-radius:10px"/>`:( a.icon||'💳');if(a.type==='credit')document.getElementById('acc-lim').value=a.limit||0;sAccT(a.type);document.getElementById('acc-dbtn').style.display='block';om('m-acc');}
+function oEditAcc(id){const a=accs.find(x=>x.id===id);if(!a)return;document.getElementById('acc-mtit').textContent='Editar cuenta';document.getElementById('acc-eid').value=id;document.getElementById('acc-nm').value=a.name;document.getElementById('acc-bal').value=a.balance||0;document.getElementById('acc-bnk').value=a.bank||'';document.getElementById('acc-idata').value=a.idata||'';const p=document.getElementById('acc-iprev');
+  if(a.idata){p.innerHTML=`<img src="${a.idata}" style="width:100%;height:100%;object-fit:cover;border-radius:10px"/>`;p.dataset.emoji='';}
+  else{p.innerHTML=a.icon||'💳';p.dataset.emoji=a.icon||'💳';}if(a.type==='credit')document.getElementById('acc-lim').value=a.limit||0;sAccT(a.type);document.getElementById('acc-dbtn').style.display='block';om('m-acc');}
 function sAccT(t){
   nAT=t;
   // Reset todos PRIMERO, luego activar solo el seleccionado
@@ -834,7 +867,7 @@ function saveAcc(){
   const bal=parseFloat(document.getElementById('acc-bal').value)||0;
   const lim=nAT==='credit'?(parseFloat(document.getElementById('acc-lim').value)||0):0;
   const bnk=nAT==='cash'?'':(document.getElementById('acc-bnk').value.trim());
-  const idata=document.getElementById('acc-idata').value;
+  const {idata, icon: iicon} = getIconValue('acc-iprev','acc-idata');
   const eid=document.getElementById('acc-eid').value;
   if(!nm){toast('Escribe un nombre','e');return;}
   if(eid){const i=accs.findIndex(a=>a.id===eid);if(i>=0)accs[i]={...accs[i],name:nm,balance:bal,limit:lim,bank:bnk,idata,type:nAT};}
@@ -915,8 +948,10 @@ function rLoans(){
 // ═══ RECURRENTES ═══
 function saveRecsL(){localStorage.setItem('fp_recs3',JSON.stringify(recs));}
 function oNewRec(){document.getElementById('rec-mtit').textContent='Cargo recurrente';document.getElementById('rec-eid').value='';['rec-nm','rec-amt','rec-day'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('rec-idata').value='';document.getElementById('rec-iprev').innerHTML='🔄';document.getElementById('rec-dbtn').style.display='none';sRecA='';rChips('acs-rec','rec');rRecCatSel();om('m-rec');}
-function oEditRec(id){const r=recs.find(x=>x.id===id);if(!r)return;document.getElementById('rec-mtit').textContent='Editar cargo';document.getElementById('rec-eid').value=id;document.getElementById('rec-nm').value=r.name;document.getElementById('rec-amt').value=r.amount;document.getElementById('rec-frq').value=r.freq||'monthly';document.getElementById('rec-day').value=r.day||'';document.getElementById('rec-idata').value=r.idata||'';const p=document.getElementById('rec-iprev');p.innerHTML=r.idata?`<img src="${r.idata}" style="width:100%;height:100%;object-fit:cover;border-radius:10px"/>`:r.icon||'🔄';sRecA=r.accountId||'';rChips('acs-rec','rec');rRecCatSel(r.cat);document.getElementById('rec-dbtn').style.display='block';om('m-rec');}
-function saveRec(){const nm=document.getElementById('rec-nm').value.trim(),amt=parseFloat(document.getElementById('rec-amt').value)||0;if(!nm){toast('Escribe nombre','e');return;}if(!amt){toast('Ingresa monto','e');return;}const d={name:nm,amount:amt,freq:document.getElementById('rec-frq').value,day:parseInt(document.getElementById('rec-day').value)||null,cat:document.getElementById('rec-cat').value,accountId:sRecA,idata:document.getElementById('rec-idata').value};const eid=document.getElementById('rec-eid').value;if(eid){const i=recs.findIndex(r=>r.id===eid);if(i>=0)recs[i]={...recs[i],...d};}else recs.push({id:'r'+Date.now(),...d});saveRecsL();rRecs();cm('m-rec');toast(eid?'✓ Actualizado':'✓ Cargo agregado','s');}
+function oEditRec(id){const r=recs.find(x=>x.id===id);if(!r)return;document.getElementById('rec-mtit').textContent='Editar cargo';document.getElementById('rec-eid').value=id;document.getElementById('rec-nm').value=r.name;document.getElementById('rec-amt').value=r.amount;document.getElementById('rec-frq').value=r.freq||'monthly';document.getElementById('rec-day').value=r.day||'';document.getElementById('rec-idata').value=r.idata||'';const p=document.getElementById('rec-iprev');
+  if(r.idata){p.innerHTML=`<img src="${r.idata}" style="width:100%;height:100%;object-fit:cover;border-radius:10px"/>`;p.dataset.emoji='';}
+  else{p.innerHTML=r.icon||'🔄';p.dataset.emoji=r.icon||'🔄';}sRecA=r.accountId||'';rChips('acs-rec','rec');rRecCatSel(r.cat);document.getElementById('rec-dbtn').style.display='block';om('m-rec');}
+function saveRec(){const nm=document.getElementById('rec-nm').value.trim(),amt=parseFloat(document.getElementById('rec-amt').value)||0;if(!nm){toast('Escribe nombre','e');return;}if(!amt){toast('Ingresa monto','e');return;}const {idata:ridata,icon:ricon}=getIconValue('rec-iprev','rec-idata');const d={name:nm,amount:amt,freq:document.getElementById('rec-frq').value,day:parseInt(document.getElementById('rec-day').value)||null,cat:document.getElementById('rec-cat').value,accountId:sRecA,idata:ridata,icon:ricon};const eid=document.getElementById('rec-eid').value;if(eid){const i=recs.findIndex(r=>r.id===eid);if(i>=0)recs[i]={...recs[i],...d};}else recs.push({id:'r'+Date.now(),...d});saveRecsL();rRecs();cm('m-rec');toast(eid?'✓ Actualizado':'✓ Cargo agregado','s');}
 function delRec(){const id=document.getElementById('rec-eid').value;if(!id||!confirm('¿Eliminar?'))return;recs=recs.filter(r=>r.id!==id);saveRecsL();rRecs();cm('m-rec');}
 function rRecCatSel(sel){const e=document.getElementById('rec-cat');if(!e)return;e.innerHTML=cats.map(c=>`<option value="${c.id}"${c.id===sel?' selected':''}>${c.icon||''} ${c.name}</option>`).join('');}
 function rRecs(){
@@ -959,7 +994,7 @@ function saveCatsL(){localStorage.setItem('fp_cats3',JSON.stringify(cats));}
 function rCatGrid(){const el=document.getElementById('cg-main');if(!el)return;el.innerHTML=cats.map(c=>{const ico=c.idata?`<img src="${c.idata}"/>`:c.icon||'📌';return`<div class="co${sCat===c.id?' sel':''}" onclick="selCat('${c.id}')"><div class="coi">${ico}</div><span>${c.name}</span></div>`;}).join('');}
 function selCat(id){sCat=id;rCatGrid();}
 function rCatsMdl(){const el=document.getElementById('cats-list');if(!el)return;el.innerHTML=cats.map(c=>{const ico=c.idata?`<img src="${c.idata}" style="width:100%;height:100%;object-fit:cover;border-radius:5px"/>`:c.icon||'📌';return`<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--sf2);border-radius:8px;margin-bottom:5px"><div style="width:28px;height:28px;border-radius:6px;background:var(--sf);display:flex;align-items:center;justify-content:center;font-size:15px;overflow:hidden">${ico}</div><span style="flex:1;font-size:12px;font-weight:500">${c.name}</span><button onclick="delCat('${c.id}')" style="padding:3px 7px;border-radius:5px;background:rgba(255,95,126,.1);border:none;color:var(--rd);cursor:pointer;font-size:10px">✕</button></div>`;}).join('');}
-function addCat(){const nm=document.getElementById('nc-nm').value.trim(),idata=document.getElementById('nc-idata').value;if(!nm){toast('Escribe nombre','e');return;}const ico=document.getElementById('nc-iprev').textContent||'📌';cats.push({id:'c'+Date.now(),name:nm,icon:ico,idata,color:'#9ca3af'});saveCatsL();rCatsMdl();rCatGrid();document.getElementById('nc-nm').value='';document.getElementById('nc-idata').value='';document.getElementById('nc-iprev').innerHTML='📌';toast('✓ Categoría agregada','s');}
+function addCat(){const nm=document.getElementById('nc-nm').value.trim(),idata=document.getElementById('nc-idata').value;if(!nm){toast('Escribe nombre','e');return;}const {idata:cidata,icon:cicon}=getIconValue('nc-iprev','nc-idata');cats.push({id:'c'+Date.now(),name:nm,icon:cicon||document.getElementById('nc-iprev').textContent||'📌',idata:cidata,color:'#9ca3af'});saveCatsL();rCatsMdl();rCatGrid();document.getElementById('nc-nm').value='';document.getElementById('nc-idata').value='';document.getElementById('nc-iprev').innerHTML='📌';toast('✓ Categoría agregada','s');}
 function delCat(id){if(cats.length<=1){toast('Necesitas al menos 1','e');return;}cats=cats.filter(c=>c.id!==id);saveCatsL();rCatsMdl();rCatGrid();}
 
 // ═══ ACCOUNT CHIPS ═══
@@ -1002,7 +1037,7 @@ async function scanAI(b64,mime){document.getElementById('scantxt').textContent='
 async function doNotes(){const t=document.getElementById('noteinp').value.trim();if(!t){toast('Escribe algo','e');return;}document.getElementById('noteparsed').textContent='⏳ Analizando con IA…';document.getElementById('noteres').style.display='block';await parseAI(t,'notes');}
 async function parseAI(text,src){
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content:`Finanzas personales México. Extrae transacciones de: "${text}". Responde SOLO JSON array sin markdown: [{"amount":NUMERO,"desc":"texto","type":"expense|income","cat":"food|housing|transport|health|ent|shop|edu|salary|inv|sav|bills|other","date":"${today()}"}]`}]})});
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-ipc':'true','anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content:`Finanzas personales México. Extrae transacciones de: "${text}". Responde SOLO JSON array sin markdown: [{"amount":NUMERO,"desc":"texto","type":"expense|income","cat":"food|housing|transport|health|ent|shop|edu|salary|inv|sav|bills|other","date":"${today()}"}]`}]})});
     const d=await res.json();
     const raw=(d.content?.[0]?.text||'[]').replace(/```json|```/g,'').trim();
     const arr=JSON.parse(raw);const list=Array.isArray(arr)?arr:[arr];
@@ -1078,6 +1113,111 @@ async function testFirebase(){
     console.error('Firebase test error:', e);
     toast('Error Firebase: '+e.code,'e');
   }
+}
+
+// ═══ EMOJI PICKER ═══
+const EMOJIS = {
+  'Frecuentes': ['💳','💵','🏦','💰','💸','🛒','🏪','🍕','🍔','🎬','✈️','🚗','🏠','💊','📱','💻','🎮','👗','☕','🍺'],
+  'Streaming': ['🎵','🎶','📺','🎙️','🎧','📻','🎞️','📡'],
+  'Servicios': ['💡','🔌','📶','🌊','🔥','📦','🚚','🏥','🏫','🏋️'],
+  'Bancos': ['🏦','💳','💎','🪙','📊','📈','📉','💱','🏧'],
+  'Comida': ['🍔','🍕','🌮','🌯','🍜','🍱','🍣','🥗','☕','🧃','🍺','🥤'],
+  'Transporte': ['🚗','🚙','🏍️','🚕','🚌','✈️','🚂','⛽','🅿️'],
+  'Salud': ['💊','🏥','🦷','👓','🏋️','🧘','🩺','💉','🧬'],
+  'Hogar': ['🏠','🛋️','🪴','🧹','🔧','🪟','🚿','🛁','🍳'],
+  'Entretenimiento': ['🎬','🎮','🎯','🎲','🎨','📚','🎭','🎪','🎢','🏊'],
+  'Ropa': ['👗','👔','👟','👜','💍','🧣','🧥','👒'],
+  'Tecnología': ['📱','💻','⌨️','🖥️','📷','📸','🎙️','⌚','🎧','🖨️'],
+  'Otros': ['📌','❤️','⭐','🔑','🎁','🏆','📝','✉️','📋','🗓️'],
+};
+
+let epTarget = null; // {prevId, dataId}
+let epCatActive = Object.keys(EMOJIS)[0];
+
+function openEpicker(prevId, dataId, event) {
+  event.stopPropagation();
+  const picker = document.getElementById('epicker');
+  epTarget = {prevId, dataId};
+  
+  // Posicionar cerca del botón
+  const btn = document.getElementById(prevId);
+  const rect = btn.getBoundingClientRect();
+  picker.style.display = 'block';
+  
+  // Posicionar debajo del botón, ajustar si se sale de pantalla
+  let top = rect.bottom + window.scrollY + 6;
+  let left = rect.left;
+  if (left + 280 > window.innerWidth) left = window.innerWidth - 290;
+  picker.style.top = top + 'px';
+  picker.style.left = left + 'px';
+  
+  renderEpickerCats();
+  renderEpickerEmojis(EMOJIS[epCatActive]);
+  document.getElementById('epsearch').value = '';
+  
+  // Cerrar al hacer click fuera
+  setTimeout(()=> document.addEventListener('click', closeEpickerOutside, {once:true}), 50);
+}
+
+function closeEpickerOutside(e) {
+  const picker = document.getElementById('epicker');
+  if (!picker.contains(e.target)) {
+    picker.style.display = 'none';
+  } else {
+    // Si el click fue dentro del picker, re-registrar el listener
+    setTimeout(()=> document.addEventListener('click', closeEpickerOutside, {once:true}), 50);
+  }
+}
+
+function renderEpickerCats() {
+  const el = document.getElementById('epcats');
+  el.innerHTML = Object.keys(EMOJIS).map(cat =>
+    `<button class="ecat-btn ${cat===epCatActive?'on':''}" onclick="setEpCat('${cat}')">${cat}</button>`
+  ).join('');
+}
+
+function setEpCat(cat) {
+  epCatActive = cat;
+  document.getElementById('epsearch').value = '';
+  renderEpickerCats();
+  renderEpickerEmojis(EMOJIS[cat]);
+}
+
+function renderEpickerEmojis(list) {
+  const el = document.getElementById('epgrid');
+  el.innerHTML = list.map(e =>
+    `<button class="ebtn" onclick="selectEmoji('${e}')">${e}</button>`
+  ).join('');
+}
+
+function filterEmojis() {
+  const q = document.getElementById('epsearch').value.toLowerCase();
+  if (!q) { renderEpickerEmojis(EMOJIS[epCatActive]); return; }
+  // Buscar en todos los grupos
+  const all = Object.values(EMOJIS).flat();
+  // Filtro simple por posición en lista (no tenemos nombres, mostramos todos)
+  renderEpickerEmojis(all.slice(0, 50));
+}
+
+function selectEmoji(emoji) {
+  if (!epTarget) return;
+  const prev = document.getElementById(epTarget.prevId);
+  const data = document.getElementById(epTarget.dataId);
+  if (prev) prev.innerHTML = emoji;
+  if (data) data.value = ''; // No es imagen, es emoji directo
+  // Marcar como emoji (no data URL)
+  if (prev) prev.dataset.emoji = emoji;
+  document.getElementById('epicker').style.display = 'none';
+  epTarget = null;
+}
+
+// Función para obtener el valor del ícono (emoji o data URL)
+function getIconValue(prevId, dataId) {
+  const prev = document.getElementById(prevId);
+  const data = document.getElementById(dataId);
+  if (data && data.value) return {idata: data.value, icon: ''};
+  if (prev && prev.dataset.emoji) return {idata: '', icon: prev.dataset.emoji};
+  return {idata: '', icon: prev?.textContent || '📌'};
 }
 </script>
 </body>
