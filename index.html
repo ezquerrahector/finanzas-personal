@@ -160,6 +160,16 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 /* SETTINGS */
 .seti{display:flex;align-items:center;gap:10px;padding:12px;background:var(--sf);border-radius:10px;margin-bottom:5px;border:1px solid var(--bd);cursor:pointer;}
 .setic{width:30px;height:30px;border-radius:7px;background:rgba(108,99,255,.12);display:flex;align-items:center;justify-content:center;color:var(--ac);flex-shrink:0;}
+/* AI CHAT */
+.aichat{background:var(--sf2);border:1px solid var(--bd);border-radius:12px;padding:10px;min-height:160px;max-height:280px;overflow:auto;margin-bottom:9px;display:flex;flex-direction:column;gap:8px}
+.aibub{max-width:86%;padding:9px 11px;border-radius:13px;font-size:12px;line-height:1.45;white-space:pre-wrap}
+.aibub.u{align-self:flex-end;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border-bottom-right-radius:4px}
+.aibub.b{align-self:flex-start;background:var(--sf);border:1px solid var(--bd);color:var(--tx);border-bottom-left-radius:4px}
+.aiactions{display:flex;gap:8px;margin-top:8px}
+.aiactions button{flex:1;padding:10px;border-radius:10px;border:none;font-weight:700;cursor:pointer}
+.aiactions .ok{background:var(--gn);color:#fff}
+.aiactions .no{background:var(--sf2);color:var(--tx);border:1px solid var(--bd)}
+
 /* AI */
 .aic2{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(167,139,250,.06));border:1px solid rgba(108,99,255,.22);border-radius:13px;padding:14px;margin-bottom:12px;}
 .aid{width:6px;height:6px;border-radius:50%;animation:pu 2s infinite;flex-shrink:0;}
@@ -339,11 +349,13 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
     <button class="bp" style="padding:11px;font-size:13px" onclick="confScan()">✓ Registrar ticket</button></div>
   </div>
   <div class="aic2">
-    <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><div class="aid" style="background:var(--yl)"></div><b style="font-family:'Syne',sans-serif;font-size:13px">📝 Notas AI</b></div>
-    <textarea id="noteinp" class="fta" placeholder="Ej: Ayer pagué 1,200 del súper y 350 de gasolina" style="margin-bottom:9px"></textarea>
-    <button class="bp" style="padding:11px;font-size:13px" onclick="doNotes()">🤖 Analizar con IA</button>
+    <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><div class="aid" style="background:var(--yl)"></div><b style="font-family:'Syne',sans-serif;font-size:13px">💬 Chat AI</b></div>
+    <p style="font-size:11px;color:var(--mu);margin-bottom:8px">Escribe como hablarías normalmente. Ej: "ayer pagué 40.40 en el Oxxo".</p>
+    <div id="aichatlog" class="aichat"></div>
+    <textarea id="noteinp" class="fta" placeholder="Escribe tu movimiento..." style="margin-bottom:9px"></textarea>
+    <button class="bp" style="padding:11px;font-size:13px" onclick="doNotes()">Enviar a IA</button>
     <div id="noteres" style="display:none;margin-top:9px"><div id="noteparsed" style="background:var(--sf2);border-radius:9px;padding:10px;font-size:12px;line-height:1.6;margin-bottom:8px;white-space:pre-wrap"></div>
-    <button class="bp" style="padding:11px;font-size:13px" onclick="confNotes()">✓ Registrar todos</button></div>
+    <div class="aiactions"><button class="ok" onclick="confNotes()">✓ Confirmar y registrar</button><button class="no" onclick="cancelNotes()">Cancelar</button></div></div>
   </div>
 </div>
 
@@ -406,7 +418,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v3.8 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v3.9 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -674,6 +686,7 @@ const FL={monthly:'mensual',biweekly:'quincenal',weekly:'semanal'};
 async function initApp(){
   // Mostrar estado de API key al cargar
   setTimeout(updateAIKeyStatus, 500);
+setTimeout(renderAIChat, 700);
   applyTheme(localStorage.getItem('fp_thm')||'auto');
   if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=3.7').catch(()=>{});
   
@@ -1350,7 +1363,12 @@ async function callAIBackend(payload){
 
 function normalizeAITransactions(data){
   let list = [];
-  if(Array.isArray(data?.transactions)){
+
+  // Primero usa los movimientos interpretados por el backend.
+  // Esto evita el error visual de "undefined" porque aquí viene description limpio.
+  if(Array.isArray(data?.interpretedMovements)){
+    list = data.interpretedMovements;
+  }else if(Array.isArray(data?.transactions)){
     list = data.transactions;
   }else if(Array.isArray(data?.result)){
     list = data.result;
@@ -1358,22 +1376,36 @@ function normalizeAITransactions(data){
     const limpio = data.result.replace(/```json|```/g, '').trim();
     try{ list = JSON.parse(limpio || '[]'); }catch(e){ list = []; }
   }
+
   return (list || []).map(t=>{
     const rawType = String(t.type || t.tipo || '').toLowerCase();
     const type = rawType.includes('income') || rawType.includes('ingreso') ? 'income' : 'expense';
-    const desc = t.desc || t.description || t.descripcion || t.comercio || t.merchant || 'Movimiento IA';
-    const catText = t.cat || t.category || t.categoria || (type==='income'?'Salario':'Otro');
+
+    const desc =
+      t.description ||
+      t.desc ||
+      t.descripcion ||
+      t.comercio ||
+      t.merchant ||
+      t.name ||
+      t.title ||
+      t.concept ||
+      'Movimiento sin descripción';
+
+    const catText = t.catName || t.cat || t.category || t.categoria || (type==='income'?'Ingresos':'Otros');
     const catObj = cats.find(c=>String(c.name).toLowerCase()===String(catText).toLowerCase())
       || cats.find(c=>String(c.id).toLowerCase()===String(catText).toLowerCase())
       || cats.find(c=>c.id==='other')
       || cats[0];
+
     return {
       type,
       amount: Number(t.amount ?? t.monto ?? 0),
       desc,
+      description: desc,
       date: t.date || t.fecha || today(),
       cat: catObj?.id || 'other',
-      catName: catObj?.name || catText || 'Otro',
+      catName: catObj?.name || catText || 'Otros',
       catIcon: catObj?.idata || catObj?.icon || '📌',
       note: t.note || t.nota || 'Registrado con IA'
     };
@@ -1384,7 +1416,7 @@ async function testAIBackend(){
   const el = document.getElementById('ai-key-status');
   if(el){ el.textContent='⏳ Probando backend de IA…'; el.style.color='var(--yl)'; }
   try{
-    const data = await callAIBackend({mode:'text', text:'Gasté 250 en comida hoy', date:today()});
+    const data = await callAIBackend({mode:'text', text:'Gasté 250 en comida hoy', date:today(), movements:txs||[]});
     const list = normalizeAITransactions(data);
     if(!list.length) throw new Error('La IA respondió, pero no regresó transacciones válidas');
     if(el){ el.textContent='✅ Backend IA funcionando'; el.style.color='var(--gn)'; }
@@ -1414,7 +1446,7 @@ async function scanAI(b64,mime){
   document.getElementById('scantxt').textContent='⏳ Analizando ticket…';
   document.getElementById('scanres').style.display='block';
   try{
-    const data = await callAIBackend({mode:'image', image:{data:b64, mime}, date:today()});
+    const data = await callAIBackend({mode:'image', image:{data:b64, mime}, date:today(), movements:txs||[]});
     scanP = normalizeAITransactions(data)[0] || null;
     if(!scanP){ document.getElementById('scantxt').textContent='No detecté datos claros en el ticket.'; return; }
     scanP.date=scanP.date||today();
@@ -1427,12 +1459,40 @@ async function scanAI(b64,mime){
     scanP=null;
   }
 }
-async function doNotes(){const t=document.getElementById('noteinp').value.trim();if(!t){toast('Escribe algo','e');return;}document.getElementById('noteparsed').textContent='⏳ Analizando con IA…';document.getElementById('noteres').style.display='block';await parseAI(t,'notes');}
+let aiChatMessages = [];
+function renderAIChat(){
+  const el=document.getElementById('aichatlog');
+  if(!el)return;
+  if(!aiChatMessages.length){
+    aiChatMessages=[{role:'b',text:'Hola, soy tu IA financiera. Escríbeme un gasto o ingreso y te ayudo a convertirlo en movimiento.'}];
+  }
+  el.innerHTML=aiChatMessages.map(m=>`<div class="aibub ${m.role==='u'?'u':'b'}">${esc(m.text)}</div>`).join('');
+  el.scrollTop=el.scrollHeight;
+}
+function addAIChat(role,text){aiChatMessages.push({role,text});renderAIChat();}
+function isConfirmText(t){return /^(si|sí|confirmo|ok|va|dale|correcto|registralo|regístralo|guardar|guárdalo)$/i.test(String(t||'').trim());}
+
+async function doNotes(){
+  const inp=document.getElementById('noteinp');
+  const t=inp.value.trim();
+  if(!t){toast('Escribe algo','e');return;}
+  addAIChat('u',t);
+  inp.value='';
+
+  if(notesP && notesP.length && isConfirmText(t)){
+    await confNotes();
+    return;
+  }
+
+  document.getElementById('noteparsed').textContent='⏳ Analizando con IA…';
+  document.getElementById('noteres').style.display='block';
+  await parseAI(t,'notes');
+}
 async function parseAI(text,src){
   const statusEl = src==='voice' ? document.getElementById('vstat') : document.getElementById('noteparsed');
   statusEl.textContent = '⏳ Conectando con IA…';
   try{
-    const data = await callAIBackend({mode:'text', text, date:today()});
+    const data = await callAIBackend({mode:'text', text, date:today(), movements:txs||[]});
     const list = normalizeAITransactions(data);
     if(!list.length){ statusEl.textContent='No detecté transacciones. Intenta: "Gasté 250 en comida"'; return; }
     if(src==='voice'){
@@ -1446,7 +1506,9 @@ ${fmt(voiceP.amount)}`;
       }
     } else {
       notesP=list;
-      document.getElementById('noteparsed').textContent=list.map(t=>`${t.type==='income'?'💚':'🔴'} ${t.desc}: ${fmt(t.amount)}`).join('\n');
+      const resumen=list.map(t=>`${t.type==='income'?'💚':'🔴'} ${t.desc}: ${fmt(t.amount)} · ${t.catName||'Otros'} · ${t.date||today()}`).join('\n');
+      document.getElementById('noteparsed').textContent=resumen;
+      addAIChat('b',`Detecté ${list.length} movimiento(s):\n${resumen}\n\n¿Confirmas que los registre? Puedes escribir “sí” o presionar Confirmar.`);
     }
   }catch(e){
     console.error('AI backend error:', e);
@@ -1456,7 +1518,20 @@ ${fmt(voiceP.amount)}`;
 }
 async function confVoice(){if(!voiceP)return;await saveTxAI(voiceP);document.getElementById('vres').style.display='none';document.getElementById('vconf').style.display='none';voiceP=null;}
 async function confScan(){if(!scanP)return;await saveTxAI(scanP);document.getElementById('scanres').style.display='none';document.getElementById('scanprev').style.display='none';scanP=null;}
-async function confNotes(){for(const t of notesP)await saveTxAI(t);document.getElementById('noteres').style.display='none';document.getElementById('noteinp').value='';notesP=[];}
+async function confNotes(){
+  if(!notesP || !notesP.length){toast('No hay movimientos pendientes','e');return;}
+  for(const t of notesP)await saveTxAI(t);
+  document.getElementById('noteres').style.display='none';
+  document.getElementById('noteinp').value='';
+  addAIChat('b','Listo, ya registré el movimiento.');
+  notesP=[];
+  renderAll();
+}
+function cancelNotes(){
+  notesP=[];
+  document.getElementById('noteres').style.display='none';
+  addAIChat('b','De acuerdo, no registré nada. Puedes escribirlo de nuevo con más detalle.');
+}
 
 // ═══ MODALES ═══
 function om(id){
