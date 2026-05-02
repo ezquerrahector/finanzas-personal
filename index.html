@@ -207,6 +207,20 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .profile-action span{font-size:12px;font-weight:600;line-height:1.2;}
 .order-item-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);cursor:pointer;font-weight:700;}
 .order-item-btn:disabled{opacity:.35;cursor:not-allowed;}
+
+/* IA compacta v4.5 */
+.aihub{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(167,139,250,.05));border:1px solid rgba(108,99,255,.22);border-radius:15px;padding:12px;margin-bottom:12px;}
+.aiquick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 10px;}
+.aiquick button,.aiquick label{display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--bd);background:var(--sf);border-radius:12px;padding:10px;font-size:12px;font-weight:800;cursor:pointer;color:var(--tx);}
+.aiquick button:active,.aiquick label:active{transform:scale(.98)}
+.aiinputrow{display:grid;grid-template-columns:1fr 140px;gap:8px;align-items:stretch;}
+.aiinputrow textarea{min-height:54px!important;margin:0!important;resize:vertical;}
+.aiinputrow .bp{height:54px;padding:0!important;margin:0!important;}
+.aichat.compact{min-height:190px;max-height:360px;margin:8px 0 10px;}
+.aistatusline{font-size:11px;color:var(--mu);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+.aistatusline span:last-child{color:var(--ac);font-weight:700;}
+@media(max-width:700px){.aiinputrow{grid-template-columns:1fr}.aiquick{grid-template-columns:1fr 1fr}.aichat.compact{max-height:300px}}
+
 </style>
 </head>
 <body>
@@ -234,7 +248,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v4.4</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v4.5</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -325,37 +339,45 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- IA -->
 <div id="s-ai" class="scr">
   <div class="sh">
-    <div class="st">IA Financiero</div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v4.5</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
-  <div id="ai-key-status" style="font-size:11px;padding:8px 12px;border-radius:9px;background:var(--sf);border:1px solid var(--bd);margin-bottom:12px;cursor:pointer" onclick="om('m-aikey')">🧠 IA vía Firebase Functions</div>
-  <div class="aic2">
-    <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><div class="aid" style="background:var(--ac)"></div><b style="font-family:'Syne',sans-serif;font-size:13px">🎤 Mic AI</b></div>
-    <p style="font-size:11px;color:var(--mu);margin-bottom:12px">Di: "Gasté 250 en comida" o "Cobré 5000 de salario"</p>
-    <div style="text-align:center;margin-bottom:8px"><button class="vbtn" id="vbtn" onclick="toggleVoice()"><svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1 1.93c-3.94-.49-7-3.85-7-7.93H2c0 4.97 3.51 9.05 8 9.93V20H7v2h10v-2h-3v-4.07c4.49-.88 8-4.96 8-9.93h-2c0 4.08-3.06 7.44-7 7.93z"/></svg></button></div>
-    <div id="vstat" style="text-align:center;font-size:11px;color:var(--mu)">Presiona para hablar</div>
+
+  <div id="ai-key-status" style="font-size:11px;padding:8px 12px;border-radius:9px;background:var(--sf);border:1px solid var(--bd);margin-bottom:10px;cursor:pointer" onclick="om('m-aikey')">🧠 IA vía Firebase Functions — toca para probar/configurar</div>
+
+  <div class="aihub">
+    <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px">
+      <div class="aid" style="background:var(--yl)"></div>
+      <b style="font-family:'Syne',sans-serif;font-size:14px">💬 Registro inteligente</b>
+    </div>
+    <div class="aistatusline">
+      <span>Escribe, dicta o sube un ticket. Ej: “ayer pagué 40.40 en el Oxxo”.</span>
+      <span id="vstat">Micrófono listo</span>
+    </div>
+
+    <div class="aiquick">
+      <button id="vbtn" type="button" onclick="toggleVoice()">🎤 Dictar movimiento</button>
+      <label for="scanf">📷 Escanear ticket</label>
+    </div>
+
+    <input type="file" id="scanf" accept="image/*" capture="environment" style="display:none" onchange="doScan(this)"/>
+    <img id="scanprev" style="max-width:160px;border-radius:10px;margin:0 0 8px 0;display:none;border:1px solid var(--bd)"/>
+    <div id="scanres" style="display:none;margin-bottom:8px"><div id="scantxt" style="background:var(--sf2);border-radius:9px;padding:10px;font-size:12px;line-height:1.6;white-space:pre-wrap"></div></div>
+
+    <div id="aichatlog" class="aichat compact"></div>
+
+    <div class="aiinputrow">
+      <textarea id="noteinp" class="fta" placeholder="Escribe tu movimiento..."></textarea>
+      <button class="bp" onclick="doNotes()">Enviar a IA</button>
+    </div>
+
+    <div id="noteres" style="display:none;margin-top:9px">
+      <div id="noteparsed" style="background:var(--sf2);border-radius:9px;padding:10px;font-size:12px;line-height:1.6;margin-bottom:8px;white-space:pre-wrap"></div>
+      <div class="aiactions"><button class="ok" onclick="confNotes()">✓ Confirmar y registrar</button><button class="no" onclick="cancelNotes()">Cancelar</button></div>
+    </div>
+
     <div id="vres" style="display:none;margin-top:8px;background:var(--sf2);border-radius:9px;padding:10px;font-size:12px;line-height:1.6;white-space:pre-wrap"></div>
     <button id="vconf" class="bp" style="display:none;margin-top:8px;padding:11px;font-size:13px" onclick="confVoice()">✓ Registrar</button>
-  </div>
-  <div class="aic2">
-    <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><div class="aid" style="background:var(--gn)"></div><b style="font-family:'Syne',sans-serif;font-size:13px">📷 Scan AI</b></div>
-    <div class="sca" onclick="document.getElementById('scanf').click()">
-      <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" style="color:var(--mu)"><path d="M3 4V1h2v3h3v2H5v3H3V6H0V4h3zm3 6V7h3V4h7l1.83 2H21c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V10h3zm7 9c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5z"/></svg>
-      <p style="font-size:11px;color:var(--mu);margin-top:6px">Foto de ticket</p>
-      <img id="scanprev" style="max-width:100%;border-radius:8px;margin-top:8px;display:none"/>
-    </div>
-    <input type="file" id="scanf" accept="image/*" capture="environment" style="display:none" onchange="doScan(this)"/>
-    <div id="scanres" style="display:none"><div id="scantxt" style="background:var(--sf2);border-radius:9px;padding:10px;font-size:12px;line-height:1.6;margin-bottom:8px;white-space:pre-wrap"></div>
-    <button class="bp" style="padding:11px;font-size:13px" onclick="confScan()">✓ Registrar ticket</button></div>
-  </div>
-  <div class="aic2">
-    <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><div class="aid" style="background:var(--yl)"></div><b style="font-family:'Syne',sans-serif;font-size:13px">💬 Chat AI</b></div>
-    <p style="font-size:11px;color:var(--mu);margin-bottom:8px">Escribe como hablarías normalmente. Ej: "ayer pagué 40.40 en el Oxxo".</p>
-    <div id="aichatlog" class="aichat"></div>
-    <textarea id="noteinp" class="fta" placeholder="Escribe tu movimiento..." style="margin-bottom:9px"></textarea>
-    <button class="bp" style="padding:11px;font-size:13px" onclick="doNotes()">Enviar a IA</button>
-    <div id="noteres" style="display:none;margin-top:9px"><div id="noteparsed" style="background:var(--sf2);border-radius:9px;padding:10px;font-size:12px;line-height:1.6;margin-bottom:8px;white-space:pre-wrap"></div>
-    <div class="aiactions"><button class="ok" onclick="confNotes()">✓ Confirmar y registrar</button><button class="no" onclick="cancelNotes()">Cancelar</button></div></div>
   </div>
 </div>
 
@@ -418,7 +440,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v4.3 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v4.5 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -1444,7 +1466,7 @@ async function testAIBackend(){
   const el = document.getElementById('ai-key-status');
   if(el){ el.textContent='⏳ Probando backend de IA…'; el.style.color='var(--yl)'; }
   try{
-    const data = await callAIBackend({mode:'text', text:'Gasté 250 en comida hoy', date:today(), movements:txs||[]});
+    const data = await callAIBackend({mode:'text', text:'Gasté 250 en comida hoy', date:today(), movements:[]});
     const list = normalizeAITransactions(data);
     if(!list.length) throw new Error('La IA respondió, pero no regresó transacciones válidas');
     if(el){ el.textContent='✅ Backend IA funcionando'; el.style.color='var(--gn)'; }
@@ -1463,27 +1485,37 @@ function toggleVoice(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   recog=new SR();recog.lang='es-MX';recog.interimResults=false;
   recog.onstart=()=>{isRec=true;document.getElementById('vbtn').classList.add('rec');document.getElementById('vstat').textContent='🔴 Escuchando…';};
-  recog.onresult=async e=>{const t=e.results[0][0].transcript;document.getElementById('vstat').textContent='⏳ Analizando: '+t;await parseAI(t,'voice');};
+  recog.onresult=async e=>{const t=e.results[0][0].transcript;document.getElementById('vstat').textContent='⏳ Analizando voz…';const inp=document.getElementById('noteinp'); if(inp){inp.value=t; await doNotes();} else {await parseAI(t,'notes');}};
   recog.onerror=()=>{toast('Error micrófono','e');stopVoice();};
   recog.onend=()=>stopVoice();
   recog.start();
 }
-function stopVoice(){isRec=false;document.getElementById('vbtn')?.classList.remove('rec');}
+function stopVoice(){isRec=false;document.getElementById('vbtn')?.classList.remove('rec');const vs=document.getElementById('vstat');if(vs)vs.textContent='Micrófono listo';}
 async function doScan(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=async e=>{const p=document.getElementById('scanprev');p.src=e.target.result;p.style.display='block';await scanAI(e.target.result.split(',')[1],f.type);};r.readAsDataURL(f);}
 async function scanAI(b64,mime){
-  document.getElementById('scantxt').textContent='⏳ Analizando ticket…';
-  document.getElementById('scanres').style.display='block';
+  const txtEl=document.getElementById('scantxt');
+  const resEl=document.getElementById('scanres');
+  if(txtEl)txtEl.textContent='⏳ Analizando ticket con IA…';
+  if(resEl)resEl.style.display='block';
   try{
-    const data = await callAIBackend({mode:'image', image:{data:b64, mime}, date:today(), movements:txs||[]});
-    scanP = normalizeAITransactions(data)[0] || null;
-    if(!scanP){ document.getElementById('scantxt').textContent='No detecté datos claros en el ticket.'; return; }
-    scanP.date=scanP.date||today();
-    document.getElementById('scantxt').textContent=`🏪 ${scanP.desc}
-💰 ${fmt(scanP.amount)}
-📅 ${scanP.date}`;
+    const data = await callAIBackend({mode:'image', image:{data:b64, mime}, date:today(), movements:[]});
+    const list = normalizeAITransactions(data);
+    if(!list.length){ if(txtEl)txtEl.textContent='No detecté datos claros en el ticket. Puedes escribir el gasto manualmente abajo.'; return; }
+    notesP=list;
+    showPendingNotes();
+    const resumen=notesP.map(movementLine).join('\n');
+    if(txtEl)txtEl.textContent='Ticket interpretado:\n'+resumen;
+    addAIChat('b',`Leí el ticket y detecté ${notesP.length} movimiento(s):\n${resumen}`);
+    if(accs.length){
+      aiChatStep='waiting_payment';
+      addAIChat('b',`¿Con qué cuenta o tarjeta lo pagaste?\n${accountOptionsText()}`);
+    }else{
+      aiChatStep='waiting_confirmation';
+      addAIChat('b','¿Confirmas que lo registre? Puedes escribir “sí” o presionar Confirmar.');
+    }
   }catch(e){
     console.error('Scan AI error:', e);
-    document.getElementById('scantxt').textContent='No pude leer el ticket: '+e.message;
+    if(txtEl)txtEl.textContent='No pude leer el ticket: '+e.message+'\nPuedes escribirlo manualmente abajo.';
     scanP=null;
   }
 }
