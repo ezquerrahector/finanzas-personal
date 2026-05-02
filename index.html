@@ -304,7 +304,11 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- IA -->
 <div id="s-ai" class="scr">
-  <div class="sh"><div class="st">IA Financiero</div></div>
+  <div class="sh">
+    <div class="st">IA Financiero</div>
+    <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🔑 API Key</button>
+  </div>
+  <div id="ai-key-status" style="font-size:11px;padding:8px 12px;border-radius:9px;background:var(--sf);border:1px solid var(--bd);margin-bottom:12px;cursor:pointer" onclick="om('m-aikey')">⚠️ Sin API key — toca aquí para configurar</div>
   <div class="aic2">
     <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><div class="aid" style="background:var(--ac)"></div><b style="font-family:'Syne',sans-serif;font-size:13px">🎤 Mic AI</b></div>
     <p style="font-size:11px;color:var(--mu);margin-bottom:12px">Di: "Gasté 250 en comida" o "Cobré 5000 de salario"</p>
@@ -556,6 +560,28 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   <input class="epicker-search" id="epsearch" placeholder="Buscar emoji…" oninput="filterEmojis()"/>
   <div class="egrid" id="epgrid"></div>
 </div>
+
+<!-- Modal API Key -->
+<div class="mo" id="m-aikey" onclick="cox(event,'m-aikey')">
+  <div class="ms">
+    <div class="mh"></div>
+    <div class="mt">🔑 Configurar API Key</div>
+    <div style="background:rgba(108,99,255,.08);border:1px solid rgba(108,99,255,.2);border-radius:10px;padding:12px;margin-bottom:14px;font-size:12px;line-height:1.7;color:var(--tx)">
+      <b>¿Cómo obtener tu API key?</b><br>
+      1. Ve a <b>console.anthropic.com</b><br>
+      2. Inicia sesión o crea cuenta<br>
+      3. Click en "API Keys" → "Create Key"<br>
+      4. Copia la key y pégala aquí
+    </div>
+    <div class="fg">
+      <label class="fl">Tu API Key de Anthropic</label>
+      <input class="fi" id="ai-key-input" type="password" placeholder="sk-ant-api03-…" autocomplete="off"/>
+    </div>
+    <button class="bp" onclick="saveAIKey()">Guardar API Key</button>
+    <button onclick="localStorage.removeItem('fp_aikey');updateAIKeyStatus();toast('Key borrada','s');document.getElementById('m-aikey').classList.remove('on')" style="width:100%;padding:10px;border-radius:10px;background:transparent;border:1px solid var(--rd);color:var(--rd);font-size:13px;cursor:pointer;margin-top:7px">Borrar API Key</button>
+    <p style="font-size:10px;color:var(--mu);text-align:center;margin-top:10px">La key se guarda solo en este dispositivo</p>
+  </div>
+</div>
 <div id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -631,6 +657,8 @@ const FL={monthly:'mensual',biweekly:'quincenal',weekly:'semanal'};
 // ═══ FIREBASE INIT ═══
 // ═══ INIT DIRECTO (todo en module, sin evento fb-ready) ═══
 async function initApp(){
+  // Mostrar estado de API key al cargar
+  setTimeout(updateAIKeyStatus, 500);
   applyTheme(localStorage.getItem('fp_thm')||'auto');
   if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
   
@@ -1069,14 +1097,55 @@ async function scanAI(b64,mime){document.getElementById('scantxt').textContent='
   const d=await res.json();scanP=JSON.parse((d.content?.[0]?.text||'{}').replace(/```json|```/g,'').trim());scanP.date=scanP.date||today();document.getElementById('scantxt').textContent=`🏪 ${scanP.desc}\n💰 ${fmt(scanP.amount)}\n📅 ${scanP.date}`;}catch(e){document.getElementById('scantxt').textContent='No pude leer el ticket. Intenta de nuevo.';scanP=null;}}
 async function doNotes(){const t=document.getElementById('noteinp').value.trim();if(!t){toast('Escribe algo','e');return;}document.getElementById('noteparsed').textContent='⏳ Analizando con IA…';document.getElementById('noteres').style.display='block';await parseAI(t,'notes');}
 async function parseAI(text,src){
+  const statusEl = src==='voice' ? document.getElementById('vstat') : document.getElementById('noteparsed');
+  statusEl.textContent = '⏳ Conectando con IA…';
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-ipc':'true','anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content:`Finanzas personales México. Extrae transacciones de: "${text}". Responde SOLO JSON array sin markdown: [{"amount":NUMERO,"desc":"texto","type":"expense|income","cat":"food|housing|transport|health|ent|shop|edu|salary|inv|sav|bills|other","date":"${today()}"}]`}]})});
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key': getAIKey(),
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-ipc':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-haiku-4-5-20251001',
+        max_tokens:600,
+        messages:[{role:'user',content:`Eres asistente de finanzas personales en México. Analiza este texto y extrae TODAS las transacciones mencionadas: "${text}". 
+Responde ÚNICAMENTE con un JSON array válido, sin markdown, sin explicaciones:
+[{"amount":NUMERO_SIN_COMAS,"desc":"descripción corta","type":"expense o income","cat":"food|housing|transport|health|ent|shop|edu|salary|inv|sav|bills|other","date":"${today()}"}]
+Si no hay transacciones claras responde: []`}]
+      })
+    });
+    if(!res.ok){
+      const errTxt = await res.text();
+      console.error('AI HTTP error:', res.status, errTxt);
+      statusEl.textContent = `Error ${res.status}: ${res.status===401?'API key inválida':res.status===403?'Sin acceso':errTxt.slice(0,80)}`;
+      return;
+    }
     const d=await res.json();
     const raw=(d.content?.[0]?.text||'[]').replace(/```json|```/g,'').trim();
-    const arr=JSON.parse(raw);const list=Array.isArray(arr)?arr:[arr];
-    if(src==='voice'){voiceP=list[0]||null;if(voiceP){document.getElementById('vres').style.display='block';document.getElementById('vres').textContent=`${voiceP.type==='income'?'💚':'🔴'} ${voiceP.desc}\n${fmt(voiceP.amount)}`;document.getElementById('vconf').style.display='block';document.getElementById('vstat').textContent='✓ Listo para registrar';}}
-    else{notesP=list;document.getElementById('noteparsed').textContent=list.map(t=>`${t.type==='income'?'💚':'🔴'} ${t.desc}: ${fmt(t.amount)}`).join('\n');}
-  }catch(e){const m='Error de conexión con la IA. Intenta de nuevo.';if(src==='voice')document.getElementById('vstat').textContent=m;else document.getElementById('noteparsed').textContent=m;}
+    let list=[];
+    try{ const arr=JSON.parse(raw); list=Array.isArray(arr)?arr:[arr]; }
+    catch(pe){ console.error('JSON parse error:', raw); statusEl.textContent='La IA no devolvió formato válido. Intenta con texto más claro.'; return; }
+    if(!list.length){ statusEl.textContent='No detecté transacciones. Intenta: "Gasté 250 en comida"'; return; }
+    if(src==='voice'){
+      voiceP=list[0]||null;
+      if(voiceP){
+        document.getElementById('vres').style.display='block';
+        document.getElementById('vres').textContent=`${voiceP.type==='income'?'💚':'🔴'} ${voiceP.desc}\n${fmt(voiceP.amount)}`;
+        document.getElementById('vconf').style.display='block';
+        document.getElementById('vstat').textContent='✓ Listo para registrar';
+      }
+    } else {
+      notesP=list;
+      document.getElementById('noteparsed').textContent=list.map(t=>`${t.type==='income'?'💚':'🔴'} ${t.desc}: ${fmt(t.amount)}`).join('\n');
+    }
+  }catch(e){
+    console.error('AI fetch error:', e);
+    statusEl.textContent='Sin conexión con IA. Verifica tu API key en Ajustes o tu conexión a internet.';
+    if(src==='voice') document.getElementById('vstat').textContent='Sin conexión. ¿Tienes API key configurada?';
+  }
 }
 async function confVoice(){if(!voiceP)return;await saveTxAI(voiceP);document.getElementById('vres').style.display='none';document.getElementById('vconf').style.display='none';voiceP=null;}
 async function confScan(){if(!scanP)return;await saveTxAI(scanP);document.getElementById('scanres').style.display='none';document.getElementById('scanprev').style.display='none';scanP=null;}
@@ -1253,4 +1322,29 @@ function getIconValue(prevId, dataId) {
   return {idata: '', icon: prev?.textContent || '📌'};
 }
 
+
+// ═══ API KEY GESTIÓN ═══
+function getAIKey(){
+  return localStorage.getItem('fp_aikey') || '';
+}
+function saveAIKey(){
+  const k = document.getElementById('ai-key-input').value.trim();
+  if(!k){ toast('Pega tu API key primero','e'); return; }
+  localStorage.setItem('fp_aikey', k);
+  toast('✅ API key guardada','s');
+  document.getElementById('m-aikey').classList.remove('on');
+  updateAIKeyStatus();
+}
+function updateAIKeyStatus(){
+  const key = getAIKey();
+  const el = document.getElementById('ai-key-status');
+  if(!el) return;
+  if(key){
+    el.textContent = '✅ API key configurada (' + key.slice(0,8) + '…)';
+    el.style.color = 'var(--gn)';
+  } else {
+    el.textContent = '⚠️ Sin API key — la IA no funcionará';
+    el.style.color = 'var(--yl)';
+  }
+}
 </script>
