@@ -523,6 +523,94 @@ canvas { width:100% !important; }
 .credit-bar { height:4px; background:rgba(255,255,255,.15); border-radius:2px; margin-top:10px; }
 .credit-bar-fill { height:4px; border-radius:2px; transition:width .4s; }
 
+/* ── CHAT AI ── */
+.ai-bubble-user {
+  display:flex; justify-content:flex-end; margin-bottom:12px;
+}
+.ai-bubble-user-text {
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff; padding:10px 16px; border-radius:18px 18px 4px 18px;
+  max-width:80%; font-size:14px; line-height:1.5;
+}
+.ai-bubble-bot {
+  display:flex; gap:10px; margin-bottom:16px; align-items:flex-start;
+}
+.ai-avatar {
+  width:32px; height:32px; border-radius:50%; flex-shrink:0;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px;
+}
+.ai-bubble-bot-inner { flex:1; }
+.ai-bubble-bot-text {
+  background:var(--surface); border:1px solid var(--border);
+  padding:10px 14px; border-radius:4px 18px 18px 18px;
+  font-size:13px; color:var(--muted); margin-bottom:10px;
+  line-height:1.5;
+}
+
+/* Tarjeta de transacción detectada (editable) */
+.ai-tx-card {
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:14px; padding:14px; margin-bottom:10px;
+  transition:.2s;
+}
+.ai-tx-card-header {
+  display:flex; align-items:center; gap:10px; margin-bottom:12px;
+}
+.ai-tx-type-badge {
+  padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.5px;
+}
+.ai-tx-type-badge.exp { background:rgba(255,95,126,.18); color:#ff8fa3; }
+.ai-tx-type-badge.inc { background:rgba(34,211,160,.18); color:#22d3a0; }
+.ai-tx-fields { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+.ai-tx-field { }
+.ai-tx-field-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:3px; }
+.ai-tx-field input, .ai-tx-field select {
+  width:100%; padding:7px 10px; background:var(--surface);
+  border:1px solid var(--border); border-radius:8px;
+  color:var(--text); font-size:13px; font-family:var(--font-body); outline:none;
+}
+.ai-tx-field input:focus, .ai-tx-field select:focus { border-color:var(--accent); }
+.ai-tx-actions { display:flex; gap:8px; }
+.ai-tx-confirm {
+  flex:1; padding:9px; border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border:none; color:#fff; font-size:13px; font-weight:700; cursor:pointer;
+}
+.ai-tx-dismiss {
+  padding:9px 14px; border-radius:10px;
+  background:transparent; border:1px solid var(--border);
+  color:var(--muted); font-size:13px; cursor:pointer;
+}
+.ai-tx-confirmed {
+  opacity:.5; pointer-events:none;
+}
+.ai-tx-confirmed .ai-tx-confirm {
+  background:var(--surface2); color:var(--muted);
+}
+
+/* Typing indicator */
+.ai-typing {
+  display:flex; gap:4px; align-items:center; padding:8px 0;
+}
+.ai-typing span {
+  width:7px; height:7px; border-radius:50%; background:var(--muted);
+  animation:typingBounce 1.2s infinite;
+}
+.ai-typing span:nth-child(2) { animation-delay:.2s; }
+.ai-typing span:nth-child(3) { animation-delay:.4s; }
+@keyframes typingBounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+
+/* mic activo */
+#ai-mic-btn.recording {
+  background:rgba(255,95,126,.2) !important;
+  border-color:var(--red) !important;
+  color:var(--red) !important;
+  animation:voicePulse .8s infinite;
+}
+
 /* ── CRÉDITOS / PRÉSTAMOS ── */
 .loan-card {
   border-radius:18px; padding:20px; margin-bottom:14px;
@@ -717,59 +805,54 @@ canvas { width:100% !important; }
     <!-- ── AI ── -->
     <div id="screen-ai" class="screen">
       <div class="screen-header">
-        <div class="screen-title">IA Financiero</div>
+        <div class="screen-title">IA</div>
+        <button onclick="clearAIChat()" style="background:transparent;border:none;color:var(--muted);font-size:13px;cursor:pointer">Limpiar</button>
       </div>
 
-      <!-- Mic AI -->
-      <div class="ai-card" style="margin-bottom:16px">
-        <div class="ai-header">
-          <div class="ai-dot"></div>
-          <div class="ai-title">🎤 Mic AI — Voz a gasto</div>
-        </div>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Di algo como: "Gasté 250 pesos en comida en el Oxxo"</p>
-        <div style="text-align:center;margin-bottom:12px">
-          <button class="voice-btn" id="voice-btn" onclick="toggleVoice()">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1 1.93c-3.94-.49-7-3.85-7-7.93H2c0 4.97 3.51 9.05 8 9.93V20H7v2h10v-2h-3v-4.07c4.49-.88 8-4.96 8-9.93h-2c0 4.08-3.06 7.44-7 7.93z"/></svg>
-          </button>
-        </div>
-        <div id="voice-status" style="text-align:center;font-size:13px;color:var(--muted)">Presiona para hablar</div>
-        <div id="voice-result" style="margin-top:12px;display:none" class="notes-preview"></div>
-        <button id="voice-confirm-btn" class="btn-primary" style="margin-top:12px;display:none" onclick="confirmVoiceEntry()">✓ Registrar este gasto</button>
+      <!-- CHAT HISTORY -->
+      <div id="ai-chat-history" style="margin-bottom:16px"></div>
+
+      <!-- INPUT PRINCIPAL tipo chat -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:4px 4px 4px 16px;display:flex;align-items:flex-end;gap:8px;margin-bottom:12px;position:sticky;bottom:calc(80px + var(--safe-bottom));z-index:10">
+        <textarea id="ai-chat-input"
+          placeholder="Escribe lo que gastaste... ej: 'pagué 450 en gasolina y 200 en el Oxxo'"
+          rows="1"
+          style="flex:1;background:transparent;border:none;color:var(--text);font-family:var(--font-body);font-size:15px;outline:none;resize:none;padding:10px 0;max-height:120px;overflow-y:auto;line-height:1.4"
+          oninput="autoResizeAI(this)"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAIMessage()}"
+        ></textarea>
+        <!-- Mic -->
+        <button id="ai-mic-btn" onclick="toggleAIVoice()" style="width:42px;height:42px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1 1.93c-3.94-.49-7-3.85-7-7.93H2c0 4.97 3.51 9.05 8 9.93V20H7v2h10v-2h-3v-4.07c4.49-.88 8-4.96 8-9.93h-2c0 4.08-3.06 7.44-7 7.93z"/></svg>
+        </button>
+        <!-- Foto ticket -->
+        <button onclick="document.getElementById('ai-scan-input').click()" style="width:42px;height:42px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 4V1h2v3h3v2H5v3H3V6H0V4h3zm3 6V7h3V4h7l1.83 2H21c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V10h3zm7 9c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5z"/></svg>
+        </button>
+        <!-- Enviar -->
+        <button onclick="sendAIMessage()" id="ai-send-btn" style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 12px rgba(108,99,255,.4)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+        <input type="file" id="ai-scan-input" accept="image/*" capture="environment" style="display:none" onchange="processAIScan(this)"/>
       </div>
 
-      <!-- Scan AI -->
-      <div class="ai-card" style="margin-bottom:16px">
-        <div class="ai-header">
-          <div class="ai-dot" style="background:var(--green)"></div>
-          <div class="ai-title">📷 Scan AI — Escanear ticket</div>
-        </div>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Toma una foto de tu ticket o recibo para extraer el total automáticamente</p>
-        <div class="scan-area" onclick="document.getElementById('scan-input').click()">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 4V1h2v3h3v2H5v3H3V6H0V4h3zm3 6V7h3V4h7l1.83 2H21c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V10h3zm7 9c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-3.2-5c0 1.77 1.43 3.2 3.2 3.2 1.77 0 3.2-1.43 3.2-3.2 0-1.77-1.43-3.2-3.2-3.2-1.77 0-3.2 1.43-3.2 3.2z"/></svg>
-          <p style="font-size:13px;color:var(--muted)">Toca para tomar foto o seleccionar imagen</p>
-          <img id="scan-preview"/>
-        </div>
-        <input type="file" id="scan-input" accept="image/*" capture="environment" style="display:none" onchange="processScan(this)"/>
-        <div id="scan-result" style="display:none">
-          <div class="notes-preview" id="scan-text" style="margin-bottom:12px"></div>
-          <button class="btn-primary" onclick="confirmScanEntry()">✓ Registrar este gasto</button>
-        </div>
+      <!-- EJEMPLOS rápidos -->
+      <div id="ai-examples" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="period-btn" onclick="setAIExample('Gasté 450 en gasolina')">⛽ Gasolina</button>
+        <button class="period-btn" onclick="setAIExample('Pagué 1,200 del súper y 350 de farmacia')">🛒 Súper</button>
+        <button class="period-btn" onclick="setAIExample('Me depositaron 8,500 de nómina')">💰 Nómina</button>
+        <button class="period-btn" onclick="setAIExample('Comí en el centro 180 pesos y gasté 60 en café')">🍽️ Comida</button>
+        <button class="period-btn" onclick="setAIExample('Pagué la luz 890, el internet 599 y el agua 320')">💡 Servicios</button>
       </div>
 
-      <!-- Notas AI -->
-      <div class="ai-card">
-        <div class="ai-header">
-          <div class="ai-dot" style="background:var(--yellow)"></div>
-          <div class="ai-title">📝 Notas AI — Texto libre</div>
-        </div>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Escribe de forma natural y la IA interpretará el gasto</p>
-        <div class="form-group">
-          <textarea class="form-textarea" id="notes-input" placeholder='Ej: "Ayer pagué 1,200 del súper y 350 de gasolina"' rows="3"></textarea>
-        </div>
-        <button class="btn-primary" onclick="processNotes()">🤖 Analizar con IA</button>
-        <div id="notes-result" style="margin-top:12px;display:none">
-          <div class="notes-preview" id="notes-parsed" style="margin-bottom:12px"></div>
-          <button class="btn-primary" onclick="confirmNotesEntry()">✓ Registrar gastos</button>
+      <!-- Mensaje bienvenida inicial -->
+      <div id="ai-welcome" style="text-align:center;padding:24px 16px">
+        <div style="font-size:48px;margin-bottom:12px">🤖</div>
+        <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:8px">Escribe como con un amigo</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.6">
+          Di lo que gastaste en lenguaje natural.<br>
+          Detecto montos, categorías e ingresos automáticamente.<br>
+          También puedes mandarme foto de tu ticket.
         </div>
       </div>
     </div>
