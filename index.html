@@ -234,7 +234,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v4.0</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v4.1</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -418,7 +418,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v4.0 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v4.1 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -925,9 +925,27 @@ function editTx(id){
 async function saveTxAI(t){
   if(!UID||!t.amount||!t.desc)return;
   const cat=cats.find(c=>c.id===t.cat)||cats[cats.length-1]||{id:'other',name:'Otro',icon:'📌'};
-  const tx={amount:t.amount,desc:t.desc,date:t.date||today(),cat:t.cat||'other',note:'',type:t.type||'expense',catIcon:cat.idata||cat.icon||'📌',catName:cat.name,accountId:'',accountName:'',createdAt:new Date().toISOString()};
+  const acc=t.accountId?accs.find(a=>a.id===t.accountId):null;
+  const tx={
+    amount:t.amount,
+    desc:t.desc,
+    date:t.date||today(),
+    cat:t.cat||'other',
+    note:t.note||'Registrado con IA',
+    type:t.type||'expense',
+    catIcon:cat.idata||cat.icon||'📌',
+    catName:cat.name,
+    accountId:t.accountId||'',
+    accountName:acc?.name||t.accountName||'',
+    accountColor:acc?.color||'',
+    createdAt:new Date().toISOString()
+  };
   try{
     await addDoc(collection(DB,`users/${UID}/transactions`),tx);
+    if(tx.accountId){
+      applyTxBalance(tx);
+      await saveAccsL();
+    }
     toast('✓ Guardado','s');
   }catch(e){
     console.error('Firestore AI error:', e);
@@ -1460,6 +1478,7 @@ async function scanAI(b64,mime){
   }
 }
 let aiChatMessages = [];
+let aiChatStep = 'idle'; // idle | waiting_payment | waiting_confirmation
 function renderAIChat(){
   const el=document.getElementById('aichatlog');
   if(!el)return;
@@ -1470,7 +1489,28 @@ function renderAIChat(){
   el.scrollTop=el.scrollHeight;
 }
 function addAIChat(role,text){aiChatMessages.push({role,text});renderAIChat();}
-function isConfirmText(t){return /^(si|sí|confirmo|ok|va|dale|correcto|registralo|regístralo|guardar|guárdalo)$/i.test(String(t||'').trim());}
+function isConfirmText(t){return /^(si|sí|confirmo|ok|va|dale|correcto|registralo|regístralo|guardar|guárdalo|guarda|confirmar)$/i.test(String(t||'').trim());}
+function isCancelText(t){return /^(no|cancelar|cancela|mejor no|borra|descarta)$/i.test(String(t||'').trim());}
+function movementLine(t){return `${t.type==='income'?'💚':'🔴'} ${t.desc}: ${fmt(t.amount)} · ${t.catName||'Otros'} · ${t.date||today()}${t.accountName?' · '+t.accountName:''}`;}
+function accountOptionsText(){
+  if(!accs.length)return '';
+  return accs.slice(0,8).map(a=>`• ${a.name}`).join('\n');
+}
+function findAccountFromText(text){
+  const q=String(text||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  return accs.find(a=>{
+    const n=String(a.name||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    return n && (q.includes(n) || n.split(/\s+/).some(w=>w.length>3 && q.includes(w)));
+  }) || null;
+}
+function showPendingNotes(){
+  const box=document.getElementById('noteres');
+  const parsed=document.getElementById('noteparsed');
+  if(!box||!parsed)return;
+  if(!notesP || !notesP.length){box.style.display='none';return;}
+  box.style.display='block';
+  parsed.textContent=notesP.map(movementLine).join('\n');
+}
 
 async function doNotes(){
   const inp=document.getElementById('noteinp');
@@ -1479,8 +1519,31 @@ async function doNotes(){
   addAIChat('u',t);
   inp.value='';
 
-  if(notesP && notesP.length && isConfirmText(t)){
-    await confNotes();
+  if(isCancelText(t)){
+    cancelNotes();
+    aiChatStep='idle';
+    return;
+  }
+
+  if(aiChatStep==='waiting_payment' && notesP && notesP.length){
+    const acc=findAccountFromText(t);
+    if(!acc){
+      addAIChat('b',`No encontré esa cuenta o tarjeta. Escríbeme el nombre como aparece en Cuentas.\n${accountOptionsText()}`);
+      return;
+    }
+    notesP=notesP.map(x=>({...x,accountId:acc.id,accountName:acc.name}));
+    showPendingNotes();
+    aiChatStep='waiting_confirmation';
+    addAIChat('b',`Perfecto, lo asigno a ${acc.name}.\n\n${notesP.map(movementLine).join('\n')}\n\n¿Confirmas que lo registre?`);
+    return;
+  }
+
+  if(aiChatStep==='waiting_confirmation' && notesP && notesP.length){
+    if(isConfirmText(t)){
+      await confNotes();
+      return;
+    }
+    addAIChat('b','Para registrarlo escribe “sí”. Si no quieres guardarlo, escribe “cancelar”.');
     return;
   }
 
@@ -1506,9 +1569,15 @@ ${fmt(voiceP.amount)}`;
       }
     } else {
       notesP=list;
-      const resumen=list.map(t=>`${t.type==='income'?'💚':'🔴'} ${t.desc}: ${fmt(t.amount)} · ${t.catName||'Otros'} · ${t.date||today()}`).join('\n');
-      document.getElementById('noteparsed').textContent=resumen;
-      addAIChat('b',`Detecté ${list.length} movimiento(s):\n${resumen}\n\n¿Confirmas que los registre? Puedes escribir “sí” o presionar Confirmar.`);
+      showPendingNotes();
+      const resumen=notesP.map(movementLine).join('\n');
+      if(accs.length){
+        aiChatStep='waiting_payment';
+        addAIChat('b',`Detecté ${notesP.length} movimiento(s):\n${resumen}\n\n¿Con qué cuenta o tarjeta lo pagaste?\n${accountOptionsText()}`);
+      }else{
+        aiChatStep='waiting_confirmation';
+        addAIChat('b',`Detecté ${notesP.length} movimiento(s):\n${resumen}\n\n¿Confirmas que lo registre? Puedes escribir “sí” o presionar Confirmar.`);
+      }
     }
   }catch(e){
     console.error('AI backend error:', e);
@@ -1523,26 +1592,17 @@ async function confNotes(){
   for(const t of notesP)await saveTxAI(t);
   document.getElementById('noteres').style.display='none';
   document.getElementById('noteinp').value='';
-  addAIChat('b','Listo, ya registré el movimiento.');
+  addAIChat('b',`Listo, registré ${notesP.length} movimiento(s) ✅`);
   notesP=[];
+  aiChatStep='idle';
   renderAll();
 }
 function cancelNotes(){
   notesP=[];
+  aiChatStep='idle';
   document.getElementById('noteres').style.display='none';
   addAIChat('b','De acuerdo, no registré nada. Puedes escribirlo de nuevo con más detalle.');
 }
-
-// ═══ MODALES ═══
-function om(id){
-  document.getElementById(id)?.classList.add('on');
-  if(id==='m-add'){rCatGrid();rChips('acs-tx','tx');document.getElementById('ai-date').value=today();}
-  if(id==='m-cats'){resetCatForm();rCatsMdl();}
-  if(id==='m-rec'){rChips('acs-rec','rec');rRecCatSel();}
-  if(id==='m-inst')rChips('acs-inst','inst');
-}
-function cm(id){document.getElementById(id)?.classList.remove('on');}
-function cox(e,id){if(e.target.id===id)cm(id);}
 
 // ═══ CSV ═══
 
