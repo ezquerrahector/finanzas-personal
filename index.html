@@ -203,7 +203,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div class="st">Finanzas</div><button class="bsm" onclick="om('m-add')">+ Agregar</button></div>
+  <div class="sh"><div class="st">Finanzas</div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -216,7 +216,20 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
     <div class="mci"><div class="mcil">Mes pasado</div><div class="mciv" id="m-last" style="color:var(--rd)">$0</div><div class="mcis" id="m-lastn">—</div></div>
     <div class="mci"><div class="mcil">Este mes</div><div class="mciv" id="m-cur" style="color:var(--yl)">$0</div><div class="mcis" id="m-curn">—</div></div>
   </div>
-  <div id="h-alerts"></div>
+  
+<!-- DEBUG PANEL — visible cuando hay error -->
+<div id="dbg-panel" style="background:var(--sf);border:1px solid var(--bd);border-radius:11px;padding:13px;margin-bottom:12px;display:none" id="dbg-panel">
+  <div style="font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;display:flex;justify-content:space-between">
+    <span>🔍 Diagnóstico Firebase</span>
+    <button onclick="document.getElementById('dbg-panel').style.display='none'" style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:12px">✕</button>
+  </div>
+  <div id="dbg-uid" style="font-size:11px;margin-bottom:4px"></div>
+  <div id="dbg-path" style="font-size:11px;margin-bottom:4px"></div>
+  <div id="dbg-msg" style="font-size:11px;color:var(--rd);margin-bottom:4px;display:none"></div>
+  <div id="dbg-cnt" style="font-size:11px;color:var(--gn)"></div>
+  <button onclick="testFirebase()" style="margin-top:8px;width:100%;padding:8px;border-radius:8px;background:var(--sf2);border:1px solid var(--bd);color:var(--tx);font-size:12px;font-weight:600;cursor:pointer">🔄 Probar conexión ahora</button>
+</div>
+<div id="h-alerts"></div>
   <div class="pb" id="pb-h">
     <button class="pbt on" data-p="month">Este mes</button>
     <button class="pbt" data-p="week">Semana</button>
@@ -658,13 +671,25 @@ async function saveTx(){
     if(sAcc)adjBal(sAcc,amt,curT);
     toast(curT==='income'?'✓ Ingreso guardado':'✓ Gasto guardado','s');
     cm('m-add'); resetTxForm();
-  }catch(e){toast('Error: '+e.message,'e');}
+  }catch(e){
+    console.error('Firestore error:', e);
+    toast('Error Firebase: '+e.message,'e');
+    // Mostrar en pantalla para debug
+    const dbg=document.getElementById('dbg-msg');
+    if(dbg){dbg.textContent='❌ '+e.code+': '+e.message;dbg.style.display='block';}
+  }
 }
 async function saveTxAI(t){
   if(!UID||!t.amount||!t.desc)return;
   const cat=cats.find(c=>c.id===t.cat)||cats[cats.length-1];
   const tx={amount:t.amount,desc:t.desc,date:t.date||today(),cat:t.cat||'other',note:'',type:t.type||'expense',catIcon:cat.idata||cat.icon||'📌',catName:cat.name,accountId:'',accountName:'',createdAt:new Date().toISOString()};
-  try{await FB.addDoc(FB.collection(DB,`users/${UID}/transactions`),tx);toast('✓ Guardado','s');}catch(e){toast('Error','e');}
+  try{
+    await FB.addDoc(FB.collection(DB,`users/${UID}/transactions`),tx);
+    toast('✓ Guardado','s');
+  }catch(e){
+    console.error('Firestore AI error:', e);
+    toast('Firebase: '+e.message,'e');
+  }
 }
 async function delTx(id){if(!confirm('¿Eliminar?'))return;await FB.deleteDoc(FB.doc(DB,`users/${UID}/transactions`,id));toast('Eliminado','s');}
 
@@ -1014,6 +1039,45 @@ function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace
 function dud(day){if(!day)return 999;const n=new Date();let c=new Date(n.getFullYear(),n.getMonth(),day);if(c<=n)c.setMonth(c.getMonth()+1);return Math.ceil((c-n)/864e5);}
 function toast(msg,t='s'){const e=document.getElementById('toast');e.textContent=msg;e.className=`on ${t}`;setTimeout(()=>e.className='',2600);}
 
+
+// ═══ DIAGNÓSTICO FIREBASE ═══
+function showDbg(){
+  const p=document.getElementById('dbg-panel');
+  p.style.display=p.style.display==='none'?'block':'none';
+  updateDbg();
+}
+function updateDbg(){
+  const uid=document.getElementById('dbg-uid');
+  const path=document.getElementById('dbg-path');
+  const cnt=document.getElementById('dbg-cnt');
+  if(uid)uid.textContent='UID: '+(UID||'❌ No autenticado');
+  if(path)path.textContent='Path: users/'+(UID||'?')+'/transactions';
+  if(cnt)cnt.textContent='Transacciones en memoria: '+txs.length;
+}
+async function testFirebase(){
+  const dbg=document.getElementById('dbg-msg');
+  if(!UID){if(dbg){dbg.textContent='❌ No hay UID — no has iniciado sesión';dbg.style.display='block';}return;}
+  try{
+    // Intentar escribir un documento de prueba
+    const testRef=await FB.addDoc(FB.collection(DB,`users/${UID}/transactions`),{
+      amount:0.01,desc:'__test__',date:today(),cat:'other',note:'prueba',
+      type:'expense',catIcon:'🔧',catName:'Test',accountId:'',accountName:'',
+      createdAt:new Date().toISOString(),_isTest:true
+    });
+    // Si llegó aquí, funciona — borrarlo
+    await FB.deleteDoc(FB.doc(DB,`users/${UID}/transactions`,testRef.id));
+    if(dbg){dbg.textContent='✅ Firebase OK — escritura y lectura funcionan correctamente';dbg.style.color='var(--gn)';dbg.style.display='block';}
+    toast('✅ Firebase conectado correctamente','s');
+  }catch(e){
+    if(dbg){
+      dbg.textContent='❌ ERROR: '+e.code+' — '+e.message;
+      dbg.style.color='var(--rd)';
+      dbg.style.display='block';
+    }
+    console.error('Firebase test error:', e);
+    toast('Error Firebase: '+e.code,'e');
+  }
+}
 </script>
 </body>
 </html>
