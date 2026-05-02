@@ -587,7 +587,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <script type="module">
 // ═══ FIREBASE IMPORTS ═══
 import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import{getFirestore,collection,addDoc,getDocs,deleteDoc,setDoc,doc as firestoreDoc,query,orderBy,onSnapshot}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import{getFirestore,collection,addDoc,getDocs,deleteDoc,setDoc,updateDoc,doc as firestoreDoc,query,orderBy,onSnapshot}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import{getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 // ═══ FIREBASE CONFIG ═══
@@ -603,6 +603,7 @@ let UID=null;
 let txs=[],accs=[],loans=[],recs=[],insts=[],cats=[];
 let curP='month',repP='month';
 let curT='expense';
+let editingTxId=null;
 let sCat='',sAcc='',sRecA='',sInstA='',sIPA='';
 let nAT='debit',nLT='mortgage';
 let dChart=null,bChart=null;
@@ -784,25 +785,89 @@ async function saveTx(){
   if(!amt||amt<=0){toast('Ingresa un monto válido','e');return;}
   if(!desc){toast('Escribe una descripción','e');return;}
   if(!sCat){toast('Selecciona una categoría','e');return;}
-  const cat=cats.find(c=>c.id===sCat)||cats[cats.length-1];
+  const cat=cats.find(c=>c.id===sCat)||cats[cats.length-1]||{id:'other',name:'Otro',icon:'📌'};
   const acc=sAcc?accs.find(a=>a.id===sAcc):null;
-  const tx={amount:amt,desc,date,cat:sCat,note,type:curT,catIcon:cat.idata||cat.icon||'📌',catName:cat.name,accountId:sAcc,accountName:acc?.name||'',createdAt:new Date().toISOString()};
+  const tx={
+    amount:amt,
+    desc,
+    date,
+    cat:sCat,
+    note,
+    type:curT,
+    catIcon:cat.idata||cat.icon||'📌',
+    catName:cat.name,
+    accountId:sAcc,
+    accountName:acc?.name||'',
+    updatedAt:new Date().toISOString()
+  };
   try{
-    await addDoc(collection(DB,`users/${UID}/transactions`),tx);
-    if(sAcc)adjBal(sAcc,amt,curT);
-    toast(curT==='income'?'✓ Ingreso guardado':'✓ Gasto guardado','s');
+    if(editingTxId){
+      const oldTx=txs.find(t=>t.id===editingTxId);
+      if(oldTx)reverseTxBalance(oldTx);
+      await updateDoc(firestoreDoc(DB,`users/${UID}/transactions`,editingTxId),tx);
+      if(sAcc)applyTxBalance(tx);
+      await saveAccsL();
+      toast('✓ Transacción actualizada','s');
+    }else{
+      tx.createdAt=new Date().toISOString();
+      await addDoc(collection(DB,`users/${UID}/transactions`),tx);
+      if(sAcc)applyTxBalance(tx);
+      await saveAccsL();
+      toast(curT==='income'?'✓ Ingreso guardado':'✓ Gasto guardado','s');
+    }
     cm('m-add'); resetTxForm();
   }catch(e){
     console.error('Firestore error:', e);
     toast('Error Firebase: '+e.message,'e');
-    // Mostrar en pantalla para debug
     const dbg=document.getElementById('dbg-msg');
-    if(dbg){dbg.textContent='❌ '+e.code+': '+e.message;dbg.style.display='block';}
+    if(dbg){dbg.textContent='❌ '+(e.code||'error')+': '+e.message;dbg.style.display='block';}
   }
 }
+
+function applyTxBalance(t){
+  if(!t?.accountId)return;
+  const i=accs.findIndex(a=>a.id===t.accountId);
+  if(i<0)return;
+  const a=accs[i];
+  const amt=Number(t.amount)||0;
+  if(t.type==='expense')accs[i].balance=a.type==='credit'?(a.balance||0)+amt:Math.max(0,(a.balance||0)-amt);
+  else accs[i].balance=a.type==='credit'?Math.max(0,(a.balance||0)-amt):(a.balance||0)+amt;
+}
+
+function reverseTxBalance(t){
+  if(!t?.accountId)return;
+  const i=accs.findIndex(a=>a.id===t.accountId);
+  if(i<0)return;
+  const a=accs[i];
+  const amt=Number(t.amount)||0;
+  if(t.type==='expense')accs[i].balance=a.type==='credit'?Math.max(0,(a.balance||0)-amt):(a.balance||0)+amt;
+  else accs[i].balance=a.type==='credit'?(a.balance||0)+amt:Math.max(0,(a.balance||0)-amt);
+}
+
+function editTx(id){
+  const t=txs.find(x=>x.id===id);
+  if(!t){toast('No encontré la transacción','e');return;}
+  editingTxId=id;
+  curT=t.type||'expense';
+  sCat=t.cat||'';
+  sAcc=t.accountId||'';
+  document.getElementById('ai-amt').value=t.amount||'';
+  document.getElementById('ai-desc').value=t.desc||'';
+  document.getElementById('ai-date').value=t.date||today();
+  document.getElementById('ai-note').value=t.note||'';
+  sType(curT);
+  rCatGrid();
+  rChips('acs-tx','tx');
+  const title=document.querySelector('#m-add .mt');
+  if(title)title.textContent='Editar transacción';
+  const w=document.getElementById('acc-warn');
+  if(w)w.style.display='none';
+  om('m-add');
+}
+
 async function saveTxAI(t){
   if(!UID||!t.amount||!t.desc)return;
-  const cat=cats.find(c=>c.id===t.cat)||cats[cats.length-1];
+  const cat=cats.find(c=>c.id===t.cat)||cats[cats.length-1]||{id:'other',name:'Otro',icon:'📌'};
   const tx={amount:t.amount,desc:t.desc,date:t.date||today(),cat:t.cat||'other',note:'',type:t.type||'expense',catIcon:cat.idata||cat.icon||'📌',catName:cat.name,accountId:'',accountName:'',createdAt:new Date().toISOString()};
   try{
     await addDoc(collection(DB,`users/${UID}/transactions`),tx);
@@ -858,7 +923,7 @@ function rTxList(list,eid){
     h+=`<div class="tgd">${fmtDate(d)}</div>`;
     g[d].forEach(t=>{
       const ico=t.catIcon&&t.catIcon.startsWith('data:')?`<img src="${t.catIcon}"/>`:(t.catIcon||'📌');
-      h+=`<div class="ti"><div class="tic" style="background:${getCatC(t.cat)}22">${ico}</div>
+      h+=`<div class="ti" onclick="editTx('${t.id}')"><div class="tic" style="background:${getCatC(t.cat)}22">${ico}</div>
         <div class="tii"><div class="tin">${esc(t.desc)}</div><div class="tis">${t.catName||''}${t.accountName?' · '+esc(t.accountName):''}</div></div>
         <div style="display:flex;align-items:center;gap:5px"><div class="tia ${t.type==='income'?'inc':'exp'}">${t.type==='income'?'+':'-'}${fmt(t.amount)}</div>
         <button class="tdl" onclick="event.stopPropagation();delTx('${t.id}')">✕</button></div></div>`;
@@ -1129,7 +1194,7 @@ function selAcc(id,cid,ctx){
 
 // ═══ FORM TYPE ═══
 function sType(t){curT=t;document.getElementById('btn-e').className='tb'+(t==='expense'?' ae':'');document.getElementById('btn-i').className='tb'+(t==='income'?' ai':'');}
-function resetTxForm(){['ai-amt','ai-desc','ai-note'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('ai-date').value=today();sCat='';sAcc='';curT='expense';sType('expense');rCatGrid();rChips('acs-tx','tx');const w=document.getElementById('acc-warn');if(w)w.style.display='none';}
+function resetTxForm(){editingTxId=null;['ai-amt','ai-desc','ai-note'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('ai-date').value=today();sCat='';sAcc='';curT='expense';sType('expense');rCatGrid();rChips('acs-tx','tx');const title=document.querySelector('#m-add .mt');if(title)title.textContent='Nueva transacción';const w=document.getElementById('acc-warn');if(w)w.style.display='none';}
 
 // ═══ ICON UPLOAD ═══
 function hdlImg(inp,prevId,dataId){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{document.getElementById(dataId).value=e.target.result;const p=document.getElementById(prevId);p.innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:10px"/>`;};r.readAsDataURL(f);}
@@ -1437,6 +1502,9 @@ Object.assign(window, {
   doScan: typeof doScan!=="undefined" ? doScan : undefined,
   dud: typeof dud!=="undefined" ? dud : undefined,
   esc: typeof esc!=="undefined" ? esc : undefined,
+  editTx: typeof editTx!=="undefined" ? editTx : undefined,
+  applyTxBalance: typeof applyTxBalance!=="undefined" ? applyTxBalance : undefined,
+  reverseTxBalance: typeof reverseTxBalance!=="undefined" ? reverseTxBalance : undefined,
   expCSV: typeof expCSV!=="undefined" ? expCSV : undefined,
   filterEmojis: typeof filterEmojis!=="undefined" ? filterEmojis : undefined,
   filterP: typeof filterP!=="undefined" ? filterP : undefined,
