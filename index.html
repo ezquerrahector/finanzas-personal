@@ -1012,25 +1012,29 @@ function rAccs(){
   document.getElementById('pat-cr').textContent=fmt(cu);
   if(!accs.length){el.innerHTML=`<div class="es"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg><p>Sin cuentas. Toca "+ Nueva"</p></div>`;return;}
   el.innerHTML=accs.map(a=>{
-    const av=getAv(a),up=a.type==='credit'&&a.limit?Math.min(100,Math.round((a.balance||0)/a.limit*100)):0;
+    const av=getAv(a),debt=a.balance||0,up=a.type==='credit'&&a.limit?Math.min(100,Math.round(debt/a.limit*100)):0;
     const bc=up>80?'#ff5f7e':up>50?'#fbbf24':'#22d3a0';
     const ico=a.idata?`<img src="${a.idata}" style="width:100%;height:100%;object-fit:cover;border-radius:8px"/>`:(a.icon||'💳');
     const tcls={debit:'acd',credit:'acc2',cash:'aca',savings:'acv'}[a.type]||'acd';
+    const typeLabel={debit:'💳 Débito',credit:'💎 Crédito',cash:'💵 Efectivo',savings:'🏦 Ahorro'}[a.type]||a.type;
+    const mainLabel=a.type==='credit'?'Deuda actual':'Saldo';
+    const mainValue=a.type==='credit'?debt:av;
+    const mainColor=a.type==='credit'?(debt>0?'#ff8fa3':'#f0f0f5'):(av<0?'#ff5f7e':av===0?'#fbbf24':'#f0f0f5');
     return`<div class="acard ${tcls}" onclick="oEditAcc('${a.id}')">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div><div style="font-size:9px;opacity:.55;text-transform:uppercase;letter-spacing:1.1px;margin-bottom:4px">${{debit:'💳 Débito',credit:'💎 Crédito',cash:'💵 Efectivo',savings:'🏦 Ahorro'}[a.type]||a.type}</div>
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px">
-            <div style="width:30px;height:30px;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:17px;background:rgba(255,255,255,.08)">${ico}</div>
-            <div style="font-family:\'Syne\',sans-serif;font-size:14px;font-weight:700;color:#fff">${esc(a.name)}${a.type!=='cash'&&a.bank?' · '+esc(a.bank):''}</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+        <div style="min-width:0;flex:1"><div style="font-size:9px;color:rgba(255,255,255,.68);text-transform:uppercase;letter-spacing:1.1px;margin-bottom:4px">${typeLabel}</div>
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;min-width:0">
+            <div style="width:30px;height:30px;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:17px;background:rgba(255,255,255,.12);flex-shrink:0">${ico}</div>
+            <div style="font-family:\'Syne\',sans-serif;font-size:14px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(a.name)}${a.type!=='cash'&&a.bank?' · '+esc(a.bank):''}</div>
           </div>
         </div>
-        <div style="text-align:right"><div style="font-size:9px;opacity:.45;margin-bottom:1px">${a.type==='credit'?'Disponible':'Saldo'}</div>
-          <div style="font-family:\'Syne\',sans-serif;font-size:19px;font-weight:800;color:${av<0?'#ff5f7e':av===0?'#fbbf24':'#f0f0f5'}">${fmt(av)}</div></div>
+        <div style="text-align:right;flex-shrink:0"><div style="font-size:9px;color:rgba(255,255,255,.62);margin-bottom:1px">${mainLabel}</div>
+          <div style="font-family:\'Syne\',sans-serif;font-size:21px;font-weight:800;color:${mainColor}">${fmt(mainValue)}</div></div>
       </div>
-      ${a.type==='credit'?`<div class="cbr"><div class="cbf" style="width:${up}%;background:${bc}"></div></div><div style="display:flex;justify-content:space-between;font-size:9px;opacity:.45;margin-top:2px"><span>Deuda: ${fmt(a.balance||0)}</span><span>Límite: ${fmt(a.limit||0)}</span></div>`:''}
+      ${a.type==='credit'?`<div class="cbr"><div class="cbf" style="width:${up}%;background:${bc}"></div></div><div style="display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.58);margin-top:4px"><span>Disponible: ${fmt(av)}</span><span>Límite: ${fmt(a.limit||0)}</span></div>`:''}
       <div style="display:flex;gap:6px;margin-top:8px">
-        <button onclick="event.stopPropagation();qAdj('${a.id}','add')" style="flex:1;padding:6px;border-radius:7px;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:10px;font-weight:600;cursor:pointer">+ Abonar</button>
-        <button onclick="event.stopPropagation();qAdj('${a.id}','sub')" style="flex:1;padding:6px;border-radius:7px;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:10px;font-weight:600;cursor:pointer">− Ajustar</button>
+        <button onclick="event.stopPropagation();qAdj('${a.id}','add')" style="flex:1;padding:6px;border-radius:7px;background:rgba(255,255,255,.14);border:none;color:#fff;font-size:10px;font-weight:700;cursor:pointer">+ Abonar</button>
+        <button onclick="event.stopPropagation();qAdj('${a.id}','sub')" style="flex:1;padding:6px;border-radius:7px;background:rgba(255,255,255,.14);border:none;color:#fff;font-size:10px;font-weight:700;cursor:pointer">− Ajustar</button>
       </div>
     </div>`;
   }).join('');
