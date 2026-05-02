@@ -234,7 +234,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v4.3</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v4.4</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -907,7 +907,7 @@ function editTx(id){
   sCat=t.cat||'';
   sAcc=t.accountId||'';
   document.getElementById('ai-amt').value=t.amount||'';
-  document.getElementById('ai-desc').value=t.desc||'';
+  document.getElementById('ai-desc').value=t.desc||t.description||t.name||'Movimiento';
   document.getElementById('ai-date').value=t.date||today();
   document.getElementById('ai-note').value=t.note||'';
   sType(curT);
@@ -1001,7 +1001,7 @@ function renderAll(){
 // ═══ HOME ═══
 function rHome(){
   const q=(document.getElementById('srch')?.value||'').toLowerCase();
-  const filt=filterP(txs,curP).filter(t=>!q||(t.desc||'').toLowerCase().includes(q)||(t.catName||'').toLowerCase().includes(q)||(t.date||'').includes(q)||(t.accountName||'').toLowerCase().includes(q));
+  const filt=filterP(txs,curP).filter(t=>!q||(t.desc||t.description||'').toLowerCase().includes(q)||(t.catName||'').toLowerCase().includes(q)||(t.date||'').includes(q)||(t.accountName||'').toLowerCase().includes(q));
   const inc=filt.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
   const exp=filt.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
   const bal=inc-exp;
@@ -1034,7 +1034,7 @@ function rTxList(list,eid){
       const accName=t.accountName||acc?.name||'';
       const accHtml=accName?` · <span style="color:${accColor};font-weight:700">${esc(accName)}</span>`:'';
       h+=`<div class="ti" onclick="editTx('${t.id}')"><div class="tic" style="background:${getCatC(t.cat)}22">${ico}</div>
-        <div class="tii"><div class="tin">${esc(t.desc)}</div><div class="tis">${t.catName||''}${accHtml}</div></div>
+        <div class="tii"><div class="tin">${esc(t.desc||t.description||'Movimiento sin descripción')}</div><div class="tis">${t.catName||''}${accHtml}</div></div>
         <div style="display:flex;align-items:center;gap:5px"><div class="tia ${t.type==='income'?'inc':'exp'}">${t.type==='income'?'+':'-'}${fmt(t.amount)}</div>
         <button class="tdl" onclick="event.stopPropagation();delTx('${t.id}')">✕</button></div></div>`;
     });
@@ -1835,6 +1835,34 @@ function getIconValue(prevId, dataId) {
 }
 
 
+
+
+// ═══ MODALES — FIX v4.4 ═══
+function om(id){
+  const modal = document.getElementById(id);
+  if(!modal){ console.warn('Modal no encontrado:', id); return; }
+  modal.classList.add('on');
+  if(id==='m-add'){
+    rCatGrid();
+    rChips('acs-tx','tx');
+    const dt=document.getElementById('ai-date');
+    if(dt && !dt.value) dt.value=today();
+  }
+  if(id==='m-rec'){
+    rRecCatSel();
+    rChips('acs-rec','rec');
+  }
+  if(id==='m-inst') rChips('acs-inst','inst');
+  if(id==='m-ipay') rChips('acs-ipay','ipay');
+}
+function cm(id){
+  const modal = document.getElementById(id);
+  if(modal) modal.classList.remove('on');
+}
+function cox(e,id){
+  if(e && e.target && e.target.id===id) cm(id);
+}
+
 // ═══ ESTADO BACKEND IA ═══
 function getAIKey(){ return ''; }
 function saveAIKey(){ toast('La v3.4 usa Firebase Functions; no pegues API key en el navegador','s'); }
@@ -1970,4 +1998,17 @@ Object.assign(window, {
   moveOrder: typeof moveOrder!=="undefined" ? moveOrder : undefined,
   updateDbg: typeof updateDbg!=="undefined" ? updateDbg : undefined
 });
+
+// Delegación de clics — respaldo para edición de transacciones en navegador móvil/escritorio.
+document.addEventListener('click', (ev)=>{
+  const row = ev.target.closest?.('.ti');
+  if(!row) return;
+  const raw = row.getAttribute('onclick') || '';
+  const m = raw.match(/editTx\('([^']+)'\)/);
+  if(m && typeof editTx === 'function'){
+    ev.preventDefault();
+    editTx(m[1]);
+  }
+}, true);
+
 </script>
