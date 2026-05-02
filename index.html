@@ -575,7 +575,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
     </div>
     <div class="fg">
       <label class="fl">Endpoint activo</label>
-      <input class="fi" id="ai-endpoint-input" readonly value="api.anthropic.com (directo desde browser)"/>
+      <input class="fi" id="ai-endpoint-input" readonly value="https://us-central1-finanzas-personal-99b1f.cloudfunctions.net/analyzeFinance"/>
     </div>
     <button class="bp" onclick="testAIBackend()">Probar IA</button>
     <button onclick="document.getElementById('m-aikey').classList.remove('on')" style="width:100%;padding:10px;border-radius:10px;background:transparent;border:1px solid var(--bd);color:var(--tx);font-size:13px;cursor:pointer;margin-top:7px">Cerrar</button>
@@ -1223,60 +1223,36 @@ function resetTxForm(){editingTxId=null;['ai-amt','ai-desc','ai-note'].forEach(i
 // ═══ ICON UPLOAD ═══
 function hdlImg(inp,prevId,dataId){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{document.getElementById(dataId).value=e.target.result;const p=document.getElementById(prevId);p.innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:10px"/>`;};r.readAsDataURL(f);}
 
-// ═══ AI — llamada directa a Anthropic ═══
-function getAIKey(){ return localStorage.getItem('fp_aikey')||''; }
+// ═══ AI ═══
+const AI_ENDPOINT = 'https://us-central1-finanzas-personal-99b1f.cloudfunctions.net/analyzeFinance';
 
 async function callAIBackend(payload){
-  const key = getAIKey();
-  if(!key) throw new Error('Sin API key. Configúrala en IA → 🔑 API Key');
-  let messages;
-  if(payload.mode==='image'){
-    messages=[{role:'user',content:[
-      {type:'image',source:{type:'base64',media_type:payload.image.mime,data:payload.image.data}},
-      {type:'text',text:'Analiza este ticket. Responde SOLO JSON sin markdown: {"amount":NUMERO,"desc":"comercio o producto","date":"'+payload.date+'","cat":"food|transport|health|ent|shop|other","type":"expense"}'}
-    ]}];
-  } else {
-    messages=[{role:'user',content:
-      'Finanzas México. Texto: "'+payload.text+'". Extrae transacciones. SOLO JSON array sin markdown:\n'+
-      '[{"amount":NUMERO,"desc":"texto","type":"expense|income","cat":"food|housing|transport|health|ent|shop|edu|salary|inv|sav|bills|other","date":"'+payload.date+'"}]\n'+
-      'Si no hay transacciones: []'
-    }];
-  }
-  const res = await fetch('https://api.anthropic.com/v1/messages',{
+  const res = await fetch(AI_ENDPOINT, {
     method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'x-api-key':key,
-      'anthropic-version':'2023-06-01',
-      'anthropic-dangerous-direct-browser-ipc':'true'
-    },
-    body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:600,messages})
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
   });
-  if(!res.ok){
-    const e=await res.json().catch(()=>({}));
-    throw new Error(e?.error?.message||'HTTP '+res.status);
+  const txt = await res.text();
+  let data = {};
+  try { data = JSON.parse(txt || '{}'); }
+  catch(e){ throw new Error('Respuesta no JSON del backend: ' + txt.slice(0,120)); }
+  if(!res.ok || data.error){
+    throw new Error(data.error || ('HTTP '+res.status));
   }
-  const d=await res.json();
-  const raw=(d.content?.[0]?.text||'').replace(/```json|```/g,'').trim();
-  const parsed=JSON.parse(raw);
-  if(payload.mode==='image') return {transactions:[parsed]};
-  return {transactions:Array.isArray(parsed)?parsed:[parsed]};
+  return data;
 }
 
 async function testAIBackend(){
   const el = document.getElementById('ai-key-status');
-  if(!getAIKey()){
-    if(el){el.textContent='⚠️ Sin API key — toca aquí para configurar';el.style.color='var(--yl)';}
-    return;
-  }
-  if(el){ el.textContent='⏳ Probando conexión…'; el.style.color='var(--yl)'; }
+  if(el){ el.textContent='⏳ Probando backend de IA…'; el.style.color='var(--yl)'; }
   try{
     const data = await callAIBackend({mode:'text', text:'Gasté 250 en comida hoy', date:today()});
-    if(el){ el.textContent='✅ IA conectada y lista'; el.style.color='var(--gn)'; }
+    if(el){ el.textContent='✅ Backend IA funcionando'; el.style.color='var(--gn)'; }
     toast('✅ IA funcionando','s');
+    console.log('AI test:', data);
   }catch(e){
-    if(el){ el.textContent='❌ '+e.message.slice(0,70); el.style.color='var(--rd)'; }
-    toast('Error: '+e.message.slice(0,40),'e');
+    if(el){ el.textContent='❌ Backend IA no disponible: '+e.message.slice(0,80); el.style.color='var(--rd)'; }
+    toast('IA no disponible','e');
     console.error(e);
   }
 }
