@@ -224,7 +224,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v3.6</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v3.7</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -416,7 +416,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v3.6 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v3.7 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -585,8 +585,9 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
     <div style="display:flex;gap:7px;align-items:center;margin-top:9px">
       <div class="iu" id="nc-iprev" onclick="openEpicker('nc-iprev','nc-idata',event)" style="cursor:pointer;width:42px;height:42px;border-radius:9px;font-size:17px">📌</div>
       <input type="hidden" id="nc-idata"/>
+      <input type="hidden" id="nc-eid"/>
       <input class="fi" id="nc-nm" placeholder="Nueva categoría" style="flex:1"/>
-      <button onclick="addCat()" style="padding:9px 12px;border-radius:9px;background:var(--ac);border:none;color:#fff;font-weight:600;cursor:pointer;font-size:12px;white-space:nowrap">+ Agregar</button>
+      <button id="cat-save-btn" onclick="addCat()" style="padding:9px 12px;border-radius:9px;background:var(--ac);border:none;color:#fff;font-weight:600;cursor:pointer;font-size:12px;white-space:nowrap">+ Agregar</button>
     </div>
   </div>
 </div>
@@ -684,7 +685,7 @@ async function initApp(){
   // Mostrar estado de API key al cargar
   setTimeout(updateAIKeyStatus, 500);
   applyTheme(localStorage.getItem('fp_thm')||'auto');
-  if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=3.5').catch(()=>{});
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=3.7').catch(()=>{});
   
   onAuthStateChanged(AUTH, u=>{
     document.getElementById('ld').style.display='none';
@@ -848,6 +849,7 @@ async function saveTx(){
     catName:cat.name,
     accountId:sAcc,
     accountName:acc?.name||'',
+    accountColor:acc?.color||'',
     updatedAt:new Date().toISOString()
   };
   try{
@@ -996,8 +998,12 @@ function rTxList(list,eid){
     h+=`<div class="tgd">${fmtDate(d)}</div>`;
     g[d].forEach(t=>{
       const ico=t.catIcon&&t.catIcon.startsWith('data:')?`<img src="${t.catIcon}"/>`:(t.catIcon||'📌');
+      const acc=accs.find(a=>a.id===t.accountId);
+      const accColor=acc?.color || t.accountColor || '#6c63ff';
+      const accName=t.accountName||acc?.name||'';
+      const accHtml=accName?` · <span style="color:${accColor};font-weight:700">${esc(accName)}</span>`:'';
       h+=`<div class="ti" onclick="editTx('${t.id}')"><div class="tic" style="background:${getCatC(t.cat)}22">${ico}</div>
-        <div class="tii"><div class="tin">${esc(t.desc)}</div><div class="tis">${t.catName||''}${t.accountName?' · '+esc(t.accountName):''}</div></div>
+        <div class="tii"><div class="tin">${esc(t.desc)}</div><div class="tis">${t.catName||''}${accHtml}</div></div>
         <div style="display:flex;align-items:center;gap:5px"><div class="tia ${t.type==='income'?'inc':'exp'}">${t.type==='income'?'+':'-'}${fmt(t.amount)}</div>
         <button class="tdl" onclick="event.stopPropagation();delTx('${t.id}')">✕</button></div></div>`;
     });
@@ -1256,11 +1262,62 @@ function rInsts(){
 
 // ═══ CATEGORÍAS ═══
 async function saveCatsL(){await saveMetaArray('cats','fp_cats3',cats);}
-function rCatGrid(){const el=document.getElementById('cg-main');if(!el)return;el.innerHTML=cats.map(c=>{const ico=c.idata?`<img src="${c.idata}"/>`:c.icon||'📌';return`<div class="co${sCat===c.id?' sel':''}" onclick="selCat('${c.id}')"><div class="coi">${ico}</div><span>${c.name}</span></div>`;}).join('');}
+function rCatGrid(){const el=document.getElementById('cg-main');if(!el)return;el.innerHTML=cats.map(c=>{const ico=c.idata?`<img src="${c.idata}"/>`:c.icon||'📌';return`<div class="co${sCat===c.id?' sel':''}" onclick="selCat('${c.id}')"><div class="coi">${ico}</div><span>${esc(c.name)}</span></div>`;}).join('');}
 function selCat(id){sCat=id;rCatGrid();}
-function rCatsMdl(){const el=document.getElementById('cats-list');if(!el)return;el.innerHTML=cats.map(c=>{const ico=c.idata?`<img src="${c.idata}" style="width:100%;height:100%;object-fit:cover;border-radius:5px"/>`:c.icon||'📌';return`<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--sf2);border-radius:8px;margin-bottom:5px"><div style="width:28px;height:28px;border-radius:6px;background:var(--sf);display:flex;align-items:center;justify-content:center;font-size:15px;overflow:hidden">${ico}</div><span style="flex:1;font-size:12px;font-weight:500">${c.name}</span><button onclick="delCat('${c.id}')" style="padding:3px 7px;border-radius:5px;background:rgba(255,95,126,.1);border:none;color:var(--rd);cursor:pointer;font-size:10px">✕</button></div>`;}).join('');}
-function addCat(){const nm=document.getElementById('nc-nm').value.trim(),idata=document.getElementById('nc-idata').value;if(!nm){toast('Escribe nombre','e');return;}const {idata:cidata,icon:cicon}=getIconValue('nc-iprev','nc-idata');cats.push({id:'c'+Date.now(),name:nm,icon:cicon||document.getElementById('nc-iprev').textContent||'📌',idata:cidata,color:'#9ca3af'});saveCatsL();rCatsMdl();rCatGrid();document.getElementById('nc-nm').value='';document.getElementById('nc-idata').value='';document.getElementById('nc-iprev').innerHTML='📌';toast('✓ Categoría agregada','s');}
-function delCat(id){if(cats.length<=1){toast('Necesitas al menos 1','e');return;}cats=cats.filter(c=>c.id!==id);saveCatsL();rCatsMdl();rCatGrid();}
+function rCatsMdl(){
+  const el=document.getElementById('cats-list');if(!el)return;
+  el.innerHTML=cats.map(c=>{
+    const ico=c.idata?`<img src="${c.idata}" style="width:100%;height:100%;object-fit:cover;border-radius:5px"/>`:c.icon||'📌';
+    return`<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--sf2);border-radius:8px;margin-bottom:5px">
+      <button onclick="event.stopPropagation();editCat('${c.id}')" style="width:28px;height:28px;border-radius:6px;background:var(--sf);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:15px;overflow:hidden;cursor:pointer">${ico}</button>
+      <button onclick="event.stopPropagation();editCat('${c.id}')" style="flex:1;text-align:left;background:none;border:none;color:var(--tx);font-size:12px;font-weight:600;cursor:pointer">${esc(c.name)}</button>
+      <button onclick="event.stopPropagation();editCat('${c.id}')" style="padding:3px 7px;border-radius:5px;background:rgba(108,99,255,.12);border:none;color:var(--ac);cursor:pointer;font-size:10px">Editar</button>
+      <button onclick="event.stopPropagation();delCat('${c.id}')" style="padding:3px 7px;border-radius:5px;background:rgba(255,95,126,.1);border:none;color:var(--rd);cursor:pointer;font-size:10px">✕</button>
+    </div>`;
+  }).join('');
+}
+function resetCatForm(){
+  const eid=document.getElementById('nc-eid'); if(eid)eid.value='';
+  const nm=document.getElementById('nc-nm'); if(nm)nm.value='';
+  const idata=document.getElementById('nc-idata'); if(idata)idata.value='';
+  const p=document.getElementById('nc-iprev'); if(p){p.innerHTML='📌';p.dataset.emoji='📌';}
+  const b=document.getElementById('cat-save-btn'); if(b)b.textContent='+ Agregar';
+}
+function editCat(id){
+  const c=cats.find(x=>x.id===id); if(!c)return;
+  const eid=document.getElementById('nc-eid'); if(eid)eid.value=id;
+  const nm=document.getElementById('nc-nm'); if(nm){nm.value=c.name||''; nm.focus();}
+  const idata=document.getElementById('nc-idata'); if(idata)idata.value=c.idata||'';
+  const p=document.getElementById('nc-iprev');
+  if(p){ if(c.idata){p.innerHTML=`<img src="${c.idata}" style="width:100%;height:100%;object-fit:cover;border-radius:9px"/>`;p.dataset.emoji='';} else {p.innerHTML=c.icon||'📌';p.dataset.emoji=c.icon||'📌';} }
+  const b=document.getElementById('cat-save-btn'); if(b)b.textContent='Guardar';
+}
+async function addCat(){
+  const nm=document.getElementById('nc-nm').value.trim();
+  if(!nm){toast('Escribe nombre','e');return;}
+  const eid=document.getElementById('nc-eid')?.value||'';
+  const {idata:cidata,icon:cicon}=getIconValue('nc-iprev','nc-idata');
+  if(eid){
+    const i=cats.findIndex(c=>c.id===eid);
+    if(i>=0){
+      cats[i]={...cats[i],name:nm,icon:cicon||cats[i].icon||'📌',idata:cidata||''};
+      if(UID){
+        const affected=txs.filter(t=>t.cat===eid);
+        for(const t of affected){
+          await updateDoc(firestoreDoc(DB,`users/${UID}/transactions`,t.id),{catName:nm,catIcon:cidata||cicon||'📌',updatedAt:new Date().toISOString()});
+        }
+      }
+      toast('✓ Categoría actualizada','s');
+    }
+  }else{
+    cats.push({id:'c'+Date.now(),name:nm,icon:cicon||document.getElementById('nc-iprev').textContent||'📌',idata:cidata,color:'#9ca3af'});
+    toast('✓ Categoría agregada','s');
+  }
+  await saveCatsL();
+  resetCatForm();
+  rCatsMdl();rCatGrid();rRecCatSel();rHome();
+}
+async function delCat(id){if(cats.length<=1){toast('Necesitas al menos 1','e');return;}if(!confirm('¿Eliminar esta categoría? Las transacciones existentes no se borrarán.'))return;cats=cats.filter(c=>c.id!==id);await saveCatsL();rCatsMdl();rCatGrid();rRecCatSel();}
 
 // ═══ ACCOUNT CHIPS ═══
 function rChips(cid,ctx){
@@ -1381,7 +1438,7 @@ async function confNotes(){for(const t of notesP)await saveTxAI(t);document.getE
 function om(id){
   document.getElementById(id)?.classList.add('on');
   if(id==='m-add'){rCatGrid();rChips('acs-tx','tx');document.getElementById('ai-date').value=today();}
-  if(id==='m-cats')rCatsMdl();
+  if(id==='m-cats'){resetCatForm();rCatsMdl();}
   if(id==='m-rec'){rChips('acs-rec','rec');rRecCatSel();}
   if(id==='m-inst')rChips('acs-inst','inst');
 }
@@ -1426,7 +1483,7 @@ async function impTemplate(inp){
     if(!desc||!monto){err++;continue;}
     const cat=cats.find(x=>x.name.toLowerCase()===catName.toLowerCase())||cats.find(x=>x.id==='other')||cats[0];
     const acc=accs.find(x=>x.name.toLowerCase()===accName.toLowerCase());
-    const tx={amount:monto,desc,date:fecha,cat:cat.id,note:nota,type:tipo.startsWith('ing')?'income':'expense',catIcon:cat.idata||cat.icon||'📌',catName:cat.name,accountId:acc?.id||'',accountName:acc?.name||'',createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+    const tx={amount:monto,desc,date:fecha,cat:cat.id,note:nota,type:tipo.startsWith('ing')?'income':'expense',catIcon:cat.idata||cat.icon||'📌',catName:cat.name,accountId:acc?.id||'',accountName:acc?.name||'',accountColor:acc?.color||'',createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
     try{await addDoc(collection(DB,`users/${UID}/transactions`),tx); if(acc){applyTxBalance(tx); await saveAccsL();} ok++;}catch(e){console.error(e);err++;}
   }
   inp.value=''; rHome(); toast(`✓ Importados: ${ok}${err?` · errores: ${err}`:''}` , err?'e':'s');
@@ -1627,6 +1684,8 @@ Object.assign(window, {
   cox: typeof cox!=="undefined" ? cox : undefined,
   delAcc: typeof delAcc!=="undefined" ? delAcc : undefined,
   delCat: typeof delCat!=="undefined" ? delCat : undefined,
+  editCat: typeof editCat!=="undefined" ? editCat : undefined,
+  resetCatForm: typeof resetCatForm!=="undefined" ? resetCatForm : undefined,
   delInst: typeof delInst!=="undefined" ? delInst : undefined,
   delLoan: typeof delLoan!=="undefined" ? delLoan : undefined,
   delRec: typeof delRec!=="undefined" ? delRec : undefined,
