@@ -1,49 +1,30 @@
-// Finanzas PWA — Service Worker v3.2
-// Evita cachear llamadas de Firebase/Google y fuerza contenido fresco.
-const CACHE_NAME = 'finanzas-v3.2';
-const STATIC_ASSETS = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icon-192.png',
-  './icon-512.png'
-];
+// Finanzas v3.3 — actualización agresiva + network first
+const CACHE = 'finanzas-v3.3';
 
 self.addEventListener('install', event => {
   self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache =>
-      cache.addAll(STATIC_ASSETS).catch(() => undefined)
-    )
-  );
 });
 
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))))
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', event => {
-  const req = event.request;
-  const url = new URL(req.url);
+  if (event.request.method !== 'GET') return;
+  const url = new URL(event.request.url);
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
 
-  // Firebase, Google Auth, CDN y cualquier POST/PUT/etc. siempre van directo a red.
-  if (req.method !== 'GET' || url.origin !== self.location.origin) {
-    event.respondWith(fetch(req));
-    return;
-  }
-
-  // Para la app propia: red primero, cache solo como respaldo offline.
   event.respondWith(
-    fetch(req)
+    fetch(event.request, { cache: 'no-store' })
       .then(response => {
         const copy = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(req, copy)).catch(() => undefined);
+        caches.open(CACHE).then(cache => cache.put(event.request, copy)).catch(() => {});
         return response;
       })
-      .catch(() => caches.match(req))
+      .catch(() => caches.match(event.request))
   );
 });

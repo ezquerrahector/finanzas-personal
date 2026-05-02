@@ -1,23 +1,16 @@
-# Finanzas — PWA Personal
+# Finanzas PWA — v3.3 Sync Real
 
-## Archivos corregidos
+Cambios incluidos:
 
-Usa estos nombres en tu repositorio:
+- Sincronización en tiempo real con Firestore para transacciones.
+- Sincronización en tiempo real para cuentas, créditos, cargos recurrentes, Instinto y categorías.
+- Las acciones de botones inline quedan expuestas al `window` para funcionar desde GitHub Pages.
+- Service Worker actualizado a v3.3 con estrategia network-first para reducir caché viejo.
 
-- `index.html`  ← reemplazar por `index_corregido.html`
-- `sw.js`       ← reemplazar por `sw_corregido.js`
-- `manifest.json`
-- `icon-192.png`
-- `icon-512.png`
+## Archivos a reemplazar en GitHub
 
-## Correcciones incluidas
+- `index_v3_3_sync_real.html` → renombrar a `index.html`
+- `sw_v3_3_sync_real.js` → renombrar a `sw.js`
+- `manifest_v3_3_sync_real.json` → renombrar a `manifest.json`
 
-- Se eliminó un bloque de JavaScript roto que impedía ejecutar botones internos.
-- Se expusieron las funciones usadas por `onclick`, porque estaban dentro de un script `type="module"` y no eran visibles globalmente.
-- Se sincronizan cuentas, créditos, cargos recurrentes, categorías e Instinto en Firestore dentro de `users/{uid}/settings/appData`.
-- Las transacciones siguen sincronizándose en tiempo real dentro de `users/{uid}/transactions`.
-- El service worker ya no cachea llamadas a Firebase/Google para evitar datos viejos o inconsistencias entre web y móvil.
-
-## Nota sobre IA
-
-La IA desde navegador puede fallar por CORS o por seguridad si se llama directo a Anthropic. Esta versión mantiene la sección y muestra el estado de API Key, pero lo ideal para producción es mover esa llamada a un backend o Firebase Cloud Function.
+Después de subirlos, cerrar y abrir la PWA. En móvil, si sigue cargando una versión anterior, eliminar la app instalada y volverla a instalar desde Safari/Chrome.
