@@ -187,6 +187,16 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .ebtn{width:34px;height:34px;border-radius:7px;border:none;background:transparent;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.1s;}
 .ebtn:hover{background:var(--sf2);}
 .epicker-search{width:100%;padding:7px 10px;background:var(--sf2);border:1px solid var(--bd);border-radius:8px;color:var(--tx);font-family:var(--fb);font-size:13px;outline:none;margin-bottom:8px;}
+
+/* PROFILE OPTIMIZADO */
+.profile-group{background:var(--sf);border:1px solid var(--bd);border-radius:13px;padding:12px;margin-bottom:12px;}
+.profile-group-title{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:1.1px;margin-bottom:9px;font-weight:700;}
+.profile-actions-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;}
+.profile-action{display:flex;align-items:center;gap:8px;padding:10px;background:var(--sf2);border:1px solid var(--bd);border-radius:10px;cursor:pointer;min-height:46px;}
+.profile-action .setic{width:28px;height:28px;}
+.profile-action span{font-size:12px;font-weight:600;line-height:1.2;}
+.order-item-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);cursor:pointer;font-weight:700;}
+.order-item-btn:disabled{opacity:.35;cursor:not-allowed;}
 </style>
 </head>
 <body>
@@ -214,7 +224,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v3.5</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v3.6</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -373,19 +383,40 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
       <button class="pbt" data-t="auto" onclick="setTheme('auto')" style="flex:1;border-radius:9px;padding:7px 4px;font-size:11px">⚙️ Auto</button>
     </div>
   </div>
-  <div class="seti" onclick="nav('accounts')"><div class="setic"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg></div><span style="flex:1">Mis cuentas</span></div>
-  <div class="seti" onclick="nav('loans')"><div class="setic"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div><span style="flex:1">Mis créditos</span></div>
-  <div class="seti" onclick="nav('rec')"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/></svg></div><span style="flex:1">Cargos recurrentes</span></div>
-  <div class="seti" onclick="nav('inst')"><div class="setic" style="background:rgba(167,139,250,.1);color:var(--ac2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div><span style="flex:1">Instinto Fragancias</span></div>
-  <div class="seti" onclick="om('m-cats')"><div class="setic"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><span style="flex:1">Categorías</span></div>
-  <div class="seti" onclick="expCSV()"><div class="setic" style="background:rgba(34,211,160,.1);color:var(--gn)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></div><span style="flex:1">Exportar CSV</span></div>
-  <div class="seti" onclick="expExcel()"><div class="setic" style="background:rgba(34,211,160,.1);color:var(--gn)">📊</div><span style="flex:1">Descargar Excel completo</span></div>
-  <div class="seti" onclick="dlTemplate()"><div class="setic" style="background:rgba(96,165,250,.12);color:#60a5fa">📄</div><span style="flex:1">Descargar plantilla de carga</span></div>
-  <div class="seti" onclick="document.getElementById('imp-file').click()"><div class="setic" style="background:rgba(167,139,250,.12);color:var(--ac2)">⬆️</div><span style="flex:1">Subir registros desde plantilla</span></div>
-  <input id="imp-file" type="file" accept=".csv,text/csv" style="display:none" onchange="impTemplate(this)"/>
-  <div class="seti" onclick="openOrder('accounts')"><div class="setic">↕️</div><span style="flex:1">Ordenar cuentas y selector de pago</span></div>
-  <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg></div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v3.5 · Firebase + OpenAI/Functions</div>
+  <div class="profile-group">
+    <div class="profile-group-title">Módulos</div>
+    <div class="profile-actions-grid">
+      <div class="profile-action" onclick="nav('accounts')"><div class="setic">💳</div><span>Cuentas</span></div>
+      <div class="profile-action" onclick="nav('loans')"><div class="setic">💰</div><span>Créditos</span></div>
+      <div class="profile-action" onclick="nav('rec')"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">🔁</div><span>Cargos recurrentes</span></div>
+      <div class="profile-action" onclick="nav('inst')"><div class="setic" style="background:rgba(167,139,250,.1);color:var(--ac2)">🧴</div><span>Instinto</span></div>
+    </div>
+  </div>
+
+  <div class="profile-group">
+    <div class="profile-group-title">Archivos</div>
+    <div class="profile-actions-grid">
+      <div class="profile-action" onclick="expExcel()"><div class="setic" style="background:rgba(34,211,160,.1);color:var(--gn)">📊</div><span>Excel completo</span></div>
+      <div class="profile-action" onclick="dlTemplate()"><div class="setic" style="background:rgba(96,165,250,.12);color:#60a5fa">📄</div><span>Plantilla</span></div>
+      <div class="profile-action" onclick="document.getElementById('imp-file').click()"><div class="setic" style="background:rgba(167,139,250,.12);color:var(--ac2)">⬆️</div><span>Subir plantilla</span></div>
+      <div class="profile-action" onclick="expCSV()"><div class="setic" style="background:rgba(34,211,160,.1);color:var(--gn)">↓</div><span>CSV</span></div>
+    </div>
+    <input id="imp-file" type="file" accept=".csv,text/csv" style="display:none" onchange="impTemplate(this)"/>
+  </div>
+
+  <div class="profile-group">
+    <div class="profile-group-title">Organización</div>
+    <div class="profile-actions-grid">
+      <div class="profile-action" onclick="openOrder('accounts')"><div class="setic">↕️</div><span>Ordenar cuentas</span></div>
+      <div class="profile-action" onclick="openOrder('loans')"><div class="setic">↕️</div><span>Ordenar créditos</span></div>
+      <div class="profile-action" onclick="openOrder('recs')"><div class="setic">↕️</div><span>Ordenar cargos</span></div>
+      <div class="profile-action" onclick="openOrder('insts')"><div class="setic">↕️</div><span>Ordenar Instinto</span></div>
+      <div class="profile-action" onclick="om('m-cats')"><div class="setic">⭐</div><span>Categorías</span></div>
+    </div>
+  </div>
+
+  <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v3.6 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -453,6 +484,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
     <div class="fg"><label class="fl" id="acc-blbl">Saldo disponible ($)</label><input class="fi" id="acc-bal" type="number" inputmode="decimal" placeholder="0.00"/></div>
     <div class="fg" id="acc-lgrp" style="display:none"><label class="fl">Límite de crédito ($)</label><input class="fi" id="acc-lim" type="number" inputmode="decimal" placeholder="0.00"/></div>
     <div class="fg" id="acc-bgrp"><label class="fl">Banco / Institución</label><input class="fi" id="acc-bnk" placeholder="BBVA, Santander…"/></div>
+    <div class="fg"><label class="fl">Color de la cuenta / tarjeta</label><div style="display:flex;align-items:center;gap:10px"><input id="acc-color" type="color" value="#1a2535" style="width:48px;height:40px;border:none;background:transparent;cursor:pointer"/><span style="font-size:11px;color:var(--mu);line-height:1.4">Aplica al bloque visual. Las cuentas y tarjetas conservan sus etiquetas y comportamiento.</span></div></div>
     <button class="bp" onclick="saveAcc()">Guardar cuenta</button>
     <button class="bd" id="acc-dbtn" style="display:none" onclick="delAcc()">Eliminar cuenta</button>
   </div>
@@ -565,6 +597,18 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   <div class="epicker-cats" id="epcats"></div>
   <input class="epicker-search" id="epsearch" placeholder="Buscar emoji…" oninput="filterEmojis()"/>
   <div class="egrid" id="epgrid"></div>
+</div>
+
+
+<!-- Ordenar elementos -->
+<div class="mo" id="m-order" onclick="cox(event,'m-order')">
+  <div class="ms">
+    <div class="mh"></div>
+    <div class="mt" id="ord-title">Ordenar</div>
+    <div style="font-size:11px;color:var(--mu);line-height:1.5;margin-bottom:12px;text-align:center">Usa las flechas para cambiar el orden. En cuentas, este orden también define el selector “¿con qué cuenta pagas?”.</div>
+    <div id="ord-list"></div>
+    <button class="bp" onclick="cm('m-order')" style="margin-top:10px">Listo</button>
+  </div>
 </div>
 
 <!-- Modal Backend IA -->
@@ -1006,6 +1050,10 @@ function rBkd(list){
 async function saveAccsL(){ await saveMetaArray('accounts','fp_accs3',accs); }
 function getAv(a){return a.type==='credit'?(a.limit||0)-(a.balance||0):(a.balance||0);}
 function adjBal(id,amt,type){const i=accs.findIndex(a=>a.id===id);if(i<0)return;const a=accs[i];if(type==='expense')accs[i].balance=a.type==='credit'?(a.balance||0)+amt:Math.max(0,(a.balance||0)-amt);else if(a.type!=='credit')accs[i].balance=(a.balance||0)+amt;else accs[i].balance=Math.max(0,(a.balance||0)-amt);saveAccsL();rAccs();}
+function hexToRgb(hex){hex=String(hex||'').replace('#','');if(hex.length===3)hex=hex.split('').map(x=>x+x).join('');const n=parseInt(hex||'1a2535',16);return{r:(n>>16)&255,g:(n>>8)&255,b:n&255};}
+function accountColor(a){if(a&&a.color)return a.color;return {debit:'#1a2535',credit:'#25201a',cash:'#201a2a',savings:'#1a2220'}[(a||{}).type]||'#1a2535';}
+function accountBg(a){const c=accountColor(a),rgb=hexToRgb(c);return `linear-gradient(135deg, rgba(${rgb.r},${rgb.g},${rgb.b},.98), rgba(10,10,15,.92))`; }
+function defaultAccColor(t){return {debit:'#1a2535',credit:'#25201a',cash:'#201a2a',savings:'#1a2220'}[t]||'#1a2535';}
 function rAccs(){
   const el=document.getElementById('acc-list');if(!el)return;
   const ct=accs.filter(a=>a.type!=='credit').reduce((s,a)=>s+(a.balance||0),0);
@@ -1025,7 +1073,7 @@ function rAccs(){
     const mainLabel=a.type==='credit'?'Deuda actual':'Saldo';
     const mainValue=a.type==='credit'?debt:av;
     const mainColor=a.type==='credit'?(debt>0?'#ff8fa3':'#f0f0f5'):(av<0?'#ff5f7e':av===0?'#fbbf24':'#f0f0f5');
-    return`<div class="acard ${tcls}" onclick="oEditAcc('${a.id}')">
+    return`<div class="acard ${tcls}" style="background:${accountBg(a)}" onclick="oEditAcc('${a.id}')">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
         <div style="min-width:0;flex:1"><div style="font-size:9px;color:rgba(255,255,255,.68);text-transform:uppercase;letter-spacing:1.1px;margin-bottom:4px">${typeLabel}</div>
           <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;min-width:0">
@@ -1045,8 +1093,8 @@ function rAccs(){
   }).join('');
 }
 function rAccTxList(){const el=document.getElementById('acc-txl');if(!el)return;const r=txs.filter(t=>t.accountId).slice(0,8);if(!r.length)return;rTxList(r,'acc-txl');}
-function oNewAcc(){document.getElementById('acc-mtit').textContent='Nueva cuenta';document.getElementById('acc-eid').value='';document.getElementById('acc-dbtn').style.display='none';['acc-nm','acc-bal','acc-lim','acc-bnk'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('acc-idata').value='';document.getElementById('acc-iprev').innerHTML='💳';sAccT('debit');om('m-acc');}
-function oEditAcc(id){const a=accs.find(x=>x.id===id);if(!a)return;document.getElementById('acc-mtit').textContent='Editar cuenta';document.getElementById('acc-eid').value=id;document.getElementById('acc-nm').value=a.name;document.getElementById('acc-bal').value=a.balance||0;document.getElementById('acc-bnk').value=a.bank||'';document.getElementById('acc-idata').value=a.idata||'';const p=document.getElementById('acc-iprev');
+function oNewAcc(){document.getElementById('acc-mtit').textContent='Nueva cuenta';document.getElementById('acc-eid').value='';document.getElementById('acc-dbtn').style.display='none';['acc-nm','acc-bal','acc-lim','acc-bnk'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('acc-idata').value='';document.getElementById('acc-iprev').innerHTML='💳';const ce=document.getElementById('acc-color');if(ce)ce.value=defaultAccColor('debit');sAccT('debit');om('m-acc');}
+function oEditAcc(id){const a=accs.find(x=>x.id===id);if(!a)return;document.getElementById('acc-mtit').textContent='Editar cuenta';document.getElementById('acc-eid').value=id;document.getElementById('acc-nm').value=a.name;document.getElementById('acc-bal').value=a.balance||0;document.getElementById('acc-bnk').value=a.bank||'';document.getElementById('acc-idata').value=a.idata||'';const ce=document.getElementById('acc-color');if(ce)ce.value=a.color||defaultAccColor(a.type);const p=document.getElementById('acc-iprev');
   if(a.idata){p.innerHTML=`<img src="${a.idata}" style="width:100%;height:100%;object-fit:cover;border-radius:10px"/>`;p.dataset.emoji='';}
   else{p.innerHTML=a.icon||'💳';p.dataset.emoji=a.icon||'💳';}if(a.type==='credit')document.getElementById('acc-lim').value=a.limit||0;sAccT(a.type);document.getElementById('acc-dbtn').style.display='block';om('m-acc');}
 function sAccT(t){
@@ -1056,6 +1104,7 @@ function sAccT(t){
   const map={debit:'d',credit:'c',cash:'ca',savings:'s'};
   const b=document.getElementById('at-'+map[t]);
   if(b)b.className='tb aa';
+  const ce=document.getElementById('acc-color'); if(ce && (!ce.value || document.getElementById('acc-eid')?.value==='')) ce.value=defaultAccColor(t);
   document.getElementById('acc-lgrp').style.display=t==='credit'?'block':'none';
   document.getElementById('acc-blbl').textContent=t==='credit'?'Deuda actual ($)':'Saldo disponible ($)';
   // Banco no obligatorio para efectivo
@@ -1067,11 +1116,12 @@ function saveAcc(){
   const bal=parseFloat(document.getElementById('acc-bal').value)||0;
   const lim=nAT==='credit'?(parseFloat(document.getElementById('acc-lim').value)||0):0;
   const bnk=nAT==='cash'?'':(document.getElementById('acc-bnk').value.trim());
+  const color=(document.getElementById('acc-color')?.value)||defaultAccColor(nAT);
   const {idata, icon: iicon} = getIconValue('acc-iprev','acc-idata');
   const eid=document.getElementById('acc-eid').value;
   if(!nm){toast('Escribe un nombre','e');return;}
-  if(eid){const i=accs.findIndex(a=>a.id===eid);if(i>=0)accs[i]={...accs[i],name:nm,balance:bal,limit:lim,bank:bnk,idata,type:nAT};}
-  else accs.push({id:'a'+Date.now(),name:nm,type:nAT,balance:bal,limit:lim,bank:bnk,idata});
+  if(eid){const i=accs.findIndex(a=>a.id===eid);if(i>=0)accs[i]={...accs[i],name:nm,balance:bal,limit:lim,bank:bnk,idata,type:nAT,color};}
+  else accs.push({id:'a'+Date.now(),name:nm,type:nAT,balance:bal,limit:lim,bank:bnk,idata,color});
   saveAccsL();rAccs();cm('m-acc');toast(eid?'✓ Cuenta actualizada':'✓ Cuenta agregada','s');
 }
 function delAcc(){const id=document.getElementById('acc-eid').value;if(!id||!confirm('¿Eliminar esta cuenta?'))return;accs=accs.filter(a=>a.id!==id);saveAccsL();rAccs();cm('m-acc');toast('Cuenta eliminada','s');}
@@ -1387,7 +1437,7 @@ function getOrderTitle(kind){return {accounts:'Ordenar cuentas',loans:'Ordenar c
 async function saveOrderArray(kind){if(kind==='accounts')await saveAccsL();else if(kind==='loans')await saveLoansL();else if(kind==='recs')await saveRecsL();else await saveInstsL();}
 function itemOrderName(kind,it){return it.name||it.desc||it.description||'Sin nombre';}
 function openOrder(kind='accounts'){ordKind=kind;document.getElementById('ord-title').textContent=getOrderTitle(kind);rOrder();om('m-order');}
-function rOrder(){const el=document.getElementById('ord-list');if(!el)return;const arr=getOrderArray(ordKind);if(!arr.length){el.innerHTML='<div class="es">Sin elementos para ordenar</div>';return;}el.innerHTML=arr.map((it,i)=>`<div style="display:flex;align-items:center;gap:8px;background:var(--sf2);border:1px solid var(--bd);border-radius:10px;padding:10px;margin-bottom:7px"><span style="font-size:11px;color:var(--mu);width:20px">${i+1}</span><span style="flex:1;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(itemOrderName(ordKind,it))}</span><button class="bsm" onclick="moveOrder('${ordKind}','${it.id}',-1)" ${i===0?'disabled':''}>↑</button><button class="bsm" onclick="moveOrder('${ordKind}','${it.id}',1)" ${i===arr.length-1?'disabled':''}>↓</button></div>`).join('');}
+function rOrder(){const el=document.getElementById('ord-list');if(!el)return;const arr=getOrderArray(ordKind);if(!arr.length){el.innerHTML='<div class="es">Sin elementos para ordenar</div>';return;}el.innerHTML=arr.map((it,i)=>`<div style="display:flex;align-items:center;gap:8px;background:var(--sf2);border:1px solid var(--bd);border-radius:10px;padding:10px;margin-bottom:7px"><span style="font-size:11px;color:var(--mu);width:20px">${i+1}</span><span style="flex:1;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(itemOrderName(ordKind,it))}</span><button class="order-item-btn" onclick="moveOrder('${ordKind}','${it.id}',-1)" ${i===0?'disabled':''}>↑</button><button class="order-item-btn" onclick="moveOrder('${ordKind}','${it.id}',1)" ${i===arr.length-1?'disabled':''}>↓</button></div>`).join('');}
 async function moveOrder(kind,id,dir){const arr=getOrderArray(kind);const i=arr.findIndex(x=>x.id===id);if(i<0)return;const j=i+dir;if(j<0||j>=arr.length)return;[arr[i],arr[j]]=[arr[j],arr[i]];await saveOrderArray(kind);rOrder();renderAll();rChips('acs-tx','tx');}
 
 function expCSV(){if(!txs.length){toast('Sin transacciones','e');return;}const h='Fecha,Tipo,Descripción,Categoría,Cuenta,Monto,Nota';const rows=txs.map(t=>`${t.date},${t.type==='income'?'Ingreso':'Gasto'},"${t.desc}","${t.catName||''}","${t.accountName||''}",${t.amount},"${t.note||''}"`);const b=new Blob([[h,...rows].join('\n')],{type:'text/csv;charset=utf-8;'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=`finanzas_${today()}.csv`;a.click();URL.revokeObjectURL(u);toast('✓ CSV descargado','s');}
