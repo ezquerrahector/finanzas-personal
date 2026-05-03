@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0a0a0f"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <title>Finanzas</title>
-<link rel="manifest" href="manifest.json?v=3.3"/>
+<link rel="manifest" href="manifest.json?v=4.6"/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 :root,[data-theme="dark"]{--bg:#0a0a0f;--sf:#13131a;--sf2:#1c1c26;--bd:#2a2a3a;--tx:#f0f0f5;--mu:#6b6b80;}
@@ -208,7 +208,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .order-item-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);cursor:pointer;font-weight:700;}
 .order-item-btn:disabled{opacity:.35;cursor:not-allowed;}
 
-/* IA compacta v4.5 */
+/* IA compacta v4.6 */
 .aihub{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(167,139,250,.05));border:1px solid rgba(108,99,255,.22);border-radius:15px;padding:12px;margin-bottom:12px;}
 .aiquick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 10px;}
 .aiquick button,.aiquick label{display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--bd);background:var(--sf);border-radius:12px;padding:10px;font-size:12px;font-weight:800;cursor:pointer;color:var(--tx);}
@@ -248,7 +248,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v4.5</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v4.6</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -339,7 +339,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- IA -->
 <div id="s-ai" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v4.5</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v4.6</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
 
@@ -440,7 +440,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v4.5 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v4.6 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -684,6 +684,8 @@ let nAT='debit',nLT='mortgage';
 let dChart=null,bChart=null;
 let voiceP=null,scanP=null,notesP=[];
 let isRec=false,recog=null;
+let isConfirmingNotes=false;
+const aiSaveFingerprints=new Set();
 
 const DEFCATS=[
   {id:'food',name:'Comida',icon:'🍔',color:'#ff6b6b'},
@@ -710,7 +712,7 @@ async function initApp(){
   setTimeout(updateAIKeyStatus, 500);
 setTimeout(renderAIChat, 700);
   applyTheme(localStorage.getItem('fp_thm')||'auto');
-  if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=3.7').catch(()=>{});
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=4.6').catch(()=>{});
   
   onAuthStateChanged(AUTH, u=>{
     document.getElementById('ld').style.display='none';
@@ -852,6 +854,21 @@ window.matchMedia?.('(prefers-color-scheme: dark)').addEventListener('change',()
 setInterval(()=>{if((localStorage.getItem('fp_thm')||'auto')==='auto')applyTheme('auto');},3600000);
 
 // ═══ TRANSACCIONES FIRESTORE ═══
+function normTxText(v){
+  return String(v||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');
+}
+function txFingerprint(t){
+  const desc=normTxText(t.desc||t.description||t.name||'');
+  const amt=(Number(t.amount)||0).toFixed(2);
+  const date=String(t.date||today()).slice(0,10);
+  const acc=String(t.accountId||'');
+  const type=String(t.type||'expense');
+  return `${type}|${amt}|${desc}|${acc}|${date}`;
+}
+function isDuplicateTransaction(newTx,ignoreId=''){
+  const fp=txFingerprint(newTx);
+  return txs.some(tx=>String(tx.id)!==String(ignoreId||'') && txFingerprint(tx)===fp);
+}
 async function saveTx(){
   if(!UID){toast('Inicia sesión primero','e');return;}
   const amt=parseFloat(document.getElementById('ai-amt').value);
@@ -877,6 +894,10 @@ async function saveTx(){
     accountColor:acc?.color||'',
     updatedAt:new Date().toISOString()
   };
+  if(isDuplicateTransaction(tx, editingTxId)){
+    toast('Este movimiento ya fue registrado','e');
+    return;
+  }
   try{
     if(editingTxId){
       const oldTx=txs.find(t=>t.id===editingTxId);
@@ -966,9 +987,15 @@ async function saveTxAI(t){
     createdAt:new Date().toISOString()
   };
 
+  const fp=txFingerprint(tx);
+  if(isDuplicateTransaction(tx) || aiSaveFingerprints.has(fp)){
+    toast('Este movimiento ya fue registrado','e');
+    return false;
+  }
+  aiSaveFingerprints.add(fp);
+
   try{
-    const ref = await addDoc(collection(DB,`users/${UID}/transactions`),tx);
-    txs.unshift({id:ref.id,...tx});
+    await addDoc(collection(DB,`users/${UID}/transactions`),tx);
 
     if(tx.accountId){
       applyTxBalance(tx);
@@ -982,6 +1009,8 @@ async function saveTxAI(t){
     console.error('Firestore AI error:', e);
     toast('Firebase: '+e.message,'e');
     return false;
+  }finally{
+    setTimeout(()=>aiSaveFingerprints.delete(fp), 3500);
   }
 }
 async function delTx(id){
@@ -1427,6 +1456,7 @@ function normalizeAITransactions(data){
     try{ list = JSON.parse(limpio || '[]'); }catch(e){ list = []; }
   }
 
+  const seen=new Set();
   return (list || []).map(t=>{
     const rawType = String(t.type || t.tipo || '').toLowerCase();
     const type = rawType.includes('income') || rawType.includes('ingreso') ? 'income' : 'expense';
@@ -1459,7 +1489,13 @@ function normalizeAITransactions(data){
       catIcon: catObj?.idata || catObj?.icon || '📌',
       note: t.note || t.nota || 'Registrado con IA'
     };
-  }).filter(t=>t.amount>0);
+  }).filter(t=>{
+    if(t.amount<=0)return false;
+    const fp=txFingerprint(t);
+    if(seen.has(fp))return false;
+    seen.add(fp);
+    return true;
+  });
 }
 
 async function testAIBackend(){
@@ -1630,22 +1666,28 @@ ${fmt(voiceP.amount)}`;
 async function confVoice(){if(!voiceP)return;await saveTxAI(voiceP);document.getElementById('vres').style.display='none';document.getElementById('vconf').style.display='none';voiceP=null;}
 async function confScan(){if(!scanP)return;await saveTxAI(scanP);document.getElementById('scanres').style.display='none';document.getElementById('scanprev').style.display='none';scanP=null;}
 async function confNotes(){
+  if(isConfirmingNotes) return;
   if(!notesP || !notesP.length){toast('No hay movimientos pendientes','e');return;}
-  let ok=0;
-  for(const t of notesP){
-    const saved = await saveTxAI(t);
-    if(saved) ok++;
-  }
+  isConfirmingNotes=true;
+  try{
+    let ok=0;
+    for(const t of notesP){
+      const saved = await saveTxAI(t);
+      if(saved) ok++;
+    }
 
-  if(ok>0){
-    document.getElementById('noteres').style.display='none';
-    document.getElementById('noteinp').value='';
-    addAIChat('b',`Listo, registré ${ok} movimiento(s) ✅`);
-    notesP=[];
-    aiChatStep='idle';
-    renderAll();
-  }else{
-    addAIChat('b','No pude guardar el movimiento. Revisa que estés con sesión iniciada y que Firebase tenga permisos.');
+    if(ok>0){
+      document.getElementById('noteres').style.display='none';
+      document.getElementById('noteinp').value='';
+      addAIChat('b',`Listo, registré ${ok} movimiento(s) ✅`);
+      notesP=[];
+      aiChatStep='idle';
+      renderAll();
+    }else{
+      addAIChat('b','No guardé nada nuevo: el movimiento ya existía o Firebase no permitió el registro.');
+    }
+  }finally{
+    isConfirmingNotes=false;
   }
 }
 function cancelNotes(){
@@ -1713,7 +1755,15 @@ function expCSV(){if(!txs.length){toast('Sin transacciones','e');return;}const h
 function filterP(list,p){const n=new Date();return list.filter(t=>{if(!t.date)return p==='all';const d=new Date(t.date+'T12:00:00');if(p==='all')return true;if(p==='month')return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear();if(p==='week'){const s=new Date(n);s.setDate(n.getDate()-n.getDay());s.setHours(0,0,0,0);return d>=s;}if(p==='year')return d.getFullYear()===n.getFullYear();return true;});}
 function fmt(n){return'$'+(n||0).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function fmtS(n){if(n>=1e6)return'$'+(n/1e6).toFixed(1)+'M';if(n>=1e3)return'$'+(n/1e3).toFixed(0)+'k';return'$'+n;}
-function today(){return new Date().toISOString().split('T')[0];}
+function today(){
+  const parts=new Intl.DateTimeFormat('en-CA',{
+    timeZone:'America/Mexico_City',
+    year:'numeric',
+    month:'2-digit',
+    day:'2-digit'
+  }).formatToParts(new Date()).reduce((a,p)=>{a[p.type]=p.value;return a;},{});
+  return `${parts.year}-${parts.month}-${parts.day}`;
+}
 function fmtDate(s){if(!s||s.length<10)return s||'';const d=new Date(s+'T12:00:00'),n=new Date();n.setHours(12,0,0,0);const y=new Date(n);y.setDate(n.getDate()-1);if(d.toDateString()===n.toDateString())return'Hoy';if(d.toDateString()===y.toDateString())return'Ayer';return d.toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'});}
 function fmtDS(s){if(!s||s.length<10)return s;return new Date(s+'T12:00:00').toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'2-digit'});}
 function getCatC(id){return cats.find(c=>c.id===id)?.color||'#6c63ff';}
