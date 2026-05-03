@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0a0a0f"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <title>Finanzas</title>
-<link rel="manifest" href="manifest.json?v=4.6"/>
+<link rel="manifest" href="manifest.json?v=6.2"/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 :root,[data-theme="dark"]{--bg:#0a0a0f;--sf:#13131a;--sf2:#1c1c26;--bd:#2a2a3a;--tx:#f0f0f5;--mu:#6b6b80;}
@@ -118,7 +118,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .acb{font-size:9px;color:var(--mu);}
 .ac.sel{border-color:var(--ac);background:rgba(108,99,255,.15);}
 
-/* Account selector PRO v6.1.1 — Nubank/Klar inspired */
+/* Account selector PRO v6.2 — Nubank/Klar inspired */
 .accpay-wrap{background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(167,139,250,.045));border:1px solid rgba(108,99,255,.18);border-radius:15px;padding:10px;margin-top:5px;}
 .accpay-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
 .accpay-title{font-size:10px;color:var(--mu);font-weight:800;letter-spacing:.7px;text-transform:uppercase;}
@@ -276,7 +276,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .ccinfo div{font-size:10px;color:rgba(255,255,255,.62);background:rgba(255,255,255,.08);border-radius:7px;padding:5px 7px}
 @media(max-width:700px){.ccpayname{max-width:155px}.ccinfo{grid-template-columns:1fr}}
 
-/* Inteligencia financiera v6.1.1 */
+/* Inteligencia financiera v6.2 */
 .smartbox{background:linear-gradient(135deg,rgba(108,99,255,.12),rgba(34,211,160,.06));border:1px solid rgba(108,99,255,.24);border-radius:16px;padding:13px;margin-bottom:12px;box-shadow:0 10px 30px rgba(0,0,0,.10);}
 .smarthead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;}
 .smarttitle{font-family:var(--fh);font-size:14px;font-weight:900;}
@@ -304,7 +304,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 @media(max-width:700px){.smartgrid{grid-template-columns:1fr}.smartname{max-width:170px}.smarthead{flex-direction:column}.smartitem{align-items:flex-start}.smartamt{font-size:12px}.smartcta{grid-template-columns:1fr}}
 
 
-/* Predicciones v6.1.1 */
+/* Predicciones v6.2 */
 .predbox{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:13px;margin-bottom:12px;}
 .predhero{background:linear-gradient(135deg,rgba(108,99,255,.14),rgba(251,191,36,.06));border:1px solid rgba(108,99,255,.24);border-radius:15px;padding:14px;margin-bottom:12px;}
 .predtitle{font-family:var(--fh);font-size:15px;font-weight:900;margin-bottom:3px;}
@@ -332,10 +332,10 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 @media(max-width:700px){.predgrid{grid-template-columns:1fr}.preditem{align-items:flex-start}.predtag{display:none}.predtwocol{grid-template-columns:1fr}.predscore{align-items:flex-start}.predring{width:52px;height:52px}}
 
 
-/* Estructura PRO v6.1.1 */
+/* Estructura PRO v6.2 */
 #nav{overflow-x:auto;scrollbar-width:none;}#nav::-webkit-scrollbar{display:none}.ni{min-width:42px;font-size:8px}.ni svg{width:18px;height:18px}.home-lite-note{font-size:11px;color:var(--mu);line-height:1.5;margin:-4px 0 12px}
 
-/* FIX CONTRASTE v6.1.1.1 — textos visibles en modo claro sobre tarjetas oscuras */
+/* FIX CONTRASTE v6.2 — textos visibles en modo claro sobre tarjetas oscuras */
 .acard,.lc,.ic,.bc{color:#f0f0f5!important;}
 .acard *, .lc *, .ic *, .bc *{text-shadow:0 1px 2px rgba(0,0,0,.18);}
 .acard [style*="opacity:.4"], .lc [style*="opacity:.4"], .ic [style*="opacity:.4"]{opacity:.78!important;}
@@ -343,6 +343,13 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .acard [style*="rgba(255,255,255,.35)"], .lc [style*="rgba(255,255,255,.35)"], .ic [style*="rgba(255,255,255,.35)"]{color:rgba(255,255,255,.74)!important;}
 .acard [style*="rgba(255,255,255,.4)"], .lc [style*="rgba(255,255,255,.4)"], .ic [style*="rgba(255,255,255,.4)"]{color:rgba(255,255,255,.80)!important;}
 #l-mon,#l-cnt,#pat-c{color:#f0f0f5!important;}
+
+/* Orden inteligente v6.2 */
+.sortbar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--sf);border:1px solid var(--bd);border-radius:13px;padding:9px 10px;margin:-4px 0 12px;}
+.sortbar-label{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:1px;font-weight:900;white-space:nowrap;}
+.sortbar select{flex:1;min-width:0;background:var(--sf2);border:1px solid var(--bd);border-radius:10px;color:var(--tx);font-family:var(--fb);font-size:12px;font-weight:800;padding:8px 10px;outline:none;}
+.sortbar-note{font-size:9px;color:var(--mu);line-height:1.3;margin-top:-7px;margin-bottom:10px;}
+@media(max-width:520px){.sortbar{align-items:stretch;flex-direction:column;gap:6px}.sortbar select{width:100%}}
 
 </style>
 </head>
@@ -371,7 +378,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v6.1.1</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v6.2</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -412,7 +419,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- MOVIMIENTOS -->
 <div id="s-mov" class="scr">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Movimientos</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.1.1</div></div><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Movimientos</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.2</div></div><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div>
   <div class="pb" id="pb-h">
     <button class="pbt on" data-p="month">Este mes</button>
     <button class="pbt" data-p="week">Semana</button>
@@ -427,7 +434,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- SALUD FINANCIERA -->
 <div id="s-health" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Salud financiera</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.1.1</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Salud financiera</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.2</div></div>
     <button class="bsm" onclick="enableFinNotifications()">🔔 Alertas</button>
   </div>
   <div id="smart-panel"></div>
@@ -435,7 +442,10 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- CUENTAS -->
 <div id="s-accounts" class="scr">
-  <div class="sh"><div class="st">Cuentas</div><div style="display:flex;gap:6px"><button class="bsm" onclick="openOrder('accounts')">Ordenar</button><button class="bsm" onclick="oNewAcc()">+ Nueva</button></div></div>
+  <div class="sh"><div class="st">Cuentas</div><div style="display:flex;gap:6px"><button class="bsm" onclick="openOrder('accounts')">Mi orden</button><button class="bsm" onclick="oNewAcc()">+ Nueva</button></div></div>
+  <div class="sortbar"><div class="sortbar-label">Ordenar vista</div><select id="sort-accounts" onchange="setSortMode('accounts',this.value)">
+    <option value="manual">Mi orden</option><option value="max_available">Mayor disponible</option><option value="min_available">Menor disponible</option><option value="max_debt">Mayor deuda</option><option value="min_debt">Menor deuda</option><option value="type">Tipo de cuenta</option><option value="name">Nombre A-Z</option>
+  </select></div>
   <div style="background:linear-gradient(135deg,#12121e,#1a1a2e);border:1px solid rgba(108,99,255,.2);border-radius:15px;padding:16px;margin-bottom:14px">
     <div style="font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:2px">Patrimonio disponible</div>
     <div id="pat-tot" style="font-family:'Syne',sans-serif;font-size:30px;font-weight:800">$0.00</div>
@@ -450,7 +460,10 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- CRÉDITOS -->
 <div id="s-loans" class="scr">
-  <div class="sh"><div class="st">Créditos</div><div style="display:flex;gap:6px"><button class="bsm" onclick="openOrder('loans')">Ordenar</button><button class="bsm" onclick="oNewLoan()">+ Nuevo</button></div></div>
+  <div class="sh"><div class="st">Créditos</div><div style="display:flex;gap:6px"><button class="bsm" onclick="openOrder('loans')">Mi orden</button><button class="bsm" onclick="oNewLoan()">+ Nuevo</button></div></div>
+  <div class="sortbar"><div class="sortbar-label">Ordenar vista</div><select id="sort-loans" onchange="setSortMode('loans',this.value)">
+    <option value="manual">Mi orden</option><option value="max_debt">Mayor deuda</option><option value="min_debt">Menor deuda</option><option value="max_payment">Pago más alto</option><option value="next_payment">Próximo pago</option><option value="progress">Mayor avance</option><option value="name">Nombre A-Z</option>
+  </select></div>
   <div style="background:linear-gradient(135deg,#1e0e0e,#2a1010);border:1px solid rgba(255,95,126,.18);border-radius:15px;padding:16px;margin-bottom:14px">
     <div style="font-size:9px;color:rgba(255,150,150,.55);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:2px">Deuda total</div>
     <div id="l-tot" style="font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:#ff8fa3">$0</div>
@@ -465,7 +478,10 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- RECURRENTES -->
 <div id="s-rec" class="scr">
-  <div class="sh"><div class="st">Recurrentes</div><div style="display:flex;gap:6px"><button class="bsm" onclick="openOrder('recs')">Ordenar</button><button class="bsm" onclick="oNewRec()">+ Nuevo</button></div></div>
+  <div class="sh"><div class="st">Recurrentes</div><div style="display:flex;gap:6px"><button class="bsm" onclick="openOrder('recs')">Mi orden</button><button class="bsm" onclick="oNewRec()">+ Nuevo</button></div></div>
+  <div class="sortbar"><div class="sortbar-label">Ordenar vista</div><select id="sort-recs" onchange="setSortMode('recs',this.value)">
+    <option value="manual">Mi orden</option><option value="max_amount">Mayor monto</option><option value="min_amount">Menor monto</option><option value="next_charge">Próximo cobro</option><option value="account">Cuenta asociada</option><option value="name">Nombre A-Z</option>
+  </select></div>
   <div style="background:var(--sf);border:1px solid var(--bd);border-radius:13px;padding:13px;margin-bottom:13px">
     <div style="font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">Total mensual estimado</div>
     <div id="rec-tot" style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--rd)">$0</div>
@@ -475,7 +491,10 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- INSTINTO -->
 <div id="s-inst" class="scr">
-  <div class="sh"><div class="st">Instinto 🧴</div><div style="display:flex;gap:6px"><button class="bsm" onclick="openOrder('insts')">Ordenar</button><button class="bsm" onclick="oNewInst()">+ Préstamo</button></div></div>
+  <div class="sh"><div class="st">Instinto 🧴</div><div style="display:flex;gap:6px"><button class="bsm" onclick="openOrder('insts')">Mi orden</button><button class="bsm" onclick="oNewInst()">+ Préstamo</button></div></div>
+  <div class="sortbar"><div class="sortbar-label">Ordenar vista</div><select id="sort-insts" onchange="setSortMode('insts',this.value)">
+    <option value="manual">Mi orden</option><option value="max_pending">Mayor pendiente</option><option value="min_pending">Menor pendiente</option><option value="recent">Más reciente</option><option value="progress">Mayor avance de pago</option><option value="name">Nombre A-Z</option>
+  </select></div>
   <div style="background:linear-gradient(135deg,#12122a,#1e1e3a);border:1px solid rgba(108,99,255,.2);border-radius:15px;padding:15px;margin-bottom:13px">
     <div style="font-size:9px;color:rgba(200,200,255,.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:2px">Instinto me debe</div>
     <div id="inst-tot" style="font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--ac2)">$0</div>
@@ -487,7 +506,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- IA -->
 <div id="s-ai" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.1.1</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.2</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
 
@@ -556,7 +575,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- PREDICCIONES -->
 <div id="s-pred" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Predicciones</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.1.1</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Predicciones</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.2</div></div>
     <button class="bsm" onclick="enableFinNotifications()">🔔 Alertas</button>
   </div>
   <div id="pred-panel"></div>
@@ -604,7 +623,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v6.1.1 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v6.2 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -837,7 +856,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   <div class="ms">
     <div class="mh"></div>
     <div class="mt" id="ord-title">Ordenar</div>
-    <div style="font-size:11px;color:var(--mu);line-height:1.5;margin-bottom:12px;text-align:center">Usa las flechas para cambiar el orden. En cuentas, este orden también define el selector “¿con qué cuenta pagas?”.</div>
+    <div style="font-size:11px;color:var(--mu);line-height:1.5;margin-bottom:12px;text-align:center">Usa las flechas para cambiar tu orden manual. Si eliges “Mi orden” en la sección, se verá exactamente así. En cuentas, este orden también define el selector “¿con qué cuenta pagas?”.</div>
     <div id="ord-list"></div>
     <button class="bp" onclick="cm('m-order')" style="margin-top:10px">Listo</button>
   </div>
@@ -931,7 +950,7 @@ async function initApp(){
   setTimeout(updateAIKeyStatus, 500);
 setTimeout(renderAIChat, 700);
   applyTheme(localStorage.getItem('fp_thm')||'auto');
-  if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=4.7').catch(()=>{});
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=6.2').catch(()=>{});
   
   onAuthStateChanged(AUTH, u=>{
     document.getElementById('ld').style.display='none';
@@ -1634,7 +1653,7 @@ function rPredictions(){
   el.innerHTML=`<div class="predhero">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
       <div><div class="predtitle">📈 Predicciones financieras PRO</div><div class="predsub">Futuro y tendencias: anticipa riesgos, detecta categorías aceleradas y decide antes de que el gasto te alcance.</div></div>
-      <span class="predtag" style="color:var(--ac);border-color:rgba(108,99,255,.35)">v6.1.1</span>
+      <span class="predtag" style="color:var(--ac);border-color:rgba(108,99,255,.35)">v6.2</span>
     </div>
     <div class="predscore"><div class="predring" style="--score:${score}"><span>${score}</span></div><div><div style="font-family:var(--fh);font-weight:900;color:${scoreInfo.color}">${scoreInfo.txt}</div><div class="predsub">${esc(scoreInfo.msg)}</div></div></div>
     <div class="predgrid"><div class="predmetric"><div class="lbl">Riesgos</div><div class="val" style="color:${riskCount?'var(--rd)':'var(--gn)'}">${riskCount}</div><div class="predmeta">Alertas de alto impacto.</div></div><div class="predmetric"><div class="lbl">Focos amarillos</div><div class="val" style="color:${warnCount?'var(--yl)':'var(--gn)'}">${warnCount}</div><div class="predmeta">Tendencias a vigilar.</div></div><div class="predmetric"><div class="lbl">Gasto estimado</div><div class="val" style="color:var(--yl)">${fmt(p.projected||0)}</div><div class="predmeta">Cierre de mes al ritmo actual.</div></div></div>
@@ -1660,7 +1679,8 @@ function rAccs(){
   document.getElementById('pat-cr').textContent=fmt(cu);
   renderCreditPayAlerts();
   if(!accs.length){el.innerHTML=`<div class="es"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg><p>Sin cuentas. Toca "+ Nueva"</p></div>`;return;}
-  el.innerHTML=accs.map(a=>{
+  syncSortSelect('accounts');
+  el.innerHTML=getSortedArray('accounts').map(a=>{
     const av=getAv(a),debt=a.balance||0,up=a.type==='credit'&&a.limit?Math.min(100,Math.round(debt/a.limit*100)):0;
     const bc=up>80?'#ff5f7e':up>50?'#fbbf24':'#22d3a0';
     const ico=a.idata?`<img src="${a.idata}" style="width:100%;height:100%;object-fit:cover;border-radius:8px"/>`:(a.icon||'💳');
@@ -1836,7 +1856,8 @@ function delLoan(){const id=document.getElementById('ln-eid').value;if(!id||!con
 function regLnPay(){const id=document.getElementById('ln-eid').value;const i=loans.findIndex(l=>l.id===id);if(i<0)return;const s=lStats(loans[i]);loans[i].balance=Math.max(0,(loans[i].balance||0)-s.np);loans[i].pc=(loans[i].pc||0)+1;if(loans[i].balance<=0)loans[i].paid=true;saveLoansL();rLoans();cm('m-loan');toast(`✓ Pago registrado. Saldo: ${fmt(loans[i].balance)}`,'s');}
 function rLoans(){
   const el=document.getElementById('loan-list');if(!el)return;
-  const act=loans.filter(l=>!l.paid);
+  syncSortSelect('loans');
+  const act=getSortedArray('loans').filter(l=>!l.paid);
   document.getElementById('l-tot').textContent=fmt(act.reduce((s,l)=>s+(l.balance||0),0));
   document.getElementById('l-mon').textContent=fmt(act.reduce((s,l)=>s+lStats(l).me,0));
   document.getElementById('l-cnt').textContent=act.length;
@@ -1875,7 +1896,8 @@ function rRecs(){
   const tot=recs.reduce((s,r)=>s+(r.freq==='yearly'?r.amount/12:r.freq==='biweekly'?r.amount*2:r.amount),0);
   document.getElementById('rec-tot').textContent=fmt(tot);
   if(!recs.length){el.innerHTML=`<div class="es"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/></svg><p>Sin cargos recurrentes.<br>Toca "+ Nuevo"</p></div>`;return;}
-  el.innerHTML=recs.map(r=>{const acc=accs.find(a=>a.id===r.accountId);const av=acc?getAv(acc):null;const nf=av!==null&&av<r.amount;const d=dud(r.day);const ico=r.idata?`<img src="${r.idata}" style="width:24px;height:24px;border-radius:6px;object-fit:cover"/>`:(r.icon||'🔄');return`<div class="rc ${nf?'warn':''}" onclick="oEditRec('${r.id}')"><div style="display:flex;align-items:center;gap:9px"><div style="width:36px;height:36px;border-radius:9px;background:var(--sf2);display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden;flex-shrink:0">${ico}</div><div style="flex:1"><div style="font-size:13px;font-weight:600">${esc(r.name)}</div><div style="font-size:10px;color:var(--mu)">${{monthly:'Mensual',biweekly:'Quincenal',yearly:'Anual'}[r.freq]||''} · Día ${r.day||'—'}${acc?' · '+esc(acc.name):''}</div>${nf?`<div style="font-size:10px;color:var(--rd);margin-top:1px">⚠️ Saldo insuficiente (disp: ${fmt(av)})</div>`:''}</div><div style="text-align:right"><div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:13px;color:var(--rd)">${fmt(r.amount)}</div><div style="font-size:9px;color:${d<=3?'var(--rd)':'var(--mu)'}">${d<=0?'¡Hoy!':d===1?'Mañana':'En '+d+'d'}</div></div></div></div>`;}).join('');
+  syncSortSelect('recs');
+  el.innerHTML=getSortedArray('recs').map(r=>{const acc=accs.find(a=>a.id===r.accountId);const av=acc?getAv(acc):null;const nf=av!==null&&av<r.amount;const d=dud(r.day);const ico=r.idata?`<img src="${r.idata}" style="width:24px;height:24px;border-radius:6px;object-fit:cover"/>`:(r.icon||'🔄');return`<div class="rc ${nf?'warn':''}" onclick="oEditRec('${r.id}')"><div style="display:flex;align-items:center;gap:9px"><div style="width:36px;height:36px;border-radius:9px;background:var(--sf2);display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden;flex-shrink:0">${ico}</div><div style="flex:1"><div style="font-size:13px;font-weight:600">${esc(r.name)}</div><div style="font-size:10px;color:var(--mu)">${{monthly:'Mensual',biweekly:'Quincenal',yearly:'Anual'}[r.freq]||''} · Día ${r.day||'—'}${acc?' · '+esc(acc.name):''}</div>${nf?`<div style="font-size:10px;color:var(--rd);margin-top:1px">⚠️ Saldo insuficiente (disp: ${fmt(av)})</div>`:''}</div><div style="text-align:right"><div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:13px;color:var(--rd)">${fmt(r.amount)}</div><div style="font-size:9px;color:${d<=3?'var(--rd)':'var(--mu)'}">${d<=0?'¡Hoy!':d===1?'Mañana':'En '+d+'d'}</div></div></div></div>`;}).join('');
 }
 
 // ═══ INSTINTO ═══
@@ -1891,7 +1913,8 @@ function rInsts(){
   const tot=insts.reduce((s,i)=>s+(i.pending!==undefined?i.pending:i.amount||0),0);
   document.getElementById('inst-tot').textContent=fmt(tot);
   if(!insts.length){el.innerHTML=`<div class="es"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg><p>Sin préstamos.<br>Toca "+ Préstamo"</p></div>`;return;}
-  el.innerHTML=insts.map(it=>{const p=it.pending!==undefined?it.pending:it.amount,paid=it.amount-p,pct=it.amount>0?Math.min(100,Math.round(paid/it.amount*100)):0,acc=accs.find(a=>a.id===it.accountId),done=p<=0,pays=it.payments||[];return`<div class="ic" onclick="oEditInst('${it.id}')">
+  syncSortSelect('insts');
+  el.innerHTML=getSortedArray('insts').map(it=>{const p=it.pending!==undefined?it.pending:it.amount,paid=it.amount-p,pct=it.amount>0?Math.min(100,Math.round(paid/it.amount*100)):0,acc=accs.find(a=>a.id===it.accountId),done=p<=0,pays=it.payments||[];return`<div class="ic" onclick="oEditInst('${it.id}')">
     <div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1">
       <div style="font-size:9px;color:rgba(200,200,255,.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">${it.date||''}${acc?' · '+esc(acc.name):''}</div>
       <div style="font-family:\'Syne\',sans-serif;font-size:13px;font-weight:700;margin-bottom:4px;color:#f0f0f5">${esc(it.desc)}</div>
@@ -2419,6 +2442,38 @@ function openOrder(kind='accounts'){ordKind=kind;document.getElementById('ord-ti
 function rOrder(){const el=document.getElementById('ord-list');if(!el)return;const arr=getOrderArray(ordKind);if(!arr.length){el.innerHTML='<div class="es">Sin elementos para ordenar</div>';return;}el.innerHTML=arr.map((it,i)=>`<div style="display:flex;align-items:center;gap:8px;background:var(--sf2);border:1px solid var(--bd);border-radius:10px;padding:10px;margin-bottom:7px"><span style="font-size:11px;color:var(--mu);width:20px">${i+1}</span><span style="flex:1;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(itemOrderName(ordKind,it))}</span><button class="order-item-btn" onclick="moveOrder('${ordKind}','${it.id}',-1)" ${i===0?'disabled':''}>↑</button><button class="order-item-btn" onclick="moveOrder('${ordKind}','${it.id}',1)" ${i===arr.length-1?'disabled':''}>↓</button></div>`).join('');}
 async function moveOrder(kind,id,dir){const arr=getOrderArray(kind);const i=arr.findIndex(x=>x.id===id);if(i<0)return;const j=i+dir;if(j<0||j>=arr.length)return;[arr[i],arr[j]]=[arr[j],arr[i]];await saveOrderArray(kind);rOrder();renderAll();rChips('acs-tx','tx');}
 
+// ═══ ORDEN INTELIGENTE v6.2 ═══
+let sortModes = JSON.parse(localStorage.getItem('fp_sort_modes_v62')||'{}');
+function getSortMode(kind){return sortModes[kind]||'manual';}
+function setSortMode(kind,mode){sortModes[kind]=mode||'manual';localStorage.setItem('fp_sort_modes_v62',JSON.stringify(sortModes));syncSortSelect(kind);renderByKind(kind);toast('Vista ordenada: '+getSortLabel(kind,mode),'s');}
+function getSortLabel(kind,mode){
+  const labels={manual:'Mi orden',max_available:'Mayor disponible',min_available:'Menor disponible',max_debt:'Mayor deuda',min_debt:'Menor deuda',type:'Tipo de cuenta',name:'Nombre A-Z',max_payment:'Pago más alto',next_payment:'Próximo pago',progress:'Mayor avance',max_amount:'Mayor monto',min_amount:'Menor monto',next_charge:'Próximo cobro',account:'Cuenta asociada',max_pending:'Mayor pendiente',min_pending:'Menor pendiente',recent:'Más reciente'};
+  return labels[mode]||'Mi orden';
+}
+function syncSortSelect(kind){const e=document.getElementById('sort-'+kind); if(e)e.value=getSortMode(kind);}
+function renderByKind(kind){if(kind==='accounts'){rAccs();rAccTxList();}else if(kind==='loans')rLoans();else if(kind==='recs')rRecs();else if(kind==='insts')rInsts();}
+function getSortedArray(kind){
+  const arr=[...getOrderArray(kind)];
+  const mode=getSortMode(kind);
+  if(mode==='manual')return arr;
+  const name=v=>String(v?.name||v?.desc||v?.description||'').toLowerCase();
+  const debt=a=>a?.type==='credit'?Number(a.balance||0):0;
+  const available=a=>Number(getAv(a)||0);
+  const pending=i=>Number((i.pending!==undefined?i.pending:i.amount)||0);
+  const progressInst=i=>{const total=Number(i.amount||0);return total?((total-pending(i))/total):0;};
+  const nextLoan=l=>{const s=lStats(l);return s.dpu===null?99999:s.dpu;};
+  const nextRec=r=>r.day?dud(r.day):99999;
+  const accountName=id=>name(accs.find(a=>a.id===id)||{});
+  const sorters={
+    accounts:{max_available:(a,b)=>available(b)-available(a),min_available:(a,b)=>available(a)-available(b),max_debt:(a,b)=>debt(b)-debt(a),min_debt:(a,b)=>debt(a)-debt(b),type:(a,b)=>String(a.type||'').localeCompare(String(b.type||''))||name(a).localeCompare(name(b)),name:(a,b)=>name(a).localeCompare(name(b))},
+    loans:{max_debt:(a,b)=>Number(b.balance||0)-Number(a.balance||0),min_debt:(a,b)=>Number(a.balance||0)-Number(b.balance||0),max_payment:(a,b)=>Number(b.pay||0)-Number(a.pay||0),next_payment:(a,b)=>nextLoan(a)-nextLoan(b),progress:(a,b)=>lStats(b).pct-lStats(a).pct,name:(a,b)=>name(a).localeCompare(name(b))},
+    recs:{max_amount:(a,b)=>Number(b.amount||0)-Number(a.amount||0),min_amount:(a,b)=>Number(a.amount||0)-Number(b.amount||0),next_charge:(a,b)=>nextRec(a)-nextRec(b),account:(a,b)=>accountName(a.accountId).localeCompare(accountName(b.accountId))||name(a).localeCompare(name(b)),name:(a,b)=>name(a).localeCompare(name(b))},
+    insts:{max_pending:(a,b)=>pending(b)-pending(a),min_pending:(a,b)=>pending(a)-pending(b),recent:(a,b)=>String(b.date||'').localeCompare(String(a.date||'')),progress:(a,b)=>progressInst(b)-progressInst(a),name:(a,b)=>name(a).localeCompare(name(b))}
+  };
+  const fn=sorters[kind]?.[mode];
+  return fn?arr.sort(fn):arr;
+}
+
 function expCSV(){if(!txs.length){toast('Sin transacciones','e');return;}const h='Fecha,Hora,Tipo,Descripción,Categoría,Cuenta,Monto,Nota';const rows=txs.map(t=>`${t.date},${t.time||''},${t.type==='income'?'Ingreso':'Gasto'},"${t.desc}","${t.catName||''}","${t.accountName||''}",${t.amount},"${t.note||''}"`);const b=new Blob([[h,...rows].join('\n')],{type:'text/csv;charset=utf-8;'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=`finanzas_${today()}.csv`;a.click();URL.revokeObjectURL(u);toast('✓ CSV descargado','s');}
 
 // ═══ UTILS ═══
@@ -2841,6 +2896,9 @@ Object.assign(window, {
   selectAllVisibleTxs: typeof selectAllVisibleTxs!=="undefined" ? selectAllVisibleTxs : undefined,
   deleteSelectedTxs: typeof deleteSelectedTxs!=="undefined" ? deleteSelectedTxs : undefined,
   exportSelectedTxsCSV: typeof exportSelectedTxsCSV!=="undefined" ? exportSelectedTxsCSV : undefined,
+  setSortMode: typeof setSortMode!=="undefined" ? setSortMode : undefined,
+  getSortedArray: typeof getSortedArray!=="undefined" ? getSortedArray : undefined,
+  syncSortSelect: typeof syncSortSelect!=="undefined" ? syncSortSelect : undefined,
   updateDbg: typeof updateDbg!=="undefined" ? updateDbg : undefined
 });
 
