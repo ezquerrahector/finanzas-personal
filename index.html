@@ -83,6 +83,18 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .tia.exp{color:var(--rd);}
 .tdl{padding:3px 7px;border-radius:6px;background:rgba(255,95,126,.1);border:none;color:var(--rd);font-size:10px;cursor:pointer;display:inline-block;}
 .ti:hover .tdl{display:inline-block;}
+.ti.sel{border-color:var(--ac);background:rgba(108,99,255,.16);box-shadow:0 0 0 1px rgba(108,99,255,.25) inset;}
+.tselbox{width:24px;height:24px;border-radius:7px;border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;background:var(--sf2);flex-shrink:0;}
+.ti.sel .tselbox{background:var(--ac);border-color:var(--ac);}
+#selbar{position:fixed;left:10px;right:10px;bottom:calc(64px + var(--sb));z-index:160;background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:9px;display:none;align-items:center;gap:7px;box-shadow:0 8px 28px rgba(0,0,0,.38);}
+#selbar.on{display:flex;}
+#selbar .selcount{flex:1;font-size:12px;font-weight:800;color:var(--tx);}
+#selbar button{padding:8px 10px;border-radius:10px;border:1px solid var(--bd);background:var(--sf2);color:var(--tx);font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;}
+#selbar button.danger{border-color:rgba(255,95,126,.45);background:rgba(255,95,126,.12);color:var(--rd);}
+#selbar button.good{border-color:rgba(34,211,160,.45);background:rgba(34,211,160,.1);color:var(--gn);}
+#selbar button.close{width:34px;padding:8px 0;}
+@media(max-width:420px){#selbar{left:7px;right:7px;gap:5px}#selbar button{padding:8px 7px;font-size:10px}.selcount{font-size:11px}}
+
 /* ACCOUNT CARDS */
 .acard{border-radius:14px;padding:15px;margin-bottom:10px;cursor:pointer;border:1px solid rgba(255,255,255,.07);}
 .acd{background:linear-gradient(135deg,#1a2535,#0d1520);}
@@ -208,7 +220,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .order-item-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);cursor:pointer;font-weight:700;}
 .order-item-btn:disabled{opacity:.35;cursor:not-allowed;}
 
-/* IA compacta v4.8 */
+/* IA compacta v4.9 */
 .aihub{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(167,139,250,.05));border:1px solid rgba(108,99,255,.22);border-radius:15px;padding:12px;margin-bottom:12px;}
 .aiquick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 10px;}
 .aiquick button,.aiquick label{display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--bd);background:var(--sf);border-radius:12px;padding:10px;font-size:12px;font-weight:800;cursor:pointer;color:var(--tx);}
@@ -248,7 +260,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v4.8</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v4.9</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -339,7 +351,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- IA -->
 <div id="s-ai" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v4.8</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v4.9</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
 
@@ -440,7 +452,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v4.8 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v4.9 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -679,6 +691,13 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 </div>
 <div id="toast"></div>
+<div id="selbar">
+  <button class="close" onclick="clearTxSelection()">✕</button>
+  <div class="selcount" id="selcount">0 seleccionados</div>
+  <button onclick="selectAllVisibleTxs()">Todos</button>
+  <button class="good" onclick="exportSelectedTxsCSV()">CSV</button>
+  <button class="danger" onclick="deleteSelectedTxs()">Eliminar</button>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script type="module">
@@ -706,6 +725,11 @@ let nAT='debit',nLT='mortgage';
 let dChart=null,bChart=null;
 let voiceP=null,scanP=null,notesP=[];
 let isRec=false,recog=null;
+let selectedTxIds=new Set();
+let selectionMode=false;
+let txPressTimer=null;
+let txLongPressFired=false;
+let lastRenderedTxIds=[];
 let isConfirmingNotes=false;
 const aiSaveFingerprints=new Set();
 
@@ -1075,6 +1099,7 @@ function renderAll(){
   if(active==='s-loans') rLoans();
   if(active==='s-rec') rRecs();
   if(active==='s-inst') rInsts();
+  updateSelectionBar();
 }
 
 // ═══ HOME ═══
@@ -1101,6 +1126,7 @@ function rHome(){
 }
 function rTxList(list,eid){
   const el=document.getElementById(eid);if(!el)return;
+  if(eid==='txl') lastRenderedTxIds=list.map(t=>t.id);
   if(!list.length){el.innerHTML=`<div class="es"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 2C6.81 2 3 5.81 3 10.5S6.81 19 11.5 19h.5v3c4.86-2.34 8-7 8-11.5C20 5.81 16.19 2 11.5 2z"/></svg><p>Sin transacciones</p></div>`;return;}
   const g={};list.forEach(t=>{const d=t.date||'';if(!g[d])g[d]=[];g[d].push(t);});
   let h='';
@@ -1113,13 +1139,84 @@ function rTxList(list,eid){
       const accName=t.accountName||acc?.name||'';
       const accHtml=accName?` · <span style="color:${accColor};font-weight:700">${esc(accName)}</span>`:'';
       const timeHtml=t.time?` · ${esc(t.time)}`:'';
-      h+=`<div class="ti" onclick="editTx('${t.id}')"><div class="tic" style="background:${getCatC(t.cat)}22">${ico}</div>
+      const isSel=selectedTxIds.has(t.id);
+      const selBox=selectionMode?`<div class="tselbox">${isSel?'✓':''}</div>`:'';
+      h+=`<div class="ti ${isSel?'sel':''}" data-txid="${t.id}" onclick="txRowClick(event,'${t.id}')" onmousedown="txPressStart(event,'${t.id}')" onmouseup="txPressEnd()" onmouseleave="txPressEnd()" ontouchstart="txPressStart(event,'${t.id}')" ontouchend="txPressEnd()" ontouchcancel="txPressEnd()">${selBox}<div class="tic" style="background:${getCatC(t.cat)}22">${ico}</div>
         <div class="tii"><div class="tin">${esc(t.desc||t.description||'Movimiento sin descripción')}</div><div class="tis">${t.catName||''}${accHtml}${timeHtml}</div></div>
         <div style="display:flex;align-items:center;gap:5px"><div class="tia ${t.type==='income'?'inc':'exp'}">${t.type==='income'?'+':'-'}${fmt(t.amount)}</div>
         <button class="tdl" onclick="event.stopPropagation();delTx('${t.id}')">✕</button></div></div>`;
     });
   });
   el.innerHTML=h;
+  updateSelectionBar();
+}
+
+function txPressStart(ev,id){
+  txLongPressFired=false;
+  clearTimeout(txPressTimer);
+  txPressTimer=setTimeout(()=>{
+    txLongPressFired=true;
+    selectionMode=true;
+    toggleTxSelection(id,true);
+    if(navigator.vibrate) navigator.vibrate(35);
+  },520);
+}
+function txPressEnd(){clearTimeout(txPressTimer);}
+function txRowClick(ev,id){
+  if(txLongPressFired){ev.preventDefault();txLongPressFired=false;return;}
+  if(selectionMode){toggleTxSelection(id);return;}
+  editTx(id);
+}
+function toggleTxSelection(id,forceOn=false){
+  if(forceOn) selectedTxIds.add(id);
+  else if(selectedTxIds.has(id)) selectedTxIds.delete(id); else selectedTxIds.add(id);
+  if(selectedTxIds.size===0) selectionMode=false;
+  rHome();
+  updateSelectionBar();
+}
+function clearTxSelection(){
+  selectedTxIds.clear();selectionMode=false;updateSelectionBar();rHome();
+}
+function updateSelectionBar(){
+  selectedTxIds=new Set([...selectedTxIds].filter(id=>txs.some(t=>t.id===id)));
+  if(selectedTxIds.size===0) selectionMode=false;
+  const bar=document.getElementById('selbar');const cnt=document.getElementById('selcount');
+  if(!bar||!cnt)return;
+  bar.classList.toggle('on',selectionMode&&selectedTxIds.size>0);
+  cnt.textContent=selectedTxIds.size===1?'1 seleccionado':`${selectedTxIds.size} seleccionados`;
+}
+function selectAllVisibleTxs(){
+  selectionMode=true;
+  lastRenderedTxIds.forEach(id=>selectedTxIds.add(id));
+  rHome();updateSelectionBar();
+}
+async function deleteSelectedTxs(){
+  if(!UID){toast('Inicia sesión primero','e');return;}
+  const ids=[...selectedTxIds];
+  if(!ids.length){toast('No hay movimientos seleccionados','e');return;}
+  if(!confirm(`¿Eliminar ${ids.length} movimiento(s)? Esta acción no se puede deshacer.`))return;
+  try{
+    for(const id of ids){
+      const t=txs.find(x=>x.id===id);
+      if(t) reverseTxBalance(t);
+      await deleteDoc(firestoreDoc(DB,`users/${UID}/transactions`,id));
+    }
+    await saveAccsL();
+    clearTxSelection();
+    toast(`✓ ${ids.length} movimiento(s) eliminados`,'s');
+  }catch(e){
+    console.error('Error eliminando seleccionados:', e);
+    toast('No pude eliminar seleccionados: '+(e.message||e),'e');
+  }
+}
+function exportSelectedTxsCSV(){
+  const ids=[...selectedTxIds];
+  const selected=txs.filter(t=>ids.includes(t.id));
+  if(!selected.length){toast('No hay seleccionados','e');return;}
+  const h='Fecha,Hora,Tipo,Descripción,Categoría,Cuenta,Monto,Nota';
+  const rows=selected.map(t=>[t.date||'',t.time||'',t.type==='income'?'Ingreso':'Gasto',t.desc||t.description||'',t.catName||'',t.accountName||'',t.amount||0,t.note||''].map(csvEsc).join(','));
+  downloadText(`finanzas_seleccion_${today()}.csv`,[h,...rows].join('\n'));
+  toast('✓ CSV de seleccionados descargado','s');
 }
 function rAlerts(){
   const el=document.getElementById('h-alerts');if(!el)return;let h='';
@@ -2130,6 +2227,15 @@ Object.assign(window, {
   openQuickAI: typeof openQuickAI!=="undefined" ? openQuickAI : undefined,
   rOrder: typeof rOrder!=="undefined" ? rOrder : undefined,
   moveOrder: typeof moveOrder!=="undefined" ? moveOrder : undefined,
+  txPressStart: typeof txPressStart!=="undefined" ? txPressStart : undefined,
+  txPressEnd: typeof txPressEnd!=="undefined" ? txPressEnd : undefined,
+  txRowClick: typeof txRowClick!=="undefined" ? txRowClick : undefined,
+  toggleTxSelection: typeof toggleTxSelection!=="undefined" ? toggleTxSelection : undefined,
+  clearTxSelection: typeof clearTxSelection!=="undefined" ? clearTxSelection : undefined,
+  updateSelectionBar: typeof updateSelectionBar!=="undefined" ? updateSelectionBar : undefined,
+  selectAllVisibleTxs: typeof selectAllVisibleTxs!=="undefined" ? selectAllVisibleTxs : undefined,
+  deleteSelectedTxs: typeof deleteSelectedTxs!=="undefined" ? deleteSelectedTxs : undefined,
+  exportSelectedTxsCSV: typeof exportSelectedTxsCSV!=="undefined" ? exportSelectedTxsCSV : undefined,
   updateDbg: typeof updateDbg!=="undefined" ? updateDbg : undefined
 });
 
