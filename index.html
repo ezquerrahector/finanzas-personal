@@ -97,6 +97,11 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 /* ACCOUNT CARDS */
 .acard{border-radius:14px;padding:15px;margin-bottom:10px;cursor:pointer;border:1px solid rgba(255,255,255,.07);}
+.acard.account-draggable{cursor:grab;touch-action:manipulation;position:relative;}
+.acard.account-draggable:active{cursor:grabbing;}
+.acard.account-dragging{opacity:.45;transform:scale(.985);}
+.acard.account-drop-target{outline:2px dashed var(--ac);outline-offset:3px;}
+.drag-hint{font-size:9px;color:rgba(255,255,255,.45);margin-top:3px;display:flex;align-items:center;gap:4px;}
 .acd{background:linear-gradient(135deg,#1a2535,#0d1520);}
 .acc2{background:linear-gradient(135deg,#25201a,#18140d);}
 .aca{background:linear-gradient(135deg,#201a2a,#140d1e);}
@@ -220,7 +225,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .order-item-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);cursor:pointer;font-weight:700;}
 .order-item-btn:disabled{opacity:.35;cursor:not-allowed;}
 
-/* IA compacta v4.9 */
+/* IA compacta v5.0 */
 .aihub{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(167,139,250,.05));border:1px solid rgba(108,99,255,.22);border-radius:15px;padding:12px;margin-bottom:12px;}
 .aiquick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 10px;}
 .aiquick button,.aiquick label{display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--bd);background:var(--sf);border-radius:12px;padding:10px;font-size:12px;font-weight:800;cursor:pointer;color:var(--tx);}
@@ -260,7 +265,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v4.9</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v5.0</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -351,7 +356,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- IA -->
 <div id="s-ai" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v4.9</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.0</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
 
@@ -452,7 +457,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v4.9 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v5.0 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -1287,13 +1292,14 @@ function rAccs(){
     const mainLabel=a.type==='credit'?'Deuda actual':'Saldo';
     const mainValue=a.type==='credit'?debt:av;
     const mainColor=a.type==='credit'?(debt>0?'#ff8fa3':'#f0f0f5'):(av<0?'#ff5f7e':av===0?'#fbbf24':'#f0f0f5');
-    return`<div class="acard ${tcls}" style="background:${accountBg(a)}" onclick="oEditAcc('${a.id}')">
+    return`<div class="acard ${tcls} account-draggable" draggable="true" data-acc-id="${a.id}" style="background:${accountBg(a)}" onclick="if(!window.__accDraggingClick)oEditAcc('${a.id}')">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
         <div style="min-width:0;flex:1"><div style="font-size:9px;color:rgba(255,255,255,.68);text-transform:uppercase;letter-spacing:1.1px;margin-bottom:4px">${typeLabel}</div>
           <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;min-width:0">
             <div style="width:30px;height:30px;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:17px;background:rgba(255,255,255,.12);flex-shrink:0">${ico}</div>
             <div style="font-family:\'Syne\',sans-serif;font-size:14px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(a.name)}${a.type!=='cash'&&a.bank?' · '+esc(a.bank):''}</div>
           </div>
+          <div class="drag-hint">↕ Arrastra para ordenar · este orden se usa al registrar transacciones</div>
         </div>
         <div style="text-align:right;flex-shrink:0"><div style="font-size:9px;color:rgba(255,255,255,.62);margin-bottom:1px">${mainLabel}</div>
           <div style="font-family:\'Syne\',sans-serif;font-size:21px;font-weight:800;color:${mainColor}">${fmt(mainValue)}</div></div>
@@ -1305,7 +1311,56 @@ function rAccs(){
       </div>
     </div>`;
   }).join('');
+  setupAccountDragSort();
 }
+
+let accDragId=null;
+function setupAccountDragSort(){
+  const cards=[...document.querySelectorAll('#acc-list .account-draggable')];
+  cards.forEach(card=>{
+    card.addEventListener('dragstart',e=>{
+      accDragId=card.dataset.accId;
+      window.__accDraggingClick=true;
+      card.classList.add('account-dragging');
+      if(e.dataTransfer){e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',accDragId||'');}
+    });
+    card.addEventListener('dragend',()=>{
+      card.classList.remove('account-dragging');
+      document.querySelectorAll('#acc-list .account-drop-target').forEach(x=>x.classList.remove('account-drop-target'));
+      setTimeout(()=>{window.__accDraggingClick=false;accDragId=null;},120);
+    });
+    card.addEventListener('dragover',e=>{
+      e.preventDefault();
+      if(!accDragId || accDragId===card.dataset.accId)return;
+      card.classList.add('account-drop-target');
+      if(e.dataTransfer)e.dataTransfer.dropEffect='move';
+    });
+    card.addEventListener('dragleave',()=>card.classList.remove('account-drop-target'));
+    card.addEventListener('drop',async e=>{
+      e.preventDefault();
+      card.classList.remove('account-drop-target');
+      const fromId=accDragId || e.dataTransfer?.getData('text/plain');
+      const toId=card.dataset.accId;
+      if(!fromId || !toId || fromId===toId)return;
+      await reorderAccountByDrop(fromId,toId);
+    });
+  });
+}
+async function reorderAccountByDrop(fromId,toId){
+  const from=accs.findIndex(a=>a.id===fromId);
+  const to=accs.findIndex(a=>a.id===toId);
+  if(from<0||to<0||from===to)return;
+  const [moved]=accs.splice(from,1);
+  accs.splice(to,0,moved);
+  await saveAccsL();
+  rAccs();
+  rChips('acs-tx','tx');
+  rChips('acs-rec','rec');
+  rChips('acs-inst','inst');
+  rChips('acs-ipay','ipay');
+  toast('✓ Orden de cuentas actualizado','s');
+}
+
 function rAccTxList(){const el=document.getElementById('acc-txl');if(!el)return;const r=txs.filter(t=>t.accountId).slice(0,8);if(!r.length)return;rTxList(r,'acc-txl');}
 function oNewAcc(){document.getElementById('acc-mtit').textContent='Nueva cuenta';document.getElementById('acc-eid').value='';document.getElementById('acc-dbtn').style.display='none';['acc-nm','acc-bal','acc-lim','acc-bnk'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('acc-idata').value='';document.getElementById('acc-iprev').innerHTML='💳';const ce=document.getElementById('acc-color');if(ce)ce.value=defaultAccColor('debit');sAccT('debit');om('m-acc');}
 function oEditAcc(id){const a=accs.find(x=>x.id===id);if(!a)return;document.getElementById('acc-mtit').textContent='Editar cuenta';document.getElementById('acc-eid').value=id;document.getElementById('acc-nm').value=a.name;document.getElementById('acc-bal').value=a.balance||0;document.getElementById('acc-bnk').value=a.bank||'';document.getElementById('acc-idata').value=a.idata||'';const ce=document.getElementById('acc-color');if(ce)ce.value=a.color||defaultAccColor(a.type);const p=document.getElementById('acc-iprev');
@@ -2166,6 +2221,8 @@ Object.assign(window, {
   qAdj: typeof qAdj!=="undefined" ? qAdj : undefined,
   rAccTxList: typeof rAccTxList!=="undefined" ? rAccTxList : undefined,
   rAccs: typeof rAccs!=="undefined" ? rAccs : undefined,
+  setupAccountDragSort: typeof setupAccountDragSort!=="undefined" ? setupAccountDragSort : undefined,
+  reorderAccountByDrop: typeof reorderAccountByDrop!=="undefined" ? reorderAccountByDrop : undefined,
   rAlerts: typeof rAlerts!=="undefined" ? rAlerts : undefined,
   rBars: typeof rBars!=="undefined" ? rBars : undefined,
   rBkd: typeof rBkd!=="undefined" ? rBkd : undefined,
