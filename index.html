@@ -208,7 +208,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .order-item-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);cursor:pointer;font-weight:700;}
 .order-item-btn:disabled{opacity:.35;cursor:not-allowed;}
 
-/* IA compacta v4.6 */
+/* IA compacta v4.7 */
 .aihub{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(167,139,250,.05));border:1px solid rgba(108,99,255,.22);border-radius:15px;padding:12px;margin-bottom:12px;}
 .aiquick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 10px;}
 .aiquick button,.aiquick label{display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--bd);background:var(--sf);border-radius:12px;padding:10px;font-size:12px;font-weight:800;cursor:pointer;color:var(--tx);}
@@ -248,7 +248,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v4.6</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v4.7</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -339,7 +339,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- IA -->
 <div id="s-ai" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v4.6</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v4.7</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
 
@@ -440,14 +440,14 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v4.6 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v4.7 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
 
 <!-- firebase integrado en script module abajo -->
 <!-- FAB -->
-<button id="fab" onclick="om('m-add')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
+<button id="fab" onclick="om('m-quickadd')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
 
 <nav id="nav">
   <button class="ni on" data-s="home"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Inicio</button>
@@ -462,6 +462,25 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 </div><!-- /app -->
 
 <!-- MODALES -->
+<!-- Agregado rápido -->
+<div class="mo" id="m-quickadd" onclick="cox(event,'m-quickadd')">
+  <div class="ms">
+    <div class="mh"></div>
+    <div class="mt">¿Cómo quieres registrar?</div>
+    <div style="display:grid;grid-template-columns:1fr;gap:9px;margin-bottom:8px">
+      <button class="bp" onclick="cm('m-quickadd');om('m-add')" style="display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px">
+        ✍️ Registro directo
+      </button>
+      <button onclick="openQuickAI()" style="width:100%;min-height:52px;padding:13px;border-radius:11px;background:var(--sf2);border:1px solid var(--bd);color:var(--tx);font-family:var(--fh);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+        🧠 Registrar con IA
+      </button>
+    </div>
+    <div style="font-size:11px;color:var(--mu);line-height:1.5;text-align:center">
+      Directo es para capturar manualmente. IA es para escribir, dictar o escanear un ticket.
+    </div>
+  </div>
+</div>
+
 <!-- Nueva Transacción -->
 <div class="mo" id="m-add" onclick="cox(event,'m-add')">
   <div class="ms">
@@ -1919,6 +1938,15 @@ function getIconValue(prevId, dataId) {
 
 
 
+function openQuickAI(){
+  cm('m-quickadd');
+  nav('ai');
+  setTimeout(()=>{
+    const inp=document.getElementById('noteinp');
+    if(inp){inp.focus(); inp.scrollIntoView({behavior:'smooth',block:'center'});}
+  },180);
+}
+
 // ═══ MODALES — FIX v4.4 ═══
 function om(id){
   const modal = document.getElementById(id);
@@ -2076,6 +2104,7 @@ Object.assign(window, {
   dlTemplate: typeof dlTemplate!=="undefined" ? dlTemplate : undefined,
   impTemplate: typeof impTemplate!=="undefined" ? impTemplate : undefined,
   openOrder: typeof openOrder!=="undefined" ? openOrder : undefined,
+  openQuickAI: typeof openQuickAI!=="undefined" ? openQuickAI : undefined,
   rOrder: typeof rOrder!=="undefined" ? rOrder : undefined,
   moveOrder: typeof moveOrder!=="undefined" ? moveOrder : undefined,
   updateDbg: typeof updateDbg!=="undefined" ? updateDbg : undefined
