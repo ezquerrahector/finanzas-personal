@@ -225,7 +225,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .order-item-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);cursor:pointer;font-weight:700;}
 .order-item-btn:disabled{opacity:.35;cursor:not-allowed;}
 
-/* IA compacta v5.1 */
+/* IA compacta v5.2 */
 .aihub{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(167,139,250,.05));border:1px solid rgba(108,99,255,.22);border-radius:15px;padding:12px;margin-bottom:12px;}
 .aiquick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 10px;}
 .aiquick button,.aiquick label{display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--bd);background:var(--sf);border-radius:12px;padding:10px;font-size:12px;font-weight:800;cursor:pointer;color:var(--tx);}
@@ -278,7 +278,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v5.1</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v5.2</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -370,7 +370,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- IA -->
 <div id="s-ai" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.1</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.2</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
 
@@ -471,7 +471,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v5.1 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v5.2 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -1719,8 +1719,8 @@ function normalizeAITransactions(data){
       amount: Number(t.amount ?? t.monto ?? 0),
       desc,
       description: desc,
-      date: t.date || t.fecha || today(),
-      time: t.time || t.hora || nowMexicoTime(),
+      date: normalizeTicketDate(t.date || t.fecha || t.fecha_ticket || t.ticketDate || t.transactionDate || t.dateText) || today(),
+      time: normalizeTicketTime(t.time || t.hora || t.hora_ticket || t.ticketTime) || nowMexicoTime(),
       cat: catObj?.id || 'other',
       catName: catObj?.name || catText || 'Otros',
       catIcon: catObj?.idata || catObj?.icon || '📌',
@@ -2009,6 +2009,57 @@ function nowMexicoTime(){
     hour12:false
   }).formatToParts(new Date()).reduce((a,p)=>{a[p.type]=p.value;return a;},{});
   return `${parts.hour}:${parts.minute}`;
+}
+function normalizeTicketDate(value){
+  if(!value) return '';
+  let raw=String(value).trim().toLowerCase();
+  if(!raw) return '';
+  raw=raw.normalize('NFD').replace(/[̀-ͯ]/g,'');
+  const baseYear=Number(today().slice(0,4));
+  const pad=n=>String(n).padStart(2,'0');
+  const clampFuture=d=>{
+    if(!d || !/^\d{4}-\d{2}-\d{2}$/.test(d)) return '';
+    const todayStr=today();
+    const dt=new Date(d+'T12:00:00');
+    const now=new Date(todayStr+'T12:00:00');
+    const diff=Math.round((dt-now)/864e5);
+    // Si la IA se fue a mañana por UTC, corrige al día local de México.
+    if(diff===1) return todayStr;
+    return d;
+  };
+  // yyyy-mm-dd / yyyy/mm/dd
+  let m=raw.match(/(20\d{2})[\/-](\d{1,2})[\/-](\d{1,2})/);
+  if(m) return clampFuture(`${m[1]}-${pad(m[2])}-${pad(m[3])}`);
+  // dd/mm/yyyy, dd-mm-yyyy, dd.mm.yy
+  m=raw.match(/(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})/);
+  if(m){
+    let y=Number(m[3]); if(y<100)y+=2000;
+    return clampFuture(`${y}-${pad(m[2])}-${pad(m[1])}`);
+  }
+  const months={ene:1,enero:1,feb:2,febrero:2,mar:3,marzo:3,abr:4,abril:4,may:5,mayo:5,jun:6,junio:6,jul:7,julio:7,ago:8,agosto:8,sep:9,sept:9,septiembre:9,oct:10,octubre:10,nov:11,noviembre:11,dic:12,diciembre:12};
+  // 2 may 2026 / 02 de mayo
+  m=raw.match(/(\d{1,2})\s*(?:de\s*)?([a-z]{3,10})(?:\s*(?:de\s*)?(\d{2,4}))?/);
+  if(m && months[m[2]]){
+    let y=m[3]?Number(m[3]):baseYear; if(y<100)y+=2000;
+    return clampFuture(`${y}-${pad(months[m[2]])}-${pad(m[1])}`);
+  }
+  // Último intento: Date parse, pero se normaliza a México y se evita UTC.
+  const d=new Date(value);
+  if(!isNaN(d.getTime())){
+    const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Mexico_City',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d).reduce((a,p)=>{a[p.type]=p.value;return a;},{});
+    return clampFuture(`${parts.year}-${parts.month}-${parts.day}`);
+  }
+  return '';
+}
+function normalizeTicketTime(value){
+  if(!value) return '';
+  const raw=String(value).trim();
+  const m=raw.match(/(\d{1,2}):(\d{2})(?::\d{2})?\s*(am|pm)?/i);
+  if(!m) return '';
+  let h=Number(m[1]); const min=m[2]; const ap=(m[3]||'').toLowerCase();
+  if(ap==='pm' && h<12)h+=12; if(ap==='am' && h===12)h=0;
+  if(h<0||h>23)return '';
+  return `${String(h).padStart(2,'0')}:${min}`;
 }
 function fmtDate(s){if(!s||s.length<10)return s||'';const d=new Date(s+'T12:00:00'),n=new Date();n.setHours(12,0,0,0);const y=new Date(n);y.setDate(n.getDate()-1);if(d.toDateString()===n.toDateString())return'Hoy';if(d.toDateString()===y.toDateString())return'Ayer';return d.toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'});}
 function fmtDS(s){if(!s||s.length<10)return s;return new Date(s+'T12:00:00').toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'2-digit'});}
