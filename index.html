@@ -118,7 +118,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .acb{font-size:9px;color:var(--mu);}
 .ac.sel{border-color:var(--ac);background:rgba(108,99,255,.15);}
 
-/* Account selector PRO v6.3 — Nubank/Klar inspired */
+/* Account selector PRO v6.4 — Nubank/Klar inspired */
 .accpay-wrap{background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(167,139,250,.045));border:1px solid rgba(108,99,255,.18);border-radius:15px;padding:10px;margin-top:5px;}
 .accpay-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
 .accpay-title{font-size:10px;color:var(--mu);font-weight:800;letter-spacing:.7px;text-transform:uppercase;}
@@ -221,10 +221,15 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 @keyframes vp{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
 .sca{border:2px dashed var(--bd);border-radius:12px;padding:22px;text-align:center;cursor:pointer;margin-bottom:10px;}
 /* TOAST */
-#toast{position:fixed;top:calc(var(--st)+10px);left:50%;transform:translateX(-50%) translateY(-70px);background:var(--sf);border:1px solid var(--bd);border-radius:9px;padding:9px 15px;font-size:12px;font-weight:500;z-index:999;transition:transform .25s;white-space:nowrap;box-shadow:0 5px 20px rgba(0,0,0,.35);}
-#toast.on{transform:translateX(-50%) translateY(0);}
-#toast.s{border-color:var(--gn);color:var(--gn);}
-#toast.e{border-color:var(--rd);color:var(--rd);}
+/* TOAST PRO v6.4 — arriba, automático y no bloqueante */
+#toast{position:fixed!important;top:calc(var(--st) + 14px)!important;bottom:auto!important;left:50%!important;right:auto!important;transform:translateX(-50%) translateY(-18px) scale(.98)!important;min-width:min(320px,calc(100vw - 32px));max-width:calc(100vw - 32px);background:rgba(19,19,26,.96);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:11px 16px;font-size:12px;font-weight:800;letter-spacing:.1px;text-align:center;z-index:9999;opacity:0;pointer-events:none;white-space:normal;box-shadow:0 10px 30px rgba(0,0,0,.28);backdrop-filter:blur(12px);transition:opacity .22s ease,transform .22s ease;}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0) scale(1)!important;}
+#toast.s{border-color:rgba(34,211,160,.45);color:#16a87d;background:rgba(236,253,245,.96);}
+#toast.e{border-color:rgba(255,95,126,.45);color:#d92d4f;background:rgba(255,241,244,.96);}
+#toast.w{border-color:rgba(251,191,36,.55);color:#b77900;background:rgba(255,251,235,.96);}
+[data-theme="dark"] #toast.s{color:#8fffe0;background:rgba(14,32,30,.96);}
+[data-theme="dark"] #toast.e{color:#ff9eb1;background:rgba(42,18,26,.96);}
+[data-theme="dark"] #toast.w{color:#ffd166;background:rgba(44,34,13,.96);}
 /* EMPTY */
 .es{text-align:center;padding:32px 14px;color:var(--mu);}
 .es svg{width:48px;height:48px;margin-bottom:9px;opacity:.28;}
@@ -276,7 +281,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .ccinfo div{font-size:10px;color:rgba(255,255,255,.62);background:rgba(255,255,255,.08);border-radius:7px;padding:5px 7px}
 @media(max-width:700px){.ccpayname{max-width:155px}.ccinfo{grid-template-columns:1fr}}
 
-/* Inteligencia financiera v6.3 */
+/* Inteligencia financiera v6.4 */
 .smartbox{background:linear-gradient(135deg,rgba(108,99,255,.12),rgba(34,211,160,.06));border:1px solid rgba(108,99,255,.24);border-radius:16px;padding:13px;margin-bottom:12px;box-shadow:0 10px 30px rgba(0,0,0,.10);}
 .smarthead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;}
 .smarttitle{font-family:var(--fh);font-size:14px;font-weight:900;}
@@ -304,7 +309,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 @media(max-width:700px){.smartgrid{grid-template-columns:1fr}.smartname{max-width:170px}.smarthead{flex-direction:column}.smartitem{align-items:flex-start}.smartamt{font-size:12px}.smartcta{grid-template-columns:1fr}}
 
 
-/* Predicciones v6.3 */
+/* Predicciones v6.4 */
 .predbox{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:13px;margin-bottom:12px;}
 .predhero{background:linear-gradient(135deg,rgba(108,99,255,.14),rgba(251,191,36,.06));border:1px solid rgba(108,99,255,.24);border-radius:15px;padding:14px;margin-bottom:12px;}
 .predtitle{font-family:var(--fh);font-size:15px;font-weight:900;margin-bottom:3px;}
@@ -332,10 +337,10 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 @media(max-width:700px){.predgrid{grid-template-columns:1fr}.preditem{align-items:flex-start}.predtag{display:none}.predtwocol{grid-template-columns:1fr}.predscore{align-items:flex-start}.predring{width:52px;height:52px}}
 
 
-/* Estructura PRO v6.3 */
+/* Estructura PRO v6.4 */
 #nav{overflow-x:auto;scrollbar-width:none;}#nav::-webkit-scrollbar{display:none}.ni{min-width:42px;font-size:8px}.ni svg{width:18px;height:18px}.home-lite-note{font-size:11px;color:var(--mu);line-height:1.5;margin:-4px 0 12px}
 
-/* FIX CONTRASTE v6.3 — textos visibles en modo claro sobre tarjetas oscuras */
+/* FIX CONTRASTE v6.4 — textos visibles en modo claro sobre tarjetas oscuras */
 .acard,.lc,.ic,.bc{color:#f0f0f5!important;}
 .acard *, .lc *, .ic *, .bc *{text-shadow:0 1px 2px rgba(0,0,0,.18);}
 .acard [style*="opacity:.4"], .lc [style*="opacity:.4"], .ic [style*="opacity:.4"]{opacity:.78!important;}
@@ -344,15 +349,15 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .acard [style*="rgba(255,255,255,.4)"], .lc [style*="rgba(255,255,255,.4)"], .ic [style*="rgba(255,255,255,.4)"]{color:rgba(255,255,255,.80)!important;}
 #l-mon,#l-cnt,#pat-c{color:#f0f0f5!important;}
 
-/* Orden inteligente v6.3 */
+/* Orden inteligente v6.4 */
 .sortbar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--sf);border:1px solid var(--bd);border-radius:13px;padding:9px 10px;margin:-4px 0 12px;}
 .sortbar-label{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:1px;font-weight:900;white-space:nowrap;}
 .sortbar select{flex:1;min-width:0;background:var(--sf2);border:1px solid var(--bd);border-radius:10px;color:var(--tx);font-family:var(--fb);font-size:12px;font-weight:800;padding:8px 10px;outline:none;}
 .sortbar-note{font-size:9px;color:var(--mu);line-height:1.3;margin-top:-7px;margin-bottom:10px;}
 @media(max-width:520px){.sortbar{align-items:stretch;flex-direction:column;gap:6px}.sortbar select{width:100%}}
 
-/* FIX MOVIMIENTOS MÓVIL v6.3 */
-/* FIX CRÉDITOS v6.3 — cálculo quincenal real: día de pago + 15 días dentro del mes */
+/* FIX MOVIMIENTOS MÓVIL v6.4 */
+/* FIX CRÉDITOS v6.4 — cálculo quincenal real: día de pago + 15 días dentro del mes */
 #txl{display:block!important;min-height:80px;position:relative;z-index:1;}
 #txl .ti{display:flex!important;visibility:visible!important;opacity:1!important;color:var(--tx)!important;}
 #txl .tgd{display:block!important;visibility:visible!important;opacity:1!important;}
@@ -387,7 +392,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v6.3</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v6.4</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -428,7 +433,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- MOVIMIENTOS -->
 <div id="s-mov" class="scr">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Movimientos</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.3</div></div><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Movimientos</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.4</div></div><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div>
   <div class="pb" id="pb-h">
     <button class="pbt on" data-p="month">Este mes</button>
     <button class="pbt" data-p="week">Semana</button>
@@ -443,7 +448,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- SALUD FINANCIERA -->
 <div id="s-health" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Salud financiera</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.3</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Salud financiera</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.4</div></div>
     <button class="bsm" onclick="enableFinNotifications()">🔔 Alertas</button>
   </div>
   <div id="smart-panel"></div>
@@ -515,7 +520,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- IA -->
 <div id="s-ai" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.3</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.4</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
 
@@ -584,7 +589,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- PREDICCIONES -->
 <div id="s-pred" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Predicciones</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.3</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Predicciones</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.4</div></div>
     <button class="bsm" onclick="enableFinNotifications()">🔔 Alertas</button>
   </div>
   <div id="pred-panel"></div>
@@ -632,7 +637,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v6.3 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v6.4 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -1664,7 +1669,7 @@ function rPredictions(){
   el.innerHTML=`<div class="predhero">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
       <div><div class="predtitle">📈 Predicciones financieras PRO</div><div class="predsub">Futuro y tendencias: anticipa riesgos, detecta categorías aceleradas y decide antes de que el gasto te alcance.</div></div>
-      <span class="predtag" style="color:var(--ac);border-color:rgba(108,99,255,.35)">v6.3</span>
+      <span class="predtag" style="color:var(--ac);border-color:rgba(108,99,255,.35)">v6.4</span>
     </div>
     <div class="predscore"><div class="predring" style="--score:${score}"><span>${score}</span></div><div><div style="font-family:var(--fh);font-weight:900;color:${scoreInfo.color}">${scoreInfo.txt}</div><div class="predsub">${esc(scoreInfo.msg)}</div></div></div>
     <div class="predgrid"><div class="predmetric"><div class="lbl">Riesgos</div><div class="val" style="color:${riskCount?'var(--rd)':'var(--gn)'}">${riskCount}</div><div class="predmeta">Alertas de alto impacto.</div></div><div class="predmetric"><div class="lbl">Focos amarillos</div><div class="val" style="color:${warnCount?'var(--yl)':'var(--gn)'}">${warnCount}</div><div class="predmeta">Tendencias a vigilar.</div></div><div class="predmetric"><div class="lbl">Gasto estimado</div><div class="val" style="color:var(--yl)">${fmt(p.projected||0)}</div><div class="predmeta">Cierre de mes al ritmo actual.</div></div></div>
@@ -2507,7 +2512,7 @@ function openOrder(kind='accounts'){ordKind=kind;document.getElementById('ord-ti
 function rOrder(){const el=document.getElementById('ord-list');if(!el)return;const arr=getOrderArray(ordKind);if(!arr.length){el.innerHTML='<div class="es">Sin elementos para ordenar</div>';return;}el.innerHTML=arr.map((it,i)=>`<div style="display:flex;align-items:center;gap:8px;background:var(--sf2);border:1px solid var(--bd);border-radius:10px;padding:10px;margin-bottom:7px"><span style="font-size:11px;color:var(--mu);width:20px">${i+1}</span><span style="flex:1;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(itemOrderName(ordKind,it))}</span><button class="order-item-btn" onclick="moveOrder('${ordKind}','${it.id}',-1)" ${i===0?'disabled':''}>↑</button><button class="order-item-btn" onclick="moveOrder('${ordKind}','${it.id}',1)" ${i===arr.length-1?'disabled':''}>↓</button></div>`).join('');}
 async function moveOrder(kind,id,dir){const arr=getOrderArray(kind);const i=arr.findIndex(x=>x.id===id);if(i<0)return;const j=i+dir;if(j<0||j>=arr.length)return;[arr[i],arr[j]]=[arr[j],arr[i]];await saveOrderArray(kind);rOrder();renderAll();rChips('acs-tx','tx');}
 
-// ═══ ORDEN INTELIGENTE v6.3 ═══
+// ═══ ORDEN INTELIGENTE v6.4 ═══
 let sortModes = JSON.parse(localStorage.getItem('fp_sort_modes_v62')||'{}');
 function getSortMode(kind){return sortModes[kind]||'manual';}
 function setSortMode(kind,mode){sortModes[kind]=mode||'manual';localStorage.setItem('fp_sort_modes_v62',JSON.stringify(sortModes));syncSortSelect(kind);renderByKind(kind);toast('Vista ordenada: '+getSortLabel(kind,mode),'s');}
@@ -2619,7 +2624,15 @@ function fmtDS(s){if(!s||s.length<10)return s;return new Date(s+'T12:00:00').toL
 function getCatC(id){return cats.find(c=>c.id===id)?.color||'#6c63ff';}
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function dud(day){if(!day)return 999;const n=new Date();let c=new Date(n.getFullYear(),n.getMonth(),day);if(c<=n)c.setMonth(c.getMonth()+1);return Math.ceil((c-n)/864e5);}
-function toast(msg,t='s'){const e=document.getElementById('toast');e.textContent=msg;e.className=`on ${t}`;setTimeout(()=>e.className='',2600);}
+function toast(msg,t='s'){
+  const e=document.getElementById('toast');
+  if(!e)return;
+  clearTimeout(window.__toastTimer);
+  const icon=t==='e'?'⚠️':t==='w'?'⚠️':'✓';
+  e.textContent=`${icon} ${msg}`;
+  e.className=`on ${t}`;
+  window.__toastTimer=setTimeout(()=>{e.className='';},2400);
+}
 
 
 // ═══ DIAGNÓSTICO FIREBASE ═══
