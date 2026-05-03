@@ -225,7 +225,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .order-item-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);cursor:pointer;font-weight:700;}
 .order-item-btn:disabled{opacity:.35;cursor:not-allowed;}
 
-/* IA compacta v5.2 */
+/* IA compacta v5.3 */
 .aihub{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(167,139,250,.05));border:1px solid rgba(108,99,255,.22);border-radius:15px;padding:12px;margin-bottom:12px;}
 .aiquick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 10px;}
 .aiquick button,.aiquick label{display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--bd);background:var(--sf);border-radius:12px;padding:10px;font-size:12px;font-weight:800;cursor:pointer;color:var(--tx);}
@@ -278,7 +278,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v5.2</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v5.3</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -370,7 +370,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- IA -->
 <div id="s-ai" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.2</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.3</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
 
@@ -471,7 +471,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v5.2 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v5.3 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -1058,7 +1058,7 @@ async function saveTxAI(t){
     date:t.date||today(),
     time:t.time||nowMexicoTime(),
     cat:t.cat||'other',
-    note:t.note||'Registrado con IA',
+    note:[t.note||'Registrado con IA', (t.aiWarnings&&t.aiWarnings.length)?('Alertas IA: '+t.aiWarnings.join(', ')):''].filter(Boolean).join(' · '),
     type:t.type||'expense',
     catIcon:cat.idata||cat.icon||'📌',
     catName:cat.name,
@@ -1676,11 +1676,75 @@ async function callAIBackend(payload){
   return data;
 }
 
+
+function aiNorm(v){
+  return String(v||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\s\.]/g,' ').replace(/\s+/g,' ').trim();
+}
+function findCategorySmart(catText, fallbackText='', type='expense'){
+  const q=aiNorm(`${catText||''} ${fallbackText||''}`);
+  const byExact=cats.find(c=>aiNorm(c.name)===aiNorm(catText)||aiNorm(c.id)===aiNorm(catText));
+  if(byExact) return byExact;
+  const rules=[
+    [['oxxo','seven','7 eleven','extra','super','abarrotes','quesadilla','taco','comida','restaurante','burger','pizza','cafe','starbucks','dominos','mcdonald','kfc','subway'],['food','Comida']],
+    [['cine','cinemex','cinepolis','netflix','spotify','prime','disney','hbo','max','ocio','entretenimiento'],['ent','Ocio']],
+    [['uber','didi','gasolina','pemex','shell','mobil','taxi','transporte','estacionamiento'],['transport','Transporte']],
+    [['farmacia','doctor','medico','salud','hospital','dentista','laboratorio'],['health','Salud']],
+    [['luz','cfe','agua','japami','telcel','megacable','totalplay','izzi','internet','chatgpt','openai','servicio','servicios'],['bills','Servicios']],
+    [['ropa','zara','h&m','pull','bershka','liverpool','palacio','compras','amazon','mercado libre','walmart','costco','sams'],['shop','Compras']],
+    [['escuela','colegiatura','unitec','anahuac','curso','libro','educacion'],['edu','Educación']],
+    [['nomina','salario','sueldo','deposito','ingreso','abono'],['salary','Salario']]
+  ];
+  for(const [words,target] of rules){
+    if(words.some(w=>q.includes(aiNorm(w)))){
+      return cats.find(c=>aiNorm(c.id)===aiNorm(target[0])||aiNorm(c.name)===aiNorm(target[1])) || null;
+    }
+  }
+  return cats.find(c=>c.id==='other') || cats[cats.length-1] || cats[0];
+}
+function detectMerchant(text){
+  const q=aiNorm(text);
+  const merchants=[
+    ['Oxxo',['oxxo','oxxo gas']],['7-Eleven',['7 eleven','seven eleven']],['Walmart',['walmart','supercenter']],['Sams Club',['sams','sam s']],['Costco',['costco']],['Amazon',['amazon']],['Mercado Libre',['mercado libre','mercadolibre']],['Cinépolis',['cinepolis']],['Cinemex',['cinemex']],['Didi',['didi']],['Uber',['uber']],['Starbucks',['starbucks']],['McDonalds',['mcdonald','mc donald']],['ChatGPT',['chatgpt','openai']],['Telcel',['telcel']],['Megacable',['megacable']],['CFE',['cfe']],['Liverpool',['liverpool']],['Zara',['zara']]
+  ];
+  const hit=merchants.find(([name,keys])=>keys.some(k=>q.includes(aiNorm(k))));
+  return hit?hit[0]:'';
+}
+function detectAccountSmart(text){
+  const q=aiNorm(text);
+  return accs.find(a=>{
+    const n=aiNorm(a.name||'');
+    const b=aiNorm(a.bank||'');
+    if(n && q.includes(n)) return true;
+    if(b && q.includes(b) && n.split(' ').some(w=>w.length>=3 && q.includes(w))) return true;
+    return n.split(' ').some(w=>w.length>=4 && q.includes(w));
+  }) || null;
+}
+function isNearDuplicateTransaction(t){
+  const amt=(Number(t.amount)||0).toFixed(2);
+  const d0=new Date((t.date||today())+'T12:00:00');
+  const q=aiNorm(t.desc||t.description||'');
+  return txs.some(x=>{
+    if(String(x.type||'expense')!==String(t.type||'expense'))return false;
+    if((Number(x.amount)||0).toFixed(2)!==amt)return false;
+    const dx=new Date((x.date||today())+'T12:00:00');
+    const dd=Math.abs(Math.round((d0-dx)/864e5));
+    if(dd>2)return false;
+    const xq=aiNorm(x.desc||x.description||'');
+    return q.includes(xq) || xq.includes(q) || (t.accountId && x.accountId===t.accountId);
+  });
+}
+function buildAIWarnings(t){
+  const w=[];
+  if(isNearDuplicateTransaction(t))w.push('posible duplicado');
+  if(t.date && t.date>today())w.push('fecha futura corregida o revisar');
+  if(!t.accountId && accs.length)w.push('falta cuenta/tarjeta');
+  if(Number(t.amount)>5000)w.push('monto alto');
+  return w;
+}
+
 function normalizeAITransactions(data){
   let list = [];
 
-  // Primero usa los movimientos interpretados por el backend.
-  // Esto evita el error visual de "undefined" porque aquí viene description limpio.
   if(Array.isArray(data?.interpretedMovements)){
     list = data.interpretedMovements;
   }else if(Array.isArray(data?.transactions)){
@@ -1692,40 +1756,44 @@ function normalizeAITransactions(data){
     try{ list = JSON.parse(limpio || '[]'); }catch(e){ list = []; }
   }
 
+  const rawContext = [data?.text, data?.ocrText, data?.ticketText, data?.rawText, data?.resultText].filter(Boolean).join(' ');
   const seen=new Set();
   return (list || []).map(t=>{
     const rawType = String(t.type || t.tipo || '').toLowerCase();
     const type = rawType.includes('income') || rawType.includes('ingreso') ? 'income' : 'expense';
 
-    const desc =
-      t.description ||
-      t.desc ||
-      t.descripcion ||
-      t.comercio ||
-      t.merchant ||
-      t.name ||
-      t.title ||
-      t.concept ||
+    const rawDesc =
+      t.description || t.desc || t.descripcion || t.comercio || t.merchant ||
+      t.establecimiento || t.name || t.title || t.concept || t.concepto ||
       'Movimiento sin descripción';
 
-    const catText = t.catName || t.cat || t.category || t.categoria || (type==='income'?'Ingresos':'Otros');
-    const catObj = cats.find(c=>String(c.name).toLowerCase()===String(catText).toLowerCase())
-      || cats.find(c=>String(c.id).toLowerCase()===String(catText).toLowerCase())
-      || cats.find(c=>c.id==='other')
-      || cats[0];
+    const merchant = t.merchant || t.comercio || t.establecimiento || detectMerchant(`${rawDesc} ${rawContext}`);
+    const desc = merchant ? `${merchant}` : rawDesc;
+    const catObj = findCategorySmart(t.catName || t.cat || t.category || t.categoria, `${desc} ${rawContext}`, type);
+    const accObj = t.accountId ? accs.find(a=>a.id===t.accountId) : detectAccountSmart(`${t.accountName||''} ${t.cuenta||''} ${t.tarjeta||''} ${rawDesc} ${rawContext}`);
+    const dateCandidate = normalizeTicketDate(t.date || t.fecha || t.fecha_ticket || t.ticketDate || t.transactionDate || t.dateText || data?.date || data?.fecha);
+    const finalDate = dateCandidate || today();
+    const finalTime = normalizeTicketTime(t.time || t.hora || t.hora_ticket || t.ticketTime || data?.time || data?.hora) || nowMexicoTime();
 
-    return {
+    const obj = {
       type,
-      amount: Number(t.amount ?? t.monto ?? 0),
+      amount: Number(t.amount ?? t.monto ?? t.total ?? 0),
       desc,
       description: desc,
-      date: normalizeTicketDate(t.date || t.fecha || t.fecha_ticket || t.ticketDate || t.transactionDate || t.dateText) || today(),
-      time: normalizeTicketTime(t.time || t.hora || t.hora_ticket || t.ticketTime) || nowMexicoTime(),
+      merchant,
+      date: finalDate,
+      time: finalTime,
       cat: catObj?.id || 'other',
-      catName: catObj?.name || catText || 'Otros',
+      catName: catObj?.name || 'Otros',
       catIcon: catObj?.idata || catObj?.icon || '📌',
-      note: t.note || t.nota || 'Registrado con IA'
+      accountId: accObj?.id || t.accountId || '',
+      accountName: accObj?.name || t.accountName || t.cuenta || '',
+      accountColor: accObj?.color || '',
+      note: t.note || t.nota || (merchant ? `Detectado con IA · comercio: ${merchant}` : 'Registrado con IA')
     };
+    obj.aiWarnings = buildAIWarnings(obj);
+    obj.aiConfidence = Math.max(55, 100 - (obj.aiWarnings.length*12) - (!merchant?5:0));
+    return obj;
   }).filter(t=>{
     if(t.amount<=0)return false;
     const fp=txFingerprint(t);
@@ -1734,7 +1802,6 @@ function normalizeAITransactions(data){
     return true;
   });
 }
-
 async function testAIBackend(){
   const el = document.getElementById('ai-key-status');
   if(el){ el.textContent='⏳ Probando backend de IA…'; el.style.color='var(--yl)'; }
@@ -1806,7 +1873,7 @@ function renderAIChat(){
 function addAIChat(role,text){aiChatMessages.push({role,text});renderAIChat();}
 function isConfirmText(t){return /^(si|sí|confirmo|ok|va|dale|correcto|registralo|regístralo|guardar|guárdalo|guarda|confirmar)$/i.test(String(t||'').trim());}
 function isCancelText(t){return /^(no|cancelar|cancela|mejor no|borra|descarta)$/i.test(String(t||'').trim());}
-function movementLine(t){return `${t.type==='income'?'💚':'🔴'} ${t.desc}: ${fmt(t.amount)} · ${t.catName||'Otros'} · ${t.date||today()}${t.accountName?' · '+t.accountName:''}`;}
+function movementLine(t){const warn=(t.aiWarnings&&t.aiWarnings.length)?`\n⚠️ ${t.aiWarnings.join(' · ')}`:'';const conf=t.aiConfidence?` · ${t.aiConfidence}% confianza`:'';return `${t.type==='income'?'💚':'🔴'} ${t.desc}: ${fmt(t.amount)} · ${t.catName||'Otros'} · ${t.date||today()} ${t.time||''}${t.accountName?' · '+t.accountName:''}${conf}${warn}`;}
 function accountOptionsText(){
   if(!accs.length)return '';
   return accs.slice(0,8).map(a=>`• ${a.name}`).join('\n');
