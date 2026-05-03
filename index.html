@@ -251,7 +251,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .ccinfo div{font-size:10px;color:rgba(255,255,255,.62);background:rgba(255,255,255,.08);border-radius:7px;padding:5px 7px}
 @media(max-width:700px){.ccpayname{max-width:155px}.ccinfo{grid-template-columns:1fr}}
 
-/* Inteligencia financiera v5.8 */
+/* Inteligencia financiera v5.9 */
 .smartbox{background:linear-gradient(135deg,rgba(108,99,255,.12),rgba(34,211,160,.06));border:1px solid rgba(108,99,255,.24);border-radius:16px;padding:13px;margin-bottom:12px;box-shadow:0 10px 30px rgba(0,0,0,.10);}
 .smarthead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;}
 .smarttitle{font-family:var(--fh);font-size:14px;font-weight:900;}
@@ -279,7 +279,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 @media(max-width:700px){.smartgrid{grid-template-columns:1fr}.smartname{max-width:170px}.smarthead{flex-direction:column}.smartitem{align-items:flex-start}.smartamt{font-size:12px}.smartcta{grid-template-columns:1fr}}
 
 
-/* Predicciones v5.8 */
+/* Predicciones v5.9 */
 .predbox{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:13px;margin-bottom:12px;}
 .predhero{background:linear-gradient(135deg,rgba(108,99,255,.14),rgba(251,191,36,.06));border:1px solid rgba(108,99,255,.24);border-radius:15px;padding:14px;margin-bottom:12px;}
 .predtitle{font-family:var(--fh);font-size:15px;font-weight:900;margin-bottom:3px;}
@@ -306,6 +306,9 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .smartnotify{margin-top:8px;width:100%;padding:9px 10px;border-radius:10px;background:var(--sf2);border:1px solid var(--bd);color:var(--tx);font-size:12px;font-weight:800;cursor:pointer;}
 @media(max-width:700px){.predgrid{grid-template-columns:1fr}.preditem{align-items:flex-start}.predtag{display:none}.predtwocol{grid-template-columns:1fr}.predscore{align-items:flex-start}.predring{width:52px;height:52px}}
 
+
+/* Estructura PRO v5.9 */
+#nav{overflow-x:auto;scrollbar-width:none;}#nav::-webkit-scrollbar{display:none}.ni{min-width:42px;font-size:8px}.ni svg{width:18px;height:18px}.home-lite-note{font-size:11px;color:var(--mu);line-height:1.5;margin:-4px 0 12px}
 </style>
 </head>
 <body>
@@ -333,7 +336,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v5.8</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v5.9</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -347,7 +350,15 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
     <div class="mci"><div class="mcil">Este mes</div><div class="mciv" id="m-cur" style="color:var(--yl)">$0</div><div class="mcis" id="m-curn">—</div></div>
   </div>
   
-  <div id="smart-panel"></div>
+  <div class="profile-group" style="margin-bottom:12px">
+    <div class="profile-group-title">Accesos rápidos</div>
+    <div class="profile-actions-grid">
+      <div class="profile-action" onclick="nav('mov')"><div class="setic">🧾</div><span>Ver movimientos</span></div>
+      <div class="profile-action" onclick="nav('health')"><div class="setic">🛡️</div><span>Salud financiera</span></div>
+      <div class="profile-action" onclick="nav('pred')"><div class="setic">📈</div><span>Predicciones</span></div>
+      <div class="profile-action" onclick="om('m-quickadd')"><div class="setic">＋</div><span>Nuevo registro</span></div>
+    </div>
+  </div>
   
 <!-- DEBUG PANEL — visible cuando hay error -->
 <div id="dbg-panel" style="background:var(--sf);border:1px solid var(--bd);border-radius:11px;padding:13px;margin-bottom:12px;display:none" id="dbg-panel">
@@ -362,6 +373,11 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   <button onclick="testFirebase()" style="margin-top:8px;width:100%;padding:8px;border-radius:8px;background:var(--sf2);border:1px solid var(--bd);color:var(--tx);font-size:12px;font-weight:600;cursor:pointer">🔄 Probar conexión ahora</button>
 </div>
 <div id="h-alerts"></div>
+</div>
+
+<!-- MOVIMIENTOS -->
+<div id="s-mov" class="scr">
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Movimientos</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.9</div></div><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div>
   <div class="pb" id="pb-h">
     <button class="pbt on" data-p="month">Este mes</button>
     <button class="pbt" data-p="week">Semana</button>
@@ -371,6 +387,15 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   <div class="sb"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:var(--mu);flex-shrink:0"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99 1.49-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg><input id="srch" placeholder="Buscar transacciones…" oninput="rHome()"/></div>
   <div class="sct"><span>Transacciones</span><span id="txc" style="font-weight:400"></span></div>
   <div id="txl"></div>
+</div>
+
+<!-- SALUD FINANCIERA -->
+<div id="s-health" class="scr">
+  <div class="sh">
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Salud financiera</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.9</div></div>
+    <button class="bsm" onclick="enableFinNotifications()">🔔 Alertas</button>
+  </div>
+  <div id="smart-panel"></div>
 </div>
 
 <!-- CUENTAS -->
@@ -427,7 +452,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- IA -->
 <div id="s-ai" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.8</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.9</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
 
@@ -496,7 +521,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- PREDICCIONES -->
 <div id="s-pred" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Predicciones</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.8</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Predicciones</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.9</div></div>
     <button class="bsm" onclick="enableFinNotifications()">🔔 Alertas</button>
   </div>
   <div id="pred-panel"></div>
@@ -537,11 +562,14 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
       <div class="profile-action" onclick="openOrder('recs')"><div class="setic">↕️</div><span>Ordenar cargos</span></div>
       <div class="profile-action" onclick="openOrder('insts')"><div class="setic">↕️</div><span>Ordenar Instinto</span></div>
       <div class="profile-action" onclick="om('m-cats')"><div class="setic">⭐</div><span>Categorías</span></div>
+      <div class="profile-action" onclick="nav('rec')"><div class="setic">🔄</div><span>Cargos recurrentes</span></div>
+      <div class="profile-action" onclick="nav('inst')"><div class="setic">🧴</div><span>Instinto</span></div>
+      <div class="profile-action" onclick="nav('rep')"><div class="setic">📊</div><span>Reportes</span></div>
     </div>
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v5.8 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v5.9 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -552,12 +580,11 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <nav id="nav">
   <button class="ni on" data-s="home"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Inicio</button>
+  <button class="ni" data-s="mov"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18v2H3V5zm0 6h18v2H3v-2zm0 6h18v2H3v-2z"/></svg>Movs</button>
   <button class="ni" data-s="accounts"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>Cuentas</button>
   <button class="ni" data-s="loans"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>Créditos</button>
-  <button class="ni" data-s="rec"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/></svg>Cargos</button>
-  <button class="ni" data-s="inst"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>Instinto</button>
-  <button class="ni" data-s="rep"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>Reportes</button>
-  <button class="ni" data-s="pred"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 21h6v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1-.85.6V16h-4v-2.3l-.85-.6C7.8 12.15 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.15-2.15 4.1z"/></svg>Predicciones</button>
+  <button class="ni" data-s="health"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 15-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z"/></svg>Salud</button>
+  <button class="ni" data-s="pred"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 21h6v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>Pred</button>
   <button class="ni" data-s="ai"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"/></svg>IA</button>
   <button class="ni" data-s="prof"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Perfil</button>
 </nav>
@@ -858,7 +885,7 @@ async function initApp(){
   setTimeout(updateAIKeyStatus, 500);
 setTimeout(renderAIChat, 700);
   applyTheme(localStorage.getItem('fp_thm')||'auto');
-  if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=4.6').catch(()=>{});
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=4.7').catch(()=>{});
   
   onAuthStateChanged(AUTH, u=>{
     document.getElementById('ld').style.display='none';
@@ -897,6 +924,8 @@ function afterRealtimeSync(name){
   if(name==='insts'){ rInsts(); rHome(); }
   const active=document.querySelector('.scr.on')?.id;
   if(active==='s-rep') rReports();
+  if(active==='s-mov') rHome();
+  if(active==='s-health') renderSmartPanel();
   if(active==='s-pred') rPredictions();
 }
 
@@ -981,9 +1010,13 @@ function setupNav(){
 }
 function nav(s){
   document.querySelectorAll('.scr').forEach(x=>x.classList.remove('on'));
-  document.getElementById('s-'+s).classList.add('on');
+  const screen=document.getElementById('s-'+s);
+  if(!screen){ console.warn('Pantalla no encontrada:',s); return; }
+  screen.classList.add('on');
   document.querySelectorAll('.ni').forEach(b=>b.classList.toggle('on',b.dataset.s===s));
   document.getElementById('sc').scrollTop=0;
+  if(s==='mov')rHome();
+  if(s==='health')renderSmartPanel();
   if(s==='rep')rReports();
   if(s==='pred')rPredictions();
   if(s==='accounts'){rAccs();rAccTxList();}
@@ -1555,7 +1588,7 @@ function rPredictions(){
   el.innerHTML=`<div class="predhero">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
       <div><div class="predtitle">📈 Predicciones financieras PRO</div><div class="predsub">Futuro y tendencias: anticipa riesgos, detecta categorías aceleradas y decide antes de que el gasto te alcance.</div></div>
-      <span class="predtag" style="color:var(--ac);border-color:rgba(108,99,255,.35)">v5.8</span>
+      <span class="predtag" style="color:var(--ac);border-color:rgba(108,99,255,.35)">v5.9</span>
     </div>
     <div class="predscore"><div class="predring" style="--score:${score}"><span>${score}</span></div><div><div style="font-family:var(--fh);font-weight:900;color:${scoreInfo.color}">${scoreInfo.txt}</div><div class="predsub">${esc(scoreInfo.msg)}</div></div></div>
     <div class="predgrid"><div class="predmetric"><div class="lbl">Riesgos</div><div class="val" style="color:${riskCount?'var(--rd)':'var(--gn)'}">${riskCount}</div><div class="predmeta">Alertas de alto impacto.</div></div><div class="predmetric"><div class="lbl">Focos amarillos</div><div class="val" style="color:${warnCount?'var(--yl)':'var(--gn)'}">${warnCount}</div><div class="predmeta">Tendencias a vigilar.</div></div><div class="predmetric"><div class="lbl">Gasto estimado</div><div class="val" style="color:var(--yl)">${fmt(p.projected||0)}</div><div class="predmeta">Cierre de mes al ritmo actual.</div></div></div>
@@ -1896,6 +1929,14 @@ function selAcc(id,cid,ctx){
   if(ctx==='tx'){sAcc=id;const a=accs.find(x=>x.id===id);const amt=parseFloat(document.getElementById('ai-amt')?.value||0);const w=document.getElementById('acc-warn');if(a&&amt>0&&curT==='expense'){const av=getAv(a);if(w)w.style.display=av<amt?'block':'none';}else if(w)w.style.display='none';}
   else if(ctx==='rec')sRecA=id;else if(ctx==='inst')sInstA=id;else if(ctx==='ipay')sIPA=id;
   rChips(cid,ctx);
+}
+
+
+function rAccSel(){
+  rChips('acs-tx','tx');
+  rChips('acs-rec','rec');
+  rChips('acs-inst','inst');
+  rChips('acs-ipay','ipay');
 }
 
 // ═══ FORM TYPE ═══
