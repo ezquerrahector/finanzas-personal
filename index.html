@@ -117,6 +117,31 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .acn{font-size:9px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:58px;}
 .acb{font-size:9px;color:var(--mu);}
 .ac.sel{border-color:var(--ac);background:rgba(108,99,255,.15);}
+
+/* Account selector PRO v6.1 — Nubank/Klar inspired */
+.accpay-wrap{background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(167,139,250,.045));border:1px solid rgba(108,99,255,.18);border-radius:15px;padding:10px;margin-top:5px;}
+.accpay-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
+.accpay-title{font-size:10px;color:var(--mu);font-weight:800;letter-spacing:.7px;text-transform:uppercase;}
+.accpay-count{font-size:9px;color:var(--ac);background:rgba(108,99,255,.13);border:1px solid rgba(108,99,255,.25);border-radius:999px;padding:3px 7px;font-weight:800;white-space:nowrap;}
+.accpay-search{display:flex;align-items:center;gap:7px;background:var(--sf);border:1px solid var(--bd);border-radius:11px;padding:7px 10px;margin-bottom:9px;}
+.accpay-search svg{width:14px;height:14px;color:var(--mu);flex-shrink:0;}
+.accpay-search input{flex:1;background:none;border:none;outline:none;color:var(--tx);font-family:var(--fb);font-size:12px;min-width:0;}
+.accpay-search input::placeholder{color:var(--mu);}
+.accpay-empty{font-size:11px;color:var(--mu);text-align:center;padding:12px;border:1px dashed var(--bd);border-radius:11px;background:rgba(255,255,255,.025);}
+.acs.pro{display:flex;gap:8px;overflow-x:auto;padding:1px 1px 4px;scrollbar-width:none;scroll-snap-type:x proximity;}
+.acs.pro::-webkit-scrollbar{display:none;}
+.ac.pro{position:relative;min-width:118px;max-width:138px;align-items:flex-start;gap:6px;padding:10px 10px 9px;border-radius:14px;border:1px solid var(--chip-color,#6c63ff);background:linear-gradient(135deg,rgba(var(--chip-rgb,108,99,255),.18),rgba(var(--chip-rgb,108,99,255),.055));box-shadow:0 8px 22px rgba(0,0,0,.12);scroll-snap-align:start;overflow:hidden;transition:transform .15s,border-color .15s,box-shadow .15s,background .15s;}
+.ac.pro:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 18% 10%,rgba(var(--chip-rgb,108,99,255),.25),transparent 38%);pointer-events:none;}
+.ac.pro:active{transform:scale(.97);}
+.ac.pro.sel{border-color:var(--chip-color,#6c63ff);background:linear-gradient(135deg,rgba(var(--chip-rgb,108,99,255),.30),rgba(var(--chip-rgb,108,99,255),.10));box-shadow:0 0 0 2px rgba(var(--chip-rgb,108,99,255),.25),0 10px 28px rgba(var(--chip-rgb,108,99,255),.20);}
+.ac.pro .aci{width:28px;height:28px;border-radius:9px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.12);font-size:15px;position:relative;z-index:1;}
+.ac.pro .acn{font-size:11px;font-weight:900;max-width:106px;color:var(--tx);line-height:1.15;position:relative;z-index:1;text-align:left;}
+.ac.pro .acb{font-family:var(--fh);font-size:12px;font-weight:900;color:var(--chip-color,#6c63ff);position:relative;z-index:1;}
+.ac.pro .acmeta{font-size:8px;text-transform:uppercase;letter-spacing:.7px;color:var(--mu);font-weight:800;position:relative;z-index:1;}
+.ac.pro .accheck{position:absolute;top:8px;right:8px;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--chip-color,#6c63ff);color:#fff;font-size:11px;font-weight:900;opacity:0;transform:scale(.7);transition:.15s;z-index:2;}
+.ac.pro.sel .accheck{opacity:1;transform:scale(1);}
+[data-theme="light"] .ac.pro{box-shadow:0 6px 18px rgba(0,0,0,.07);}
+
 /* LOAN CARDS */
 .lc{border-radius:14px;padding:15px;margin-bottom:10px;cursor:pointer;border:1px solid rgba(255,255,255,.07);}
 .lcm{background:linear-gradient(135deg,#1a2535,#0d1520);}
@@ -251,7 +276,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .ccinfo div{font-size:10px;color:rgba(255,255,255,.62);background:rgba(255,255,255,.08);border-radius:7px;padding:5px 7px}
 @media(max-width:700px){.ccpayname{max-width:155px}.ccinfo{grid-template-columns:1fr}}
 
-/* Inteligencia financiera v5.9 */
+/* Inteligencia financiera v6.1 */
 .smartbox{background:linear-gradient(135deg,rgba(108,99,255,.12),rgba(34,211,160,.06));border:1px solid rgba(108,99,255,.24);border-radius:16px;padding:13px;margin-bottom:12px;box-shadow:0 10px 30px rgba(0,0,0,.10);}
 .smarthead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;}
 .smarttitle{font-family:var(--fh);font-size:14px;font-weight:900;}
@@ -279,7 +304,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 @media(max-width:700px){.smartgrid{grid-template-columns:1fr}.smartname{max-width:170px}.smarthead{flex-direction:column}.smartitem{align-items:flex-start}.smartamt{font-size:12px}.smartcta{grid-template-columns:1fr}}
 
 
-/* Predicciones v5.9 */
+/* Predicciones v6.1 */
 .predbox{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:13px;margin-bottom:12px;}
 .predhero{background:linear-gradient(135deg,rgba(108,99,255,.14),rgba(251,191,36,.06));border:1px solid rgba(108,99,255,.24);border-radius:15px;padding:14px;margin-bottom:12px;}
 .predtitle{font-family:var(--fh);font-size:15px;font-weight:900;margin-bottom:3px;}
@@ -307,7 +332,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 @media(max-width:700px){.predgrid{grid-template-columns:1fr}.preditem{align-items:flex-start}.predtag{display:none}.predtwocol{grid-template-columns:1fr}.predscore{align-items:flex-start}.predring{width:52px;height:52px}}
 
 
-/* Estructura PRO v5.9 */
+/* Estructura PRO v6.1 */
 #nav{overflow-x:auto;scrollbar-width:none;}#nav::-webkit-scrollbar{display:none}.ni{min-width:42px;font-size:8px}.ni svg{width:18px;height:18px}.home-lite-note{font-size:11px;color:var(--mu);line-height:1.5;margin:-4px 0 12px}
 </style>
 </head>
@@ -336,7 +361,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v5.9</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v6.1</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -377,7 +402,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- MOVIMIENTOS -->
 <div id="s-mov" class="scr">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Movimientos</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.9</div></div><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Movimientos</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.1</div></div><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div>
   <div class="pb" id="pb-h">
     <button class="pbt on" data-p="month">Este mes</button>
     <button class="pbt" data-p="week">Semana</button>
@@ -392,7 +417,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- SALUD FINANCIERA -->
 <div id="s-health" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Salud financiera</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.9</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Salud financiera</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.1</div></div>
     <button class="bsm" onclick="enableFinNotifications()">🔔 Alertas</button>
   </div>
   <div id="smart-panel"></div>
@@ -452,7 +477,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- IA -->
 <div id="s-ai" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.9</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.1</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
 
@@ -521,7 +546,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- PREDICCIONES -->
 <div id="s-pred" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Predicciones</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.9</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Predicciones</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.1</div></div>
     <button class="bsm" onclick="enableFinNotifications()">🔔 Alertas</button>
   </div>
   <div id="pred-panel"></div>
@@ -569,7 +594,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v5.9 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v6.1 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -625,7 +650,18 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
       <div class="fg"><label class="fl">Hora</label><input class="fi" id="ai-time" type="time"/></div>
     </div>
     <div class="fg"><label class="fl">Categoría</label><div class="cg" id="cg-main"></div></div>
-    <div class="fg"><label class="fl">¿Con qué cuenta pagas?</label><div class="acs" id="acs-tx"></div><div id="acc-warn" style="display:none;font-size:10px;color:var(--rd);margin-top:3px">⚠️ Saldo insuficiente</div></div>
+    <div class="fg">
+      <label class="fl">¿Con qué cuenta pagas?</label>
+      <div class="accpay-wrap">
+        <div class="accpay-top"><div class="accpay-title">Selecciona cuenta o tarjeta</div><div class="accpay-count" id="acs-tx-count">0 disponibles</div></div>
+        <div class="accpay-search">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99 1.49-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <input id="acc-search-tx" placeholder="Buscar cuenta, banco o tarjeta…" oninput="rChips('acs-tx','tx')"/>
+        </div>
+        <div class="acs pro" id="acs-tx"></div>
+      </div>
+      <div id="acc-warn" style="display:none;font-size:10px;color:var(--rd);margin-top:6px">⚠️ Saldo insuficiente</div>
+    </div>
     <div class="fg"><label class="fl">Nota (opcional)</label><textarea class="fta" id="ai-note" rows="2"></textarea></div>
     <button class="bp" onclick="saveTx()">Guardar</button>
     <button class="bd" id="tx-dbtn" style="display:none" onclick="delEditingTx()">Eliminar transacción</button>
@@ -1588,7 +1624,7 @@ function rPredictions(){
   el.innerHTML=`<div class="predhero">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
       <div><div class="predtitle">📈 Predicciones financieras PRO</div><div class="predsub">Futuro y tendencias: anticipa riesgos, detecta categorías aceleradas y decide antes de que el gasto te alcance.</div></div>
-      <span class="predtag" style="color:var(--ac);border-color:rgba(108,99,255,.35)">v5.9</span>
+      <span class="predtag" style="color:var(--ac);border-color:rgba(108,99,255,.35)">v6.1</span>
     </div>
     <div class="predscore"><div class="predring" style="--score:${score}"><span>${score}</span></div><div><div style="font-family:var(--fh);font-weight:900;color:${scoreInfo.color}">${scoreInfo.txt}</div><div class="predsub">${esc(scoreInfo.msg)}</div></div></div>
     <div class="predgrid"><div class="predmetric"><div class="lbl">Riesgos</div><div class="val" style="color:${riskCount?'var(--rd)':'var(--gn)'}">${riskCount}</div><div class="predmeta">Alertas de alto impacto.</div></div><div class="predmetric"><div class="lbl">Focos amarillos</div><div class="val" style="color:${warnCount?'var(--yl)':'var(--gn)'}">${warnCount}</div><div class="predmeta">Tendencias a vigilar.</div></div><div class="predmetric"><div class="lbl">Gasto estimado</div><div class="val" style="color:var(--yl)">${fmt(p.projected||0)}</div><div class="predmeta">Cierre de mes al ritmo actual.</div></div></div>
@@ -1919,11 +1955,42 @@ async function addCat(){
 async function delCat(id){if(cats.length<=1){toast('Necesitas al menos 1','e');return;}if(!confirm('¿Eliminar esta categoría? Las transacciones existentes no se borrarán.'))return;cats=cats.filter(c=>c.id!==id);await saveCatsL();rCatsMdl();rCatGrid();rRecCatSel();}
 
 // ═══ ACCOUNT CHIPS ═══
+function safeHexColor(v,fallback='#6c63ff'){
+  const x=String(v||'').trim();
+  return /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(x)?x:fallback;
+}
+function rgbStringFromHex(hex){
+  const rgb=hexToRgb(safeHexColor(hex));
+  return `${rgb.r},${rgb.g},${rgb.b}`;
+}
+function accTypeLabel(a){
+  return {debit:'Débito',credit:'Crédito',cash:'Efectivo',savings:'Ahorro'}[(a||{}).type]||'Cuenta';
+}
 function rChips(cid,ctx){
   const el=document.getElementById(cid);if(!el)return;
   const sel=ctx==='tx'?sAcc:ctx==='rec'?sRecA:ctx==='inst'?sInstA:sIPA;
-  if(!accs.length){el.innerHTML='<p style="font-size:10px;color:var(--mu)">Sin cuentas registradas</p>';return;}
-  el.innerHTML=accs.map(a=>{const av=getAv(a);const ico=a.idata?`<img src="${a.idata}"/>`:a.icon||'💳';return`<div class="ac${sel===a.id?' sel':''}" onclick="selAcc('${a.id}','${cid}','${ctx}')"><div class="aci">${ico}</div><div class="acn">${esc(a.name)}</div><div class="acb">${fmt(av)}</div></div>`;}).join('');
+  if(!accs.length){el.innerHTML='<p style="font-size:10px;color:var(--mu)">Sin cuentas registradas</p>';const c=document.getElementById(cid+'-count');if(c)c.textContent='0 disponibles';return;}
+  const q=(document.getElementById('acc-search-'+ctx)?.value||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+  const filtered=accs.filter(a=>{
+    if(!q)return true;
+    const text=`${a.name||''} ${a.bank||''} ${accTypeLabel(a)} ${a.type||''}`.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    return text.includes(q);
+  });
+  const count=document.getElementById(cid+'-count');
+  if(count)count.textContent=filtered.length===1?'1 disponible':`${filtered.length} disponibles`;
+  if(!filtered.length){el.innerHTML='<div class="accpay-empty">No se encontraron cuentas</div>';return;}
+  const pro=cid==='acs-tx';
+  el.innerHTML=filtered.map(a=>{
+    const av=getAv(a);
+    const ico=a.idata?`<img src="${a.idata}"/>`:a.icon||'💳';
+    const color=safeHexColor(a.color||accountColor(a));
+    const rgb=rgbStringFromHex(color);
+    const meta=a.bank?`${accTypeLabel(a)} · ${a.bank}`:accTypeLabel(a);
+    if(pro){
+      return`<div class="ac pro${sel===a.id?' sel':''}" style="--chip-color:${color};--chip-rgb:${rgb}" onclick="selAcc('${a.id}','${cid}','${ctx}')"><div class="accheck">✓</div><div class="aci">${ico}</div><div class="acmeta">${esc(meta)}</div><div class="acn">${esc(a.name)}</div><div class="acb">${fmt(av)}</div></div>`;
+    }
+    return`<div class="ac${sel===a.id?' sel':''}" style="border-color:${color};background:rgba(${rgb},.12)" onclick="selAcc('${a.id}','${cid}','${ctx}')"><div class="aci">${ico}</div><div class="acn">${esc(a.name)}</div><div class="acb" style="color:${color}">${fmt(av)}</div></div>`;
+  }).join('');
 }
 function selAcc(id,cid,ctx){
   if(ctx==='tx'){sAcc=id;const a=accs.find(x=>x.id===id);const amt=parseFloat(document.getElementById('ai-amt')?.value||0);const w=document.getElementById('acc-warn');if(a&&amt>0&&curT==='expense'){const av=getAv(a);if(w)w.style.display=av<amt?'block':'none';}else if(w)w.style.display='none';}
@@ -1941,7 +2008,7 @@ function rAccSel(){
 
 // ═══ FORM TYPE ═══
 function sType(t){curT=t;document.getElementById('btn-e').className='tb'+(t==='expense'?' ae':'');document.getElementById('btn-i').className='tb'+(t==='income'?' ai':'');}
-function resetTxForm(){editingTxId=null;['ai-amt','ai-desc','ai-note'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('ai-date').value=today();document.getElementById('ai-time').value=nowMexicoTime();sCat='';sAcc='';curT='expense';sType('expense');rCatGrid();rChips('acs-tx','tx');const title=document.querySelector('#m-add .mt');if(title)title.textContent='Nueva transacción';const delBtn=document.getElementById('tx-dbtn');if(delBtn)delBtn.style.display='none';const w=document.getElementById('acc-warn');if(w)w.style.display='none';}
+function resetTxForm(){editingTxId=null;['ai-amt','ai-desc','ai-note'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('ai-date').value=today();document.getElementById('ai-time').value=nowMexicoTime();sCat='';sAcc='';const as=document.getElementById('acc-search-tx');if(as)as.value='';curT='expense';sType('expense');rCatGrid();rChips('acs-tx','tx');const title=document.querySelector('#m-add .mt');if(title)title.textContent='Nueva transacción';const delBtn=document.getElementById('tx-dbtn');if(delBtn)delBtn.style.display='none';const w=document.getElementById('acc-warn');if(w)w.style.display='none';}
 
 // ═══ ICON UPLOAD ═══
 function hdlImg(inp,prevId,dataId){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{document.getElementById(dataId).value=e.target.result;const p=document.getElementById(prevId);p.innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:10px"/>`;};r.readAsDataURL(f);}
