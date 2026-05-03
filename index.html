@@ -208,7 +208,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .order-item-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);cursor:pointer;font-weight:700;}
 .order-item-btn:disabled{opacity:.35;cursor:not-allowed;}
 
-/* IA compacta v4.7 */
+/* IA compacta v4.8 */
 .aihub{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(167,139,250,.05));border:1px solid rgba(108,99,255,.22);border-radius:15px;padding:12px;margin-bottom:12px;}
 .aiquick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 10px;}
 .aiquick button,.aiquick label{display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--bd);background:var(--sf);border-radius:12px;padding:10px;font-size:12px;font-weight:800;cursor:pointer;color:var(--tx);}
@@ -248,7 +248,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v4.7</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-add')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v4.8</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -339,7 +339,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- IA -->
 <div id="s-ai" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v4.7</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v4.8</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
 
@@ -440,7 +440,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v4.7 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v4.8 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -491,7 +491,10 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
     </div>
     <div style="text-align:center;padding:8px 0 4px"><input style="font-family:'Syne',sans-serif;font-size:40px;font-weight:800;background:none;border:none;color:var(--tx);text-align:center;width:100%;outline:none;" id="ai-amt" type="number" inputmode="decimal" placeholder="0.00"/></div>
     <div class="fg"><label class="fl">Descripción</label><input class="fi" id="ai-desc" placeholder="Ej: Comida en el centro"/></div>
-    <div class="fg"><label class="fl">Fecha</label><input class="fi" id="ai-date" type="date"/></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="fg"><label class="fl">Fecha</label><input class="fi" id="ai-date" type="date"/></div>
+      <div class="fg"><label class="fl">Hora</label><input class="fi" id="ai-time" type="time"/></div>
+    </div>
     <div class="fg"><label class="fl">Categoría</label><div class="cg" id="cg-main"></div></div>
     <div class="fg"><label class="fl">¿Con qué cuenta pagas?</label><div class="acs" id="acs-tx"></div><div id="acc-warn" style="display:none;font-size:10px;color:var(--rd);margin-top:3px">⚠️ Saldo insuficiente</div></div>
     <div class="fg"><label class="fl">Nota (opcional)</label><textarea class="fta" id="ai-note" rows="2"></textarea></div>
@@ -812,6 +815,7 @@ function bootApp(u){
   document.getElementById('pnm').textContent=u.displayName||'Usuario';
   document.getElementById('pem').textContent=u.email||'';
   document.getElementById('ai-date').value=today();
+  document.getElementById('ai-time').value=nowMexicoTime();
   document.getElementById('inst-dt').value=today();
   document.getElementById('ip-dt').value=today();
   // Carga local inicial como respaldo y después activa sincronización en tiempo real.
@@ -880,9 +884,10 @@ function txFingerprint(t){
   const desc=normTxText(t.desc||t.description||t.name||'');
   const amt=(Number(t.amount)||0).toFixed(2);
   const date=String(t.date||today()).slice(0,10);
+  const time=String(t.time||'').slice(0,5);
   const acc=String(t.accountId||'');
   const type=String(t.type||'expense');
-  return `${type}|${amt}|${desc}|${acc}|${date}`;
+  return `${type}|${amt}|${desc}|${acc}|${date}|${time}`;
 }
 function isDuplicateTransaction(newTx,ignoreId=''){
   const fp=txFingerprint(newTx);
@@ -893,6 +898,7 @@ async function saveTx(){
   const amt=parseFloat(document.getElementById('ai-amt').value);
   const desc=document.getElementById('ai-desc').value.trim();
   const date=document.getElementById('ai-date').value||today();
+  const time=document.getElementById('ai-time').value||nowMexicoTime();
   const note=document.getElementById('ai-note').value.trim();
   if(!amt||amt<=0){toast('Ingresa un monto válido','e');return;}
   if(!desc){toast('Escribe una descripción','e');return;}
@@ -903,6 +909,7 @@ async function saveTx(){
     amount:amt,
     desc,
     date,
+    time,
     cat:sCat,
     note,
     type:curT,
@@ -971,6 +978,7 @@ function editTx(id){
   document.getElementById('ai-amt').value=t.amount||'';
   document.getElementById('ai-desc').value=t.desc||t.description||t.name||'Movimiento';
   document.getElementById('ai-date').value=t.date||today();
+  document.getElementById('ai-time').value=t.time||nowMexicoTime();
   document.getElementById('ai-note').value=t.note||'';
   sType(curT);
   rCatGrid();
@@ -995,6 +1003,7 @@ async function saveTxAI(t){
     desc:t.desc,
     description:t.desc,
     date:t.date||today(),
+    time:t.time||nowMexicoTime(),
     cat:t.cat||'other',
     note:t.note||'Registrado con IA',
     type:t.type||'expense',
@@ -1097,14 +1106,15 @@ function rTxList(list,eid){
   let h='';
   Object.keys(g).sort((a,b)=>b.localeCompare(a)).forEach(d=>{
     h+=`<div class="tgd">${fmtDate(d)}</div>`;
-    g[d].forEach(t=>{
+    g[d].sort((a,b)=>String(b.time||'00:00').localeCompare(String(a.time||'00:00'))).forEach(t=>{
       const ico=t.catIcon&&t.catIcon.startsWith('data:')?`<img src="${t.catIcon}"/>`:(t.catIcon||'📌');
       const acc=accs.find(a=>a.id===t.accountId);
       const accColor=acc?.color || t.accountColor || '#6c63ff';
       const accName=t.accountName||acc?.name||'';
       const accHtml=accName?` · <span style="color:${accColor};font-weight:700">${esc(accName)}</span>`:'';
+      const timeHtml=t.time?` · ${esc(t.time)}`:'';
       h+=`<div class="ti" onclick="editTx('${t.id}')"><div class="tic" style="background:${getCatC(t.cat)}22">${ico}</div>
-        <div class="tii"><div class="tin">${esc(t.desc||t.description||'Movimiento sin descripción')}</div><div class="tis">${t.catName||''}${accHtml}</div></div>
+        <div class="tii"><div class="tin">${esc(t.desc||t.description||'Movimiento sin descripción')}</div><div class="tis">${t.catName||''}${accHtml}${timeHtml}</div></div>
         <div style="display:flex;align-items:center;gap:5px"><div class="tia ${t.type==='income'?'inc':'exp'}">${t.type==='income'?'+':'-'}${fmt(t.amount)}</div>
         <button class="tdl" onclick="event.stopPropagation();delTx('${t.id}')">✕</button></div></div>`;
     });
@@ -1435,7 +1445,7 @@ function selAcc(id,cid,ctx){
 
 // ═══ FORM TYPE ═══
 function sType(t){curT=t;document.getElementById('btn-e').className='tb'+(t==='expense'?' ae':'');document.getElementById('btn-i').className='tb'+(t==='income'?' ai':'');}
-function resetTxForm(){editingTxId=null;['ai-amt','ai-desc','ai-note'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('ai-date').value=today();sCat='';sAcc='';curT='expense';sType('expense');rCatGrid();rChips('acs-tx','tx');const title=document.querySelector('#m-add .mt');if(title)title.textContent='Nueva transacción';const delBtn=document.getElementById('tx-dbtn');if(delBtn)delBtn.style.display='none';const w=document.getElementById('acc-warn');if(w)w.style.display='none';}
+function resetTxForm(){editingTxId=null;['ai-amt','ai-desc','ai-note'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('ai-date').value=today();document.getElementById('ai-time').value=nowMexicoTime();sCat='';sAcc='';curT='expense';sType('expense');rCatGrid();rChips('acs-tx','tx');const title=document.querySelector('#m-add .mt');if(title)title.textContent='Nueva transacción';const delBtn=document.getElementById('tx-dbtn');if(delBtn)delBtn.style.display='none';const w=document.getElementById('acc-warn');if(w)w.style.display='none';}
 
 // ═══ ICON UPLOAD ═══
 function hdlImg(inp,prevId,dataId){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{document.getElementById(dataId).value=e.target.result;const p=document.getElementById(prevId);p.innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:10px"/>`;};r.readAsDataURL(f);}
@@ -1503,6 +1513,7 @@ function normalizeAITransactions(data){
       desc,
       description: desc,
       date: t.date || t.fecha || today(),
+      time: t.time || t.hora || nowMexicoTime(),
       cat: catObj?.id || 'other',
       catName: catObj?.name || catText || 'Otros',
       catIcon: catObj?.idata || catObj?.icon || '📌',
@@ -1521,7 +1532,7 @@ async function testAIBackend(){
   const el = document.getElementById('ai-key-status');
   if(el){ el.textContent='⏳ Probando backend de IA…'; el.style.color='var(--yl)'; }
   try{
-    const data = await callAIBackend({mode:'text', text:'Gasté 250 en comida hoy', date:today(), movements:[]});
+    const data = await callAIBackend({mode:'text', text:'Gasté 250 en comida hoy', date:today(), time:nowMexicoTime(), movements:[]});
     const list = normalizeAITransactions(data);
     if(!list.length) throw new Error('La IA respondió, pero no regresó transacciones válidas');
     if(el){ el.textContent='✅ Backend IA funcionando'; el.style.color='var(--gn)'; }
@@ -1553,7 +1564,7 @@ async function scanAI(b64,mime){
   if(txtEl)txtEl.textContent='⏳ Analizando ticket con IA…';
   if(resEl)resEl.style.display='block';
   try{
-    const data = await callAIBackend({mode:'image', image:{data:b64, mime}, date:today(), movements:[]});
+    const data = await callAIBackend({mode:'image', image:{data:b64, mime}, date:today(), time:nowMexicoTime(), movements:[]});
     const list = normalizeAITransactions(data);
     if(!list.length){ if(txtEl)txtEl.textContent='No detecté datos claros en el ticket. Puedes escribir el gasto manualmente abajo.'; return; }
     notesP=list;
@@ -1652,7 +1663,7 @@ async function parseAI(text,src){
   const statusEl = src==='voice' ? document.getElementById('vstat') : document.getElementById('noteparsed');
   statusEl.textContent = '⏳ Conectando con IA…';
   try{
-    const data = await callAIBackend({mode:'text', text, date:today(), movements:[]});
+    const data = await callAIBackend({mode:'text', text, date:today(), time:nowMexicoTime(), movements:[]});
     const list = normalizeAITransactions(data);
     if(!list.length){ statusEl.textContent='No detecté transacciones. Intenta: "Gasté 250 en comida"'; return; }
     if(src==='voice'){
@@ -1727,7 +1738,7 @@ function expExcel(){
   const escHtml=v=>String(v??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
   const table=(title, headers, rows)=>`<h2>${escHtml(title)}</h2><table border="1"><tr>${headers.map(h=>`<th>${escHtml(h)}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>`<td>${escHtml(c)}</td>`).join('')}</tr>`).join('')}</table><br/>`;
   const html=`<html><head><meta charset="utf-8"></head><body>`+
-    table('Transacciones',['Fecha','Tipo','Descripción','Categoría','Cuenta','Monto','Nota'],txs.map(t=>[t.date,t.type==='income'?'Ingreso':'Gasto',t.desc,t.catName||'',t.accountName||'',t.amount,t.note||'']))+
+    table('Transacciones',['Fecha','Hora','Tipo','Descripción','Categoría','Cuenta','Monto','Nota'],txs.map(t=>[t.date,t.time||'',t.type==='income'?'Ingreso':'Gasto',t.desc,t.catName||'',t.accountName||'',t.amount,t.note||'']))+
     table('Cuentas',['Tipo','Nombre','Banco','Saldo/Deuda','Límite','Disponible'],accs.map(a=>[a.type,a.name,a.bank||'',a.balance||0,a.limit||0,getAv(a)]))+
     table('Créditos',['Tipo','Nombre','Deuda actual','Monto original','Pago','Plazo','Pagos realizados','Fecha fin'],loans.map(l=>[l.type,l.name,l.balance||0,l.orig||0,l.pay||0,l.tp||'',l.pc||'',l.end||'']))+
     table('Recurrentes',['Nombre','Monto','Frecuencia','Día','Cuenta'],recs.map(r=>[r.name,r.amount,r.freq,r.day,(accs.find(a=>a.id===r.accountId)||{}).name||'']))+
@@ -1750,11 +1761,11 @@ async function impTemplate(inp){
   let ok=0,err=0;
   for(const line of lines.slice(1)){
     const c=parseCSVLine(line); if(!c.length)continue;
-    const fecha=c[idx('fecha')]||today(),tipo=(c[idx('tipo')]||'Gasto').toLowerCase(),desc=c[idx('descripcion')]||'',catName=c[idx('categoria')]||'Otro',accName=c[idx('cuenta')]||'',monto=parseFloat(String(c[idx('monto')]||'0').replace(',','.'))||0,nota=c[idx('nota')]||'';
+    const fecha=c[idx('fecha')]||today(),hora=(c[idx('hora')]||nowMexicoTime()),tipo=(c[idx('tipo')]||'Gasto').toLowerCase(),desc=c[idx('descripcion')]||'',catName=c[idx('categoria')]||'Otro',accName=c[idx('cuenta')]||'',monto=parseFloat(String(c[idx('monto')]||'0').replace(',','.'))||0,nota=c[idx('nota')]||'';
     if(!desc||!monto){err++;continue;}
     const cat=cats.find(x=>x.name.toLowerCase()===catName.toLowerCase())||cats.find(x=>x.id==='other')||cats[0];
     const acc=accs.find(x=>x.name.toLowerCase()===accName.toLowerCase());
-    const tx={amount:monto,desc,date:fecha,cat:cat.id,note:nota,type:tipo.startsWith('ing')?'income':'expense',catIcon:cat.idata||cat.icon||'📌',catName:cat.name,accountId:acc?.id||'',accountName:acc?.name||'',accountColor:acc?.color||'',createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+    const tx={amount:monto,desc,date:fecha,time:hora,cat:cat.id,note:nota,type:tipo.startsWith('ing')?'income':'expense',catIcon:cat.idata||cat.icon||'📌',catName:cat.name,accountId:acc?.id||'',accountName:acc?.name||'',accountColor:acc?.color||'',createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
     try{await addDoc(collection(DB,`users/${UID}/transactions`),tx); if(acc){applyTxBalance(tx); await saveAccsL();} ok++;}catch(e){console.error(e);err++;}
   }
   inp.value=''; rHome(); toast(`✓ Importados: ${ok}${err?` · errores: ${err}`:''}` , err?'e':'s');
@@ -1768,7 +1779,7 @@ function openOrder(kind='accounts'){ordKind=kind;document.getElementById('ord-ti
 function rOrder(){const el=document.getElementById('ord-list');if(!el)return;const arr=getOrderArray(ordKind);if(!arr.length){el.innerHTML='<div class="es">Sin elementos para ordenar</div>';return;}el.innerHTML=arr.map((it,i)=>`<div style="display:flex;align-items:center;gap:8px;background:var(--sf2);border:1px solid var(--bd);border-radius:10px;padding:10px;margin-bottom:7px"><span style="font-size:11px;color:var(--mu);width:20px">${i+1}</span><span style="flex:1;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(itemOrderName(ordKind,it))}</span><button class="order-item-btn" onclick="moveOrder('${ordKind}','${it.id}',-1)" ${i===0?'disabled':''}>↑</button><button class="order-item-btn" onclick="moveOrder('${ordKind}','${it.id}',1)" ${i===arr.length-1?'disabled':''}>↓</button></div>`).join('');}
 async function moveOrder(kind,id,dir){const arr=getOrderArray(kind);const i=arr.findIndex(x=>x.id===id);if(i<0)return;const j=i+dir;if(j<0||j>=arr.length)return;[arr[i],arr[j]]=[arr[j],arr[i]];await saveOrderArray(kind);rOrder();renderAll();rChips('acs-tx','tx');}
 
-function expCSV(){if(!txs.length){toast('Sin transacciones','e');return;}const h='Fecha,Tipo,Descripción,Categoría,Cuenta,Monto,Nota';const rows=txs.map(t=>`${t.date},${t.type==='income'?'Ingreso':'Gasto'},"${t.desc}","${t.catName||''}","${t.accountName||''}",${t.amount},"${t.note||''}"`);const b=new Blob([[h,...rows].join('\n')],{type:'text/csv;charset=utf-8;'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=`finanzas_${today()}.csv`;a.click();URL.revokeObjectURL(u);toast('✓ CSV descargado','s');}
+function expCSV(){if(!txs.length){toast('Sin transacciones','e');return;}const h='Fecha,Hora,Tipo,Descripción,Categoría,Cuenta,Monto,Nota';const rows=txs.map(t=>`${t.date},${t.time||''},${t.type==='income'?'Ingreso':'Gasto'},"${t.desc}","${t.catName||''}","${t.accountName||''}",${t.amount},"${t.note||''}"`);const b=new Blob([[h,...rows].join('\n')],{type:'text/csv;charset=utf-8;'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=`finanzas_${today()}.csv`;a.click();URL.revokeObjectURL(u);toast('✓ CSV descargado','s');}
 
 // ═══ UTILS ═══
 function filterP(list,p){const n=new Date();return list.filter(t=>{if(!t.date)return p==='all';const d=new Date(t.date+'T12:00:00');if(p==='all')return true;if(p==='month')return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear();if(p==='week'){const s=new Date(n);s.setDate(n.getDate()-n.getDay());s.setHours(0,0,0,0);return d>=s;}if(p==='year')return d.getFullYear()===n.getFullYear();return true;});}
@@ -1782,6 +1793,15 @@ function today(){
     day:'2-digit'
   }).formatToParts(new Date()).reduce((a,p)=>{a[p.type]=p.value;return a;},{});
   return `${parts.year}-${parts.month}-${parts.day}`;
+}
+function nowMexicoTime(){
+  const parts=new Intl.DateTimeFormat('en-GB',{
+    timeZone:'America/Mexico_City',
+    hour:'2-digit',
+    minute:'2-digit',
+    hour12:false
+  }).formatToParts(new Date()).reduce((a,p)=>{a[p.type]=p.value;return a;},{});
+  return `${parts.hour}:${parts.minute}`;
 }
 function fmtDate(s){if(!s||s.length<10)return s||'';const d=new Date(s+'T12:00:00'),n=new Date();n.setHours(12,0,0,0);const y=new Date(n);y.setDate(n.getDate()-1);if(d.toDateString()===n.toDateString())return'Hoy';if(d.toDateString()===y.toDateString())return'Ayer';return d.toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'});}
 function fmtDS(s){if(!s||s.length<10)return s;return new Date(s+'T12:00:00').toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'2-digit'});}
@@ -1956,7 +1976,9 @@ function om(id){
     rCatGrid();
     rChips('acs-tx','tx');
     const dt=document.getElementById('ai-date');
+    const tm=document.getElementById('ai-time');
     if(dt && !dt.value) dt.value=today();
+    if(tm && !tm.value) tm.value=nowMexicoTime();
   }
   if(id==='m-rec'){
     rRecCatSel();
@@ -2097,6 +2119,7 @@ Object.assign(window, {
   testFirebase: typeof testFirebase!=="undefined" ? testFirebase : undefined,
   toast: typeof toast!=="undefined" ? toast : undefined,
   today: typeof today!=="undefined" ? today : undefined,
+  nowMexicoTime: typeof nowMexicoTime!=="undefined" ? nowMexicoTime : undefined,
   toggleVoice: typeof toggleVoice!=="undefined" ? toggleVoice : undefined,
   updateAIKeyStatus: typeof updateAIKeyStatus!=="undefined" ? updateAIKeyStatus : undefined,
 
