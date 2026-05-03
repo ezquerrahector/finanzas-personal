@@ -225,7 +225,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .order-item-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);cursor:pointer;font-weight:700;}
 .order-item-btn:disabled{opacity:.35;cursor:not-allowed;}
 
-/* IA compacta v5.0 */
+/* IA compacta v5.1 */
 .aihub{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(167,139,250,.05));border:1px solid rgba(108,99,255,.22);border-radius:15px;padding:12px;margin-bottom:12px;}
 .aiquick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 10px;}
 .aiquick button,.aiquick label{display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--bd);background:var(--sf);border-radius:12px;padding:10px;font-size:12px;font-weight:800;cursor:pointer;color:var(--tx);}
@@ -237,6 +237,19 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .aistatusline{font-size:11px;color:var(--mu);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
 .aistatusline span:last-child{color:var(--ac);font-weight:700;}
 @media(max-width:700px){.aiinputrow{grid-template-columns:1fr}.aiquick{grid-template-columns:1fr 1fr}.aichat.compact{max-height:300px}}
+
+/* Tarjetas: corte / pago */
+.ccpaybox{background:var(--sf);border:1px solid var(--bd);border-radius:13px;padding:12px;margin-bottom:12px;}
+.ccpaytitle{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:1.1px;margin-bottom:8px;font-weight:800;display:flex;justify-content:space-between;gap:8px}
+.ccpayitem{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 10px;background:var(--sf2);border:1px solid var(--bd);border-radius:10px;margin-bottom:6px}
+.ccpayitem.urgent{border-color:rgba(255,95,126,.45);background:rgba(255,95,126,.06)}
+.ccpayitem.soon{border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.05)}
+.ccpayname{font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+.ccpaymeta{font-size:10px;color:var(--mu);margin-top:2px;line-height:1.4}
+.ccpayamt{font-family:var(--fh);font-size:14px;font-weight:900;color:var(--rd);text-align:right;white-space:nowrap}
+.ccinfo{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px}
+.ccinfo div{font-size:10px;color:rgba(255,255,255,.62);background:rgba(255,255,255,.08);border-radius:7px;padding:5px 7px}
+@media(max-width:700px){.ccpayname{max-width:155px}.ccinfo{grid-template-columns:1fr}}
 
 </style>
 </head>
@@ -265,7 +278,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v5.0</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v5.1</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -314,6 +327,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
       <div><div style="font-size:9px;color:rgba(255,255,255,.35);margin-bottom:1px">Crédito usado</div><div id="pat-cr" style="font-size:12px;font-weight:600;color:#ff8fa3">$0</div></div>
     </div>
   </div>
+  <div id="cc-pay-alerts"></div>
   <div id="acc-list"></div>
 </div>
 
@@ -356,7 +370,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- IA -->
 <div id="s-ai" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.0</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.1</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
 
@@ -457,7 +471,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v5.0 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v5.1 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -546,6 +560,16 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
     </div>
     <div class="fg"><label class="fl" id="acc-blbl">Saldo disponible ($)</label><input class="fi" id="acc-bal" type="number" inputmode="decimal" placeholder="0.00"/></div>
     <div class="fg" id="acc-lgrp" style="display:none"><label class="fl">Límite de crédito ($)</label><input class="fi" id="acc-lim" type="number" inputmode="decimal" placeholder="0.00"/></div>
+    <div id="acc-card-dates" style="display:none">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="fg"><label class="fl">Día de corte</label><input class="fi" id="acc-cutoff-day" type="number" inputmode="numeric" min="1" max="31" placeholder="Ej: 10"/></div>
+        <div class="fg"><label class="fl">Día límite de pago</label><input class="fi" id="acc-due-day" type="number" inputmode="numeric" min="1" max="31" placeholder="Ej: 25"/></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="fg"><label class="fl">Pago para no generar intereses ($)</label><input class="fi" id="acc-nointerest" type="number" inputmode="decimal" placeholder="Si lo dejas vacío usa deuda actual"/></div>
+        <div class="fg"><label class="fl">Pago mínimo ($)</label><input class="fi" id="acc-minpay" type="number" inputmode="decimal" placeholder="Opcional"/></div>
+      </div>
+    </div>
     <div class="fg" id="acc-bgrp"><label class="fl">Banco / Institución</label><input class="fi" id="acc-bnk" placeholder="BBVA, Santander…"/></div>
     <div class="fg"><label class="fl">Color de la cuenta / tarjeta</label><div style="display:flex;align-items:center;gap:10px"><input id="acc-color" type="color" value="#1a2535" style="width:48px;height:40px;border:none;background:transparent;cursor:pointer"/><span style="font-size:11px;color:var(--mu);line-height:1.4">Aplica al bloque visual. Las cuentas y tarjetas conservan sus etiquetas y comportamiento.</span></div></div>
     <button class="bp" onclick="saveAcc()">Guardar cuenta</button>
@@ -1273,6 +1297,31 @@ function hexToRgb(hex){hex=String(hex||'').replace('#','');if(hex.length===3)hex
 function accountColor(a){if(a&&a.color)return a.color;return {debit:'#1a2535',credit:'#25201a',cash:'#201a2a',savings:'#1a2220'}[(a||{}).type]||'#1a2535';}
 function accountBg(a){const c=accountColor(a),rgb=hexToRgb(c);return `linear-gradient(135deg, rgba(${rgb.r},${rgb.g},${rgb.b},.98), rgba(10,10,15,.92))`; }
 function defaultAccColor(t){return {debit:'#1a2535',credit:'#25201a',cash:'#201a2a',savings:'#1a2220'}[t]||'#1a2535';}
+
+function normDay(v){v=parseInt(v);return v>=1&&v<=31?v:null;}
+function daysInMonth(y,m){return new Date(y,m+1,0).getDate();}
+function nextDateForDay(day, fromDate=new Date()){
+  day=normDay(day); if(!day)return null;
+  const base=new Date(fromDate); base.setHours(12,0,0,0);
+  let y=base.getFullYear(), m=base.getMonth();
+  let d=new Date(y,m,Math.min(day,daysInMonth(y,m)),12,0,0,0);
+  if(d<base){m++; if(m>11){m=0;y++;} d=new Date(y,m,Math.min(day,daysInMonth(y,m)),12,0,0,0);}
+  return d;
+}
+function daysUntilDate(d){if(!d)return null;const n=new Date();n.setHours(12,0,0,0);return Math.ceil((d-n)/86400000);}
+function dateShort(d){return d?d.toLocaleDateString('es-MX',{day:'numeric',month:'short'}):'—';}
+function noInterestAmount(a){const v=Number(a.noInterestPayment||0);return v>0?v:Number(a.balance||0);}
+function renderCreditPayAlerts(){
+  const el=document.getElementById('cc-pay-alerts'); if(!el)return;
+  const cards=accs.filter(a=>a.type==='credit' && normDay(a.dueDay));
+  if(!cards.length){el.innerHTML='';return;}
+  const rows=cards.map(a=>{const due=nextDateForDay(a.dueDay);const cut=nextDateForDay(a.cutoffDay);const dpu=daysUntilDate(due);return{a,due,cut,dpu,amt:noInterestAmount(a),min:Number(a.minPayment||0)};})
+    .filter(x=>x.dpu!==null && x.dpu>=0 && x.dpu<=15 && x.amt>0)
+    .sort((x,y)=>x.dpu-y.dpu);
+  if(!rows.length){el.innerHTML='';return;}
+  const total=rows.reduce((s,x)=>s+x.amt,0);
+  el.innerHTML=`<div class="ccpaybox"><div class="ccpaytitle"><span>💳 Tarjetas a pagar en la quincena</span><span>${fmt(total)}</span></div>${rows.map(x=>`<div class="ccpayitem ${x.dpu<=3?'urgent':x.dpu<=7?'soon':''}"><div style="min-width:0"><div class="ccpayname">${esc(x.a.name)}${x.a.bank?' · '+esc(x.a.bank):''}</div><div class="ccpaymeta">Límite: ${dateShort(x.due)} · ${x.dpu===0?'vence hoy':x.dpu===1?'vence mañana':'vence en '+x.dpu+' días'}${x.cut?' · corte: '+dateShort(x.cut):''}${x.min>0?' · mínimo: '+fmt(x.min):''}</div></div><div class="ccpayamt">${fmt(x.amt)}<div style="font-size:9px;color:var(--mu);font-family:var(--fb);font-weight:700">para no generar intereses</div></div></div>`).join('')}</div>`;
+}
 function rAccs(){
   const el=document.getElementById('acc-list');if(!el)return;
   const ct=accs.filter(a=>a.type!=='credit').reduce((s,a)=>s+(a.balance||0),0);
@@ -1282,6 +1331,7 @@ function rAccs(){
   document.getElementById('pat-tot').style.color=pat<0?'var(--rd)':'var(--gn)';
   document.getElementById('pat-c').textContent=fmt(ct);
   document.getElementById('pat-cr').textContent=fmt(cu);
+  renderCreditPayAlerts();
   if(!accs.length){el.innerHTML=`<div class="es"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg><p>Sin cuentas. Toca "+ Nueva"</p></div>`;return;}
   el.innerHTML=accs.map(a=>{
     const av=getAv(a),debt=a.balance||0,up=a.type==='credit'&&a.limit?Math.min(100,Math.round(debt/a.limit*100)):0;
@@ -1304,7 +1354,7 @@ function rAccs(){
         <div style="text-align:right;flex-shrink:0"><div style="font-size:9px;color:rgba(255,255,255,.62);margin-bottom:1px">${mainLabel}</div>
           <div style="font-family:\'Syne\',sans-serif;font-size:21px;font-weight:800;color:${mainColor}">${fmt(mainValue)}</div></div>
       </div>
-      ${a.type==='credit'?`<div class="cbr"><div class="cbf" style="width:${up}%;background:${bc}"></div></div><div style="display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.58);margin-top:4px"><span>Disponible: ${fmt(av)}</span><span>Límite: ${fmt(a.limit||0)}</span></div>`:''}
+      ${a.type==='credit'?(()=>{const due=nextDateForDay(a.dueDay),cut=nextDateForDay(a.cutoffDay),dpu=daysUntilDate(due),payAmt=noInterestAmount(a);return `<div class="cbr"><div class="cbf" style="width:${up}%;background:${bc}"></div></div><div style="display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.58);margin-top:4px"><span>Disponible: ${fmt(av)}</span><span>Límite: ${fmt(a.limit||0)}</span></div>${(a.cutoffDay||a.dueDay)?`<div class="ccinfo"><div>✂️ Corte: ${cut?dateShort(cut):'—'}</div><div>🗓️ Pago: ${due?dateShort(due):'—'}${dpu!==null?` · ${dpu===0?'hoy':dpu+'d'}`:''}</div><div>💳 No intereses: ${fmt(payAmt)}</div><div>💵 Mínimo: ${a.minPayment?fmt(a.minPayment):'—'}</div></div>`:''}`})():''}
       <div style="display:flex;gap:6px;margin-top:8px">
         <button onclick="event.stopPropagation();qAdj('${a.id}','add')" style="flex:1;padding:6px;border-radius:7px;background:rgba(255,255,255,.14);border:none;color:#fff;font-size:10px;font-weight:700;cursor:pointer">+ Abonar</button>
         <button onclick="event.stopPropagation();qAdj('${a.id}','sub')" style="flex:1;padding:6px;border-radius:7px;background:rgba(255,255,255,.14);border:none;color:#fff;font-size:10px;font-weight:700;cursor:pointer">− Ajustar</button>
@@ -1362,10 +1412,10 @@ async function reorderAccountByDrop(fromId,toId){
 }
 
 function rAccTxList(){const el=document.getElementById('acc-txl');if(!el)return;const r=txs.filter(t=>t.accountId).slice(0,8);if(!r.length)return;rTxList(r,'acc-txl');}
-function oNewAcc(){document.getElementById('acc-mtit').textContent='Nueva cuenta';document.getElementById('acc-eid').value='';document.getElementById('acc-dbtn').style.display='none';['acc-nm','acc-bal','acc-lim','acc-bnk'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('acc-idata').value='';document.getElementById('acc-iprev').innerHTML='💳';const ce=document.getElementById('acc-color');if(ce)ce.value=defaultAccColor('debit');sAccT('debit');om('m-acc');}
+function oNewAcc(){document.getElementById('acc-mtit').textContent='Nueva cuenta';document.getElementById('acc-eid').value='';document.getElementById('acc-dbtn').style.display='none';['acc-nm','acc-bal','acc-lim','acc-bnk','acc-cutoff-day','acc-due-day','acc-nointerest','acc-minpay'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('acc-idata').value='';document.getElementById('acc-iprev').innerHTML='💳';const ce=document.getElementById('acc-color');if(ce)ce.value=defaultAccColor('debit');sAccT('debit');om('m-acc');}
 function oEditAcc(id){const a=accs.find(x=>x.id===id);if(!a)return;document.getElementById('acc-mtit').textContent='Editar cuenta';document.getElementById('acc-eid').value=id;document.getElementById('acc-nm').value=a.name;document.getElementById('acc-bal').value=a.balance||0;document.getElementById('acc-bnk').value=a.bank||'';document.getElementById('acc-idata').value=a.idata||'';const ce=document.getElementById('acc-color');if(ce)ce.value=a.color||defaultAccColor(a.type);const p=document.getElementById('acc-iprev');
   if(a.idata){p.innerHTML=`<img src="${a.idata}" style="width:100%;height:100%;object-fit:cover;border-radius:10px"/>`;p.dataset.emoji='';}
-  else{p.innerHTML=a.icon||'💳';p.dataset.emoji=a.icon||'💳';}if(a.type==='credit')document.getElementById('acc-lim').value=a.limit||0;sAccT(a.type);document.getElementById('acc-dbtn').style.display='block';om('m-acc');}
+  else{p.innerHTML=a.icon||'💳';p.dataset.emoji=a.icon||'💳';}if(a.type==='credit')document.getElementById('acc-lim').value=a.limit||0;document.getElementById('acc-cutoff-day').value=a.cutoffDay||'';document.getElementById('acc-due-day').value=a.dueDay||'';document.getElementById('acc-nointerest').value=a.noInterestPayment||'';document.getElementById('acc-minpay').value=a.minPayment||'';sAccT(a.type);document.getElementById('acc-dbtn').style.display='block';om('m-acc');}
 function sAccT(t){
   nAT=t;
   // Reset todos PRIMERO, luego activar solo el seleccionado
@@ -1375,6 +1425,7 @@ function sAccT(t){
   if(b)b.className='tb aa';
   const ce=document.getElementById('acc-color'); if(ce && (!ce.value || document.getElementById('acc-eid')?.value==='')) ce.value=defaultAccColor(t);
   document.getElementById('acc-lgrp').style.display=t==='credit'?'block':'none';
+  const cdg=document.getElementById('acc-card-dates'); if(cdg)cdg.style.display=t==='credit'?'block':'none';
   document.getElementById('acc-blbl').textContent=t==='credit'?'Deuda actual ($)':'Saldo disponible ($)';
   // Banco no obligatorio para efectivo
   const bg=document.getElementById('acc-bgrp');
@@ -1384,13 +1435,17 @@ function saveAcc(){
   const nm=document.getElementById('acc-nm').value.trim();
   const bal=parseFloat(document.getElementById('acc-bal').value)||0;
   const lim=nAT==='credit'?(parseFloat(document.getElementById('acc-lim').value)||0):0;
+  const cutoffDay=nAT==='credit'?normDay(document.getElementById('acc-cutoff-day').value):null;
+  const dueDay=nAT==='credit'?normDay(document.getElementById('acc-due-day').value):null;
+  const noInterestPayment=nAT==='credit'?(parseFloat(document.getElementById('acc-nointerest').value)||0):0;
+  const minPayment=nAT==='credit'?(parseFloat(document.getElementById('acc-minpay').value)||0):0;
   const bnk=nAT==='cash'?'':(document.getElementById('acc-bnk').value.trim());
   const color=(document.getElementById('acc-color')?.value)||defaultAccColor(nAT);
   const {idata, icon: iicon} = getIconValue('acc-iprev','acc-idata');
   const eid=document.getElementById('acc-eid').value;
   if(!nm){toast('Escribe un nombre','e');return;}
-  if(eid){const i=accs.findIndex(a=>a.id===eid);if(i>=0)accs[i]={...accs[i],name:nm,balance:bal,limit:lim,bank:bnk,idata,type:nAT,color};}
-  else accs.push({id:'a'+Date.now(),name:nm,type:nAT,balance:bal,limit:lim,bank:bnk,idata,color});
+  if(eid){const i=accs.findIndex(a=>a.id===eid);if(i>=0)accs[i]={...accs[i],name:nm,balance:bal,limit:lim,bank:bnk,idata,type:nAT,color,cutoffDay,dueDay,noInterestPayment,minPayment};}
+  else accs.push({id:'a'+Date.now(),name:nm,type:nAT,balance:bal,limit:lim,bank:bnk,idata,color,cutoffDay,dueDay,noInterestPayment,minPayment});
   saveAccsL();rAccs();cm('m-acc');toast(eid?'✓ Cuenta actualizada':'✓ Cuenta agregada','s');
 }
 function delAcc(){const id=document.getElementById('acc-eid').value;if(!id||!confirm('¿Eliminar esta cuenta?'))return;accs=accs.filter(a=>a.id!==id);saveAccsL();rAccs();cm('m-acc');toast('Cuenta eliminada','s');}
@@ -2221,6 +2276,7 @@ Object.assign(window, {
   qAdj: typeof qAdj!=="undefined" ? qAdj : undefined,
   rAccTxList: typeof rAccTxList!=="undefined" ? rAccTxList : undefined,
   rAccs: typeof rAccs!=="undefined" ? rAccs : undefined,
+  renderCreditPayAlerts: typeof renderCreditPayAlerts!=="undefined" ? renderCreditPayAlerts : undefined,
   setupAccountDragSort: typeof setupAccountDragSort!=="undefined" ? setupAccountDragSort : undefined,
   reorderAccountByDrop: typeof reorderAccountByDrop!=="undefined" ? reorderAccountByDrop : undefined,
   rAlerts: typeof rAlerts!=="undefined" ? rAlerts : undefined,
