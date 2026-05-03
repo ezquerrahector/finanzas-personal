@@ -118,7 +118,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .acb{font-size:9px;color:var(--mu);}
 .ac.sel{border-color:var(--ac);background:rgba(108,99,255,.15);}
 
-/* Account selector PRO v6.1 — Nubank/Klar inspired */
+/* Account selector PRO v6.1.1 — Nubank/Klar inspired */
 .accpay-wrap{background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(167,139,250,.045));border:1px solid rgba(108,99,255,.18);border-radius:15px;padding:10px;margin-top:5px;}
 .accpay-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
 .accpay-title{font-size:10px;color:var(--mu);font-weight:800;letter-spacing:.7px;text-transform:uppercase;}
@@ -276,7 +276,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .ccinfo div{font-size:10px;color:rgba(255,255,255,.62);background:rgba(255,255,255,.08);border-radius:7px;padding:5px 7px}
 @media(max-width:700px){.ccpayname{max-width:155px}.ccinfo{grid-template-columns:1fr}}
 
-/* Inteligencia financiera v6.1 */
+/* Inteligencia financiera v6.1.1 */
 .smartbox{background:linear-gradient(135deg,rgba(108,99,255,.12),rgba(34,211,160,.06));border:1px solid rgba(108,99,255,.24);border-radius:16px;padding:13px;margin-bottom:12px;box-shadow:0 10px 30px rgba(0,0,0,.10);}
 .smarthead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;}
 .smarttitle{font-family:var(--fh);font-size:14px;font-weight:900;}
@@ -304,7 +304,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 @media(max-width:700px){.smartgrid{grid-template-columns:1fr}.smartname{max-width:170px}.smarthead{flex-direction:column}.smartitem{align-items:flex-start}.smartamt{font-size:12px}.smartcta{grid-template-columns:1fr}}
 
 
-/* Predicciones v6.1 */
+/* Predicciones v6.1.1 */
 .predbox{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:13px;margin-bottom:12px;}
 .predhero{background:linear-gradient(135deg,rgba(108,99,255,.14),rgba(251,191,36,.06));border:1px solid rgba(108,99,255,.24);border-radius:15px;padding:14px;margin-bottom:12px;}
 .predtitle{font-family:var(--fh);font-size:15px;font-weight:900;margin-bottom:3px;}
@@ -332,8 +332,18 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 @media(max-width:700px){.predgrid{grid-template-columns:1fr}.preditem{align-items:flex-start}.predtag{display:none}.predtwocol{grid-template-columns:1fr}.predscore{align-items:flex-start}.predring{width:52px;height:52px}}
 
 
-/* Estructura PRO v6.1 */
+/* Estructura PRO v6.1.1 */
 #nav{overflow-x:auto;scrollbar-width:none;}#nav::-webkit-scrollbar{display:none}.ni{min-width:42px;font-size:8px}.ni svg{width:18px;height:18px}.home-lite-note{font-size:11px;color:var(--mu);line-height:1.5;margin:-4px 0 12px}
+
+/* FIX CONTRASTE v6.1.1.1 — textos visibles en modo claro sobre tarjetas oscuras */
+.acard,.lc,.ic,.bc{color:#f0f0f5!important;}
+.acard *, .lc *, .ic *, .bc *{text-shadow:0 1px 2px rgba(0,0,0,.18);}
+.acard [style*="opacity:.4"], .lc [style*="opacity:.4"], .ic [style*="opacity:.4"]{opacity:.78!important;}
+.acard [style*="opacity:.55"], .lc [style*="opacity:.55"], .ic [style*="opacity:.55"]{opacity:.82!important;}
+.acard [style*="rgba(255,255,255,.35)"], .lc [style*="rgba(255,255,255,.35)"], .ic [style*="rgba(255,255,255,.35)"]{color:rgba(255,255,255,.74)!important;}
+.acard [style*="rgba(255,255,255,.4)"], .lc [style*="rgba(255,255,255,.4)"], .ic [style*="rgba(255,255,255,.4)"]{color:rgba(255,255,255,.80)!important;}
+#l-mon,#l-cnt,#pat-c{color:#f0f0f5!important;}
+
 </style>
 </head>
 <body>
@@ -361,7 +371,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v6.1</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v6.1.1</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -402,7 +412,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- MOVIMIENTOS -->
 <div id="s-mov" class="scr">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Movimientos</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.1</div></div><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Movimientos</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.1.1</div></div><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div>
   <div class="pb" id="pb-h">
     <button class="pbt on" data-p="month">Este mes</button>
     <button class="pbt" data-p="week">Semana</button>
@@ -417,7 +427,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- SALUD FINANCIERA -->
 <div id="s-health" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Salud financiera</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.1</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Salud financiera</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.1.1</div></div>
     <button class="bsm" onclick="enableFinNotifications()">🔔 Alertas</button>
   </div>
   <div id="smart-panel"></div>
@@ -477,7 +487,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- IA -->
 <div id="s-ai" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.1</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.1.1</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
 
@@ -546,7 +556,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- PREDICCIONES -->
 <div id="s-pred" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Predicciones</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.1</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Predicciones</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v6.1.1</div></div>
     <button class="bsm" onclick="enableFinNotifications()">🔔 Alertas</button>
   </div>
   <div id="pred-panel"></div>
@@ -594,7 +604,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v6.1 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v6.1.1 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -1624,7 +1634,7 @@ function rPredictions(){
   el.innerHTML=`<div class="predhero">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
       <div><div class="predtitle">📈 Predicciones financieras PRO</div><div class="predsub">Futuro y tendencias: anticipa riesgos, detecta categorías aceleradas y decide antes de que el gasto te alcance.</div></div>
-      <span class="predtag" style="color:var(--ac);border-color:rgba(108,99,255,.35)">v6.1</span>
+      <span class="predtag" style="color:var(--ac);border-color:rgba(108,99,255,.35)">v6.1.1</span>
     </div>
     <div class="predscore"><div class="predring" style="--score:${score}"><span>${score}</span></div><div><div style="font-family:var(--fh);font-weight:900;color:${scoreInfo.color}">${scoreInfo.txt}</div><div class="predsub">${esc(scoreInfo.msg)}</div></div></div>
     <div class="predgrid"><div class="predmetric"><div class="lbl">Riesgos</div><div class="val" style="color:${riskCount?'var(--rd)':'var(--gn)'}">${riskCount}</div><div class="predmeta">Alertas de alto impacto.</div></div><div class="predmetric"><div class="lbl">Focos amarillos</div><div class="val" style="color:${warnCount?'var(--yl)':'var(--gn)'}">${warnCount}</div><div class="predmeta">Tendencias a vigilar.</div></div><div class="predmetric"><div class="lbl">Gasto estimado</div><div class="val" style="color:var(--yl)">${fmt(p.projected||0)}</div><div class="predmeta">Cierre de mes al ritmo actual.</div></div></div>
