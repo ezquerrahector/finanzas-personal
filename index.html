@@ -225,7 +225,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .order-item-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);cursor:pointer;font-weight:700;}
 .order-item-btn:disabled{opacity:.35;cursor:not-allowed;}
 
-/* IA compacta v5.6 */
+/* IA compacta v5.7 */
 .aihub{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(167,139,250,.05));border:1px solid rgba(108,99,255,.22);border-radius:15px;padding:12px;margin-bottom:12px;}
 .aiquick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 10px;}
 .aiquick button,.aiquick label{display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--bd);background:var(--sf);border-radius:12px;padding:10px;font-size:12px;font-weight:800;cursor:pointer;color:var(--tx);}
@@ -251,7 +251,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .ccinfo div{font-size:10px;color:rgba(255,255,255,.62);background:rgba(255,255,255,.08);border-radius:7px;padding:5px 7px}
 @media(max-width:700px){.ccpayname{max-width:155px}.ccinfo{grid-template-columns:1fr}}
 
-/* Inteligencia financiera v5.6 */
+/* Inteligencia financiera v5.7 */
 .smartbox{background:linear-gradient(135deg,rgba(108,99,255,.10),rgba(34,211,160,.05));border:1px solid rgba(108,99,255,.22);border-radius:14px;padding:12px;margin-bottom:12px;}
 .smarthead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;}
 .smarttitle{font-family:var(--fh);font-size:13px;font-weight:900;}
@@ -273,7 +273,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 @media(max-width:700px){.smartgrid{grid-template-columns:1fr}.smartname{max-width:170px}.smarthead{flex-direction:column}.smartitem{align-items:flex-start}.smartamt{font-size:12px}}
 
 
-/* Predicciones v5.6 */
+/* Predicciones v5.7 */
 .predbox{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:13px;margin-bottom:12px;}
 .predhero{background:linear-gradient(135deg,rgba(108,99,255,.14),rgba(251,191,36,.06));border:1px solid rgba(108,99,255,.24);border-radius:15px;padding:14px;margin-bottom:12px;}
 .predtitle{font-family:var(--fh);font-size:15px;font-weight:900;margin-bottom:3px;}
@@ -289,8 +289,16 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .predname{font-size:12px;font-weight:900;line-height:1.25;}
 .predmeta{font-size:10px;color:var(--mu);line-height:1.45;margin-top:2px;}
 .predtag{font-size:9px;border:1px solid var(--bd);background:var(--sf);border-radius:999px;padding:3px 7px;color:var(--mu);white-space:nowrap;font-weight:800;}
+.predscore{display:flex;align-items:center;gap:12px;margin-top:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:11px;}
+.predring{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:900;font-size:17px;background:conic-gradient(var(--gn) calc(var(--score)*1%), rgba(255,255,255,.12) 0);position:relative;flex-shrink:0;}
+.predring:after{content:'';position:absolute;inset:5px;border-radius:50%;background:var(--sf);}
+.predring span{position:relative;z-index:1;}
+.predaction{display:flex;gap:8px;align-items:flex-start;background:linear-gradient(135deg,rgba(108,99,255,.09),rgba(34,211,160,.04));border:1px solid rgba(108,99,255,.2);border-radius:11px;padding:10px;margin-bottom:7px;}
+.predaction b{display:block;font-size:12px;margin-bottom:2px;}
+.predaction div:last-child{font-size:10px;color:var(--mu);line-height:1.45;}
+.predtwocol{display:grid;grid-template-columns:1.2fr .8fr;gap:10px;}
 .smartnotify{margin-top:8px;width:100%;padding:9px 10px;border-radius:10px;background:var(--sf2);border:1px solid var(--bd);color:var(--tx);font-size:12px;font-weight:800;cursor:pointer;}
-@media(max-width:700px){.predgrid{grid-template-columns:1fr}.preditem{align-items:flex-start}.predtag{display:none}}
+@media(max-width:700px){.predgrid{grid-template-columns:1fr}.preditem{align-items:flex-start}.predtag{display:none}.predtwocol{grid-template-columns:1fr}.predscore{align-items:flex-start}.predring{width:52px;height:52px}}
 
 </style>
 </head>
@@ -319,7 +327,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v5.6</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v5.7</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -413,7 +421,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- IA -->
 <div id="s-ai" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.6</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.7</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
 
@@ -482,7 +490,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- PREDICCIONES -->
 <div id="s-pred" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Predicciones</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.6</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Predicciones</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.7</div></div>
     <button class="bsm" onclick="enableFinNotifications()">🔔 Alertas</button>
   </div>
   <div id="pred-panel"></div>
@@ -527,7 +535,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v5.6 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v5.7 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -543,7 +551,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   <button class="ni" data-s="rec"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/></svg>Cargos</button>
   <button class="ni" data-s="inst"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>Instinto</button>
   <button class="ni" data-s="rep"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>Reportes</button>
-  <button class="ni" data-s="pred"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 21h6v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1-.85.6V16h-4v-2.3l-.85-.6C7.8 12.15 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.15-2.15 4.1z"/></svg>Predice</button>
+  <button class="ni" data-s="pred"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 21h6v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1-.85.6V16h-4v-2.3l-.85-.6C7.8 12.15 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.15-2.15 4.1z"/></svg>Predicciones</button>
   <button class="ni" data-s="ai"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"/></svg>IA</button>
   <button class="ni" data-s="prof"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Perfil</button>
 </nav>
@@ -1494,14 +1502,55 @@ function buildPredictions(){
   if(!insights.length) insights.push({level:'good',title:'Sin alertas predictivas relevantes',meta:'No detecto categorías disparadas, pagos críticos ni gastos atípicos con los datos actuales.',tag:'Estable'});
   return {insights,due,totalDue,cash,projected};
 }
+function predictionScore(p){
+  let score=100;
+  if((p.totalDue||0)>(p.cash||0)) score-=30;
+  if((p.due||[]).some(x=>x.dpu<=3)) score-=15;
+  const risks=(p.insights||[]).filter(i=>i.level==='risk').length;
+  const warns=(p.insights||[]).filter(i=>i.level==='warn').length;
+  score-=risks*12+warns*6;
+  return Math.max(0,Math.min(100,Math.round(score)));
+}
+function predictionScoreLabel(score){
+  if(score>=85)return {txt:'Muy sano',color:'var(--gn)',msg:'Tu panorama próximo se ve controlado. Mantén la reserva antes de gastar.'};
+  if(score>=65)return {txt:'Estable con focos',color:'var(--yl)',msg:'Hay algunos pagos o categorías que conviene vigilar esta quincena.'};
+  if(score>=40)return {txt:'Riesgo medio',color:'var(--yl)',msg:'Necesitas priorizar pagos y recortar gasto flexible para evitar presión.'};
+  return {txt:'Riesgo alto',color:'var(--rd)',msg:'Primero cubre tarjetas, créditos y cargos esenciales. No gastes libre hasta reservar.'};
+}
+function buildPredActions(p){
+  const actions=[];
+  const free=(p.cash||0)-(p.totalDue||0);
+  if((p.totalDue||0)>0) actions.push({ico:'💰',title:'Reserva tus compromisos próximos',text:`Aparta ${fmt(p.totalDue)} para pagos de los siguientes 15 días antes de gastar libremente.`});
+  if(free<0) actions.push({ico:'🚨',title:'Prioriza pagos críticos',text:`Te faltan ${fmt(Math.abs(free))} para cubrir los próximos compromisos. Evita compras no esenciales.`});
+  const risk=(p.insights||[]).find(i=>i.level==='risk');
+  if(risk) actions.push({ico:'⚠️',title:'Atiende el principal riesgo detectado',text:risk.meta});
+  const accelerated=(p.insights||[]).find(i=>String(i.tag||'').includes('Categoría'));
+  if(accelerated) actions.push({ico:'📉',title:'Pon límite a la categoría acelerada',text:'Define un tope para esta categoría hasta tu siguiente quincena.'});
+  if(!actions.length) actions.push({ico:'✅',title:'Sigue igual, pero revisa cada semana',text:'No detecto riesgos fuertes. Revisa esta sección al menos una vez por semana.'});
+  return actions.slice(0,4);
+}
 function rPredictions(){
   const el=document.getElementById('pred-panel'); if(!el)return;
   const p=buildPredictions();
   const free=p.cash-p.totalDue;
+  const score=predictionScore(p);
+  const scoreInfo=predictionScoreLabel(score);
+  const actions=buildPredActions(p);
   const top=p.insights.slice(0,8);
-  el.innerHTML=`<div class="predhero"><div class="predtitle">🧠 IA predictiva financiera</div><div class="predsub">Consulta aquí riesgos, gastos atípicos, categorías aceleradas y compromisos de la quincena. Las alertas externas dependen del permiso de notificaciones del navegador.</div><div class="predgrid"><div class="predmetric"><div class="lbl">Compromisos 15 días</div><div class="val" style="color:var(--rd)">${fmt(p.totalDue)}</div></div><div class="predmetric"><div class="lbl">Libre estimado</div><div class="val" style="color:${free>=0?'var(--gn)':'var(--rd)'}">${fmt(free)}</div></div><div class="predmetric"><div class="lbl">Gasto mensual estimado</div><div class="val" style="color:var(--yl)">${fmt(p.projected||0)}</div></div></div></div><div class="predbox"><div class="ct">Insights accionables</div>${top.map(i=>`<div class="preditem ${i.level}"><div><div class="predname">${esc(i.title)}</div><div class="predmeta">${esc(i.meta)}</div></div><div class="predtag">${esc(i.tag)}</div></div>`).join('')}</div><div class="predbox"><div class="ct">Próximos pagos detectados</div>${p.due.length?p.due.slice(0,10).map(x=>`<div class="preditem ${x.priority}"><div><div class="predname">${x.icon} ${esc(x.name)}</div><div class="predmeta">${x.meta} · ${dateShort(x.date)} · ${x.dpu===0?'hoy':x.dpu===1?'mañana':'en '+x.dpu+' días'}</div></div><div class="predtag">${fmt(x.amount)}</div></div>`).join(''):`<div class="preditem good"><div><div class="predname">✅ Sin pagos próximos configurados</div><div class="predmeta">Configura fechas límite en tarjetas, cargos y créditos para activar predicciones más útiles.</div></div></div>`}</div>`;
+  el.innerHTML=`<div class="predhero">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+      <div><div class="predtitle">🧠 Predicciones financieras PRO</div><div class="predsub">Lectura automática de tus próximos 15 días: compromisos, riesgo de tarjetas, categorías aceleradas, gastos atípicos y proyección mensual.</div></div>
+      <span class="predtag" style="color:var(--ac);border-color:rgba(108,99,255,.35)">v5.7</span>
+    </div>
+    <div class="predscore"><div class="predring" style="--score:${score}"><span>${score}</span></div><div><div style="font-family:var(--fh);font-weight:900;color:${scoreInfo.color}">${scoreInfo.txt}</div><div class="predsub">${esc(scoreInfo.msg)}</div></div></div>
+    <div class="predgrid"><div class="predmetric"><div class="lbl">Compromisos 15 días</div><div class="val" style="color:var(--rd)">${fmt(p.totalDue)}</div><div class="predmeta">Tarjetas, créditos y cargos próximos.</div></div><div class="predmetric"><div class="lbl">Libre estimado</div><div class="val" style="color:${free>=0?'var(--gn)':'var(--rd)'}">${fmt(free)}</div><div class="predmeta">Después de reservar compromisos.</div></div><div class="predmetric"><div class="lbl">Gasto mensual estimado</div><div class="val" style="color:var(--yl)">${fmt(p.projected||0)}</div><div class="predmeta">Proyección con ritmo actual.</div></div></div>
+  </div>
+  <div class="predtwocol">
+    <div class="predbox"><div class="ct">Insights accionables</div>${top.map(i=>`<div class="preditem ${i.level}"><div><div class="predname">${esc(i.title)}</div><div class="predmeta">${esc(i.meta)}</div></div><div class="predtag">${esc(i.tag)}</div></div>`).join('')}</div>
+    <div class="predbox"><div class="ct">Qué haría ahora</div>${actions.map(a=>`<div class="predaction"><span>${a.ico}</span><div><b>${esc(a.title)}</b><div>${esc(a.text)}</div></div></div>`).join('')}<button class="smartnotify" onclick="enableFinNotifications()">🔔 Activar alertas del navegador</button></div>
+  </div>
+  <div class="predbox"><div class="ct">Próximos pagos detectados</div>${p.due.length?p.due.slice(0,10).map(x=>`<div class="preditem ${x.priority}"><div><div class="predname">${x.icon} ${esc(x.name)}</div><div class="predmeta">${x.meta} · ${dateShort(x.date)} · ${x.dpu===0?'hoy':x.dpu===1?'mañana':'en '+x.dpu+' días'}</div></div><div class="predtag">${fmt(x.amount)}</div></div>`).join(''):`<div class="preditem good"><div><div class="predname">✅ Sin pagos próximos configurados</div><div class="predmeta">Configura fechas límite en tarjetas, cargos y créditos para activar predicciones más útiles.</div></div></div>`}</div>`;
 }
-
 function rAccs(){
   const el=document.getElementById('acc-list');if(!el)return;
   const ct=accs.filter(a=>a.type!=='credit').reduce((s,a)=>s+(a.balance||0),0);
