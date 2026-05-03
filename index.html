@@ -225,7 +225,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .order-item-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);cursor:pointer;font-weight:700;}
 .order-item-btn:disabled{opacity:.35;cursor:not-allowed;}
 
-/* IA compacta v5.5 */
+/* IA compacta v5.6 */
 .aihub{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(167,139,250,.05));border:1px solid rgba(108,99,255,.22);border-radius:15px;padding:12px;margin-bottom:12px;}
 .aiquick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 10px;}
 .aiquick button,.aiquick label{display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--bd);background:var(--sf);border-radius:12px;padding:10px;font-size:12px;font-weight:800;cursor:pointer;color:var(--tx);}
@@ -251,7 +251,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .ccinfo div{font-size:10px;color:rgba(255,255,255,.62);background:rgba(255,255,255,.08);border-radius:7px;padding:5px 7px}
 @media(max-width:700px){.ccpayname{max-width:155px}.ccinfo{grid-template-columns:1fr}}
 
-/* Inteligencia financiera v5.5 */
+/* Inteligencia financiera v5.6 */
 .smartbox{background:linear-gradient(135deg,rgba(108,99,255,.10),rgba(34,211,160,.05));border:1px solid rgba(108,99,255,.22);border-radius:14px;padding:12px;margin-bottom:12px;}
 .smarthead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;}
 .smarttitle{font-family:var(--fh);font-size:13px;font-weight:900;}
@@ -272,6 +272,25 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .smartpill{font-size:9px;border:1px solid var(--bd);background:var(--sf2);color:var(--mu);border-radius:999px;padding:3px 7px;font-weight:800;white-space:nowrap;}
 @media(max-width:700px){.smartgrid{grid-template-columns:1fr}.smartname{max-width:170px}.smarthead{flex-direction:column}.smartitem{align-items:flex-start}.smartamt{font-size:12px}}
 
+
+/* Predicciones v5.6 */
+.predbox{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:13px;margin-bottom:12px;}
+.predhero{background:linear-gradient(135deg,rgba(108,99,255,.14),rgba(251,191,36,.06));border:1px solid rgba(108,99,255,.24);border-radius:15px;padding:14px;margin-bottom:12px;}
+.predtitle{font-family:var(--fh);font-size:15px;font-weight:900;margin-bottom:3px;}
+.predsub{font-size:11px;color:var(--mu);line-height:1.45;}
+.predgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;}
+.predmetric{background:var(--sf);border:1px solid var(--bd);border-radius:11px;padding:10px;}
+.predmetric .lbl{font-size:8px;color:var(--mu);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;}
+.predmetric .val{font-family:var(--fh);font-size:15px;font-weight:900;}
+.preditem{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:var(--sf2);border:1px solid var(--bd);border-radius:11px;padding:10px;margin-bottom:7px;}
+.preditem.warn{border-color:rgba(251,191,36,.42);background:rgba(251,191,36,.05);}
+.preditem.risk{border-color:rgba(255,95,126,.42);background:rgba(255,95,126,.05);}
+.preditem.good{border-color:rgba(34,211,160,.30);background:rgba(34,211,160,.04);}
+.predname{font-size:12px;font-weight:900;line-height:1.25;}
+.predmeta{font-size:10px;color:var(--mu);line-height:1.45;margin-top:2px;}
+.predtag{font-size:9px;border:1px solid var(--bd);background:var(--sf);border-radius:999px;padding:3px 7px;color:var(--mu);white-space:nowrap;font-weight:800;}
+.smartnotify{margin-top:8px;width:100%;padding:9px 10px;border-radius:10px;background:var(--sf2);border:1px solid var(--bd);color:var(--tx);font-size:12px;font-weight:800;cursor:pointer;}
+@media(max-width:700px){.predgrid{grid-template-columns:1fr}.preditem{align-items:flex-start}.predtag{display:none}}
 
 </style>
 </head>
@@ -300,7 +319,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- HOME -->
 <div id="s-home" class="scr on">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v5.5</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v5.6</div></div><div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div></div>
   <div class="bc">
     <div class="bcl">Balance del período</div>
     <div class="bca" id="b-tot">$0.00</div>
@@ -394,7 +413,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- IA -->
 <div id="s-ai" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.5</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.6</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
 
@@ -459,6 +478,16 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   <div class="sct">Desglose por categoría</div><div id="r-bkd"></div>
 </div>
 
+
+<!-- PREDICCIONES -->
+<div id="s-pred" class="scr">
+  <div class="sh">
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Predicciones</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v5.6</div></div>
+    <button class="bsm" onclick="enableFinNotifications()">🔔 Alertas</button>
+  </div>
+  <div id="pred-panel"></div>
+</div>
+
 <!-- PERFIL -->
 <div id="s-prof" class="scr">
   <div class="sh"><div class="st">Perfil</div></div>
@@ -498,7 +527,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v5.5 · Firebase + OpenAI/Functions</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v5.6 · Firebase + OpenAI/Functions</div>
 </div>
 
 </div><!-- /sc -->
@@ -514,6 +543,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   <button class="ni" data-s="rec"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/></svg>Cargos</button>
   <button class="ni" data-s="inst"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>Instinto</button>
   <button class="ni" data-s="rep"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>Reportes</button>
+  <button class="ni" data-s="pred"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 21h6v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1-.85.6V16h-4v-2.3l-.85-.6C7.8 12.15 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.15-2.15 4.1z"/></svg>Predice</button>
   <button class="ni" data-s="ai"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"/></svg>IA</button>
   <button class="ni" data-s="prof"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Perfil</button>
 </nav>
@@ -853,7 +883,9 @@ function afterRealtimeSync(name){
   if(name==='insts'){ rInsts(); rHome(); }
   const active=document.querySelector('.scr.on')?.id;
   if(active==='s-rep') rReports();
+  if(active==='s-pred') rPredictions();
 }
+
 function listenMetaArray(name, localKey, fallback=[]){
   const ref = firestoreDoc(DB, `users/${UID}/meta`, name);
   onSnapshot(ref, snap=>{
@@ -939,6 +971,7 @@ function nav(s){
   document.querySelectorAll('.ni').forEach(b=>b.classList.toggle('on',b.dataset.s===s));
   document.getElementById('sc').scrollTop=0;
   if(s==='rep')rReports();
+  if(s==='pred')rPredictions();
   if(s==='accounts'){rAccs();rAccTxList();}
   if(s==='loans')rLoans();
   if(s==='rec')rRecs();
@@ -1151,6 +1184,7 @@ function renderAll(){
   rAlerts();
   const active = document.querySelector('.scr.on')?.id;
   if(active==='s-rep') rReports();
+  if(active==='s-pred') rPredictions();
   if(active==='s-accounts'){ rAccs(); rAccTxList(); }
   if(active==='s-loans') rLoans();
   if(active==='s-rec') rRecs();
@@ -1392,8 +1426,82 @@ function renderSmartPanel(){
   else if(due.some(x=>x.dpu<=3)) advice='Tienes pagos muy próximos. Prioriza cubrirlos antes de nuevos gastos.';
   else if(projected>spent*1.35 && spent>0) advice='Tu proyección de gasto puede subir. Revisa gastos pequeños recurrentes.';
   const listHtml=top.length?`<div class="smartlist">${top.map(x=>`<div class="smartitem ${x.priority}"><div style="min-width:0"><div class="smartname">${x.icon} ${esc(x.name)}</div><div class="smartmeta">${x.meta} · ${dateShort(x.date)} · ${x.dpu===0?'hoy':x.dpu===1?'mañana':'en '+x.dpu+' días'}</div></div><div class="smartamt" style="color:${x.priority==='urgent'?'var(--rd)':x.priority==='soon'?'var(--yl)':'var(--tx)'}">${fmt(x.amount)}</div></div>`).join('')}</div>`:`<div class="smartitem good"><div><div class="smartname">✅ Sin pagos críticos en 15 días</div><div class="smartmeta">No detecto tarjetas, créditos o cargos próximos configurados.</div></div></div>`;
-  el.innerHTML=`<div class="smartbox"><div class="smarthead"><div><div class="smarttitle">🧠 Centro de salud financiera</div><div class="smartsub">Plan automático para la quincena con tarjetas, cargos recurrentes y créditos próximos.</div></div><div class="smartpill">Score ${score}/100</div></div><div class="smartgrid"><div class="smartmetric"><div class="lbl">Reserva necesaria</div><div class="val" style="color:var(--rd)">${fmt(totalDue)}</div><div class="hint">Pagos próximos 15 días</div></div><div class="smartmetric"><div class="lbl">Disponible libre estimado</div><div class="val" style="color:${freeAfter>=0?'var(--gn)':'var(--rd)'}">${fmt(freeAfter)}</div><div class="hint">Efectivo menos compromisos</div></div><div class="smartmetric"><div class="lbl">Proyección gasto mes</div><div class="val" style="color:var(--yl)">${fmt(projected||0)}</div><div class="hint">Basado en tu ritmo actual</div></div></div><div class="smartsub" style="margin-bottom:8px">${esc(advice)}</div>${listHtml}</div>`;
+  const notifText=(typeof Notification==='undefined')?'Alertas no soportadas':(Notification.permission==='granted'?'🔔 Alertas activas':'🔔 Activar alertas del navegador');
+  el.innerHTML=`<div class="smartbox"><div class="smarthead"><div><div class="smarttitle">🧠 Centro de salud financiera</div><div class="smartsub">Plan automático para la quincena con tarjetas, cargos recurrentes y créditos próximos.</div></div><div class="smartpill">Score ${score}/100</div></div><div class="smartgrid"><div class="smartmetric"><div class="lbl">Reserva necesaria</div><div class="val" style="color:var(--rd)">${fmt(totalDue)}</div><div class="hint">Pagos próximos 15 días</div></div><div class="smartmetric"><div class="lbl">Disponible libre estimado</div><div class="val" style="color:${freeAfter>=0?'var(--gn)':'var(--rd)'}">${fmt(freeAfter)}</div><div class="hint">Efectivo menos compromisos</div></div><div class="smartmetric"><div class="lbl">Proyección gasto mes</div><div class="val" style="color:var(--yl)">${fmt(projected||0)}</div><div class="hint">Basado en tu ritmo actual</div></div></div><div class="smartsub" style="margin-bottom:8px">${esc(advice)}</div>${listHtml}<button class="smartnotify" onclick="enableFinNotifications()">${notifText}</button></div>`;
+  maybeNotifyDueItems(due);
 }
+function enableFinNotifications(){
+  if(!('Notification' in window)){toast('Tu navegador no soporta notificaciones','e');return;}
+  Notification.requestPermission().then(p=>{
+    if(p==='granted'){toast('✓ Alertas activadas','s');maybeNotifyDueItems(getDueItems(15),true);renderSmartPanel();rPredictions();}
+    else toast('No se activaron las alertas','e');
+  });
+}
+function maybeNotifyDueItems(items,force=false){
+  if(!('Notification' in window) || Notification.permission!=='granted')return;
+  const due=(items||getDueItems(15)).filter(x=>x.dpu<=3);
+  if(!due.length)return;
+  const key='fp_notif_'+today()+'_'+due.map(x=>x.name+x.dpu).join('|');
+  if(!force && localStorage.getItem(key))return;
+  const total=due.reduce((s,x)=>s+x.amount,0);
+  new Notification('Finanzas · pagos próximos',{body:`Tienes ${due.length} pago(s) en 3 días o menos por ${fmt(total)}.`});
+  localStorage.setItem(key,'1');
+}
+function monthKeyOffset(offset=0){const n=new Date();return new Date(n.getFullYear(),n.getMonth()+offset,1).toISOString().slice(0,7);}
+function monthExpenseByCat(offset=0){
+  const key=monthKeyOffset(offset), out={};
+  txs.filter(t=>t.type==='expense' && String(t.date||'').slice(0,7)===key).forEach(t=>{const k=t.catName||t.cat||'Otros';out[k]=(out[k]||0)+Number(t.amount||0);});
+  return out;
+}
+function categoryAverage(catName,months=3){
+  let vals=[];
+  for(let i=1;i<=months;i++){const m=monthExpenseByCat(-i);vals.push(Number(m[catName]||0));}
+  const used=vals.filter(v=>v>0);
+  return used.length?used.reduce((a,b)=>a+b,0)/used.length:0;
+}
+function detectAtypicalTx(){
+  const recent=txs.filter(t=>t.type==='expense').slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,30);
+  return recent.map(t=>{
+    const same=txs.filter(x=>x.type==='expense' && (x.catName||x.cat)===(t.catName||t.cat) && x.id!==t.id).map(x=>Number(x.amount||0)).filter(Boolean);
+    const avg=same.length?same.reduce((a,b)=>a+b,0)/same.length:0;
+    return {t,avg,ratio:avg?Number(t.amount||0)/avg:0};
+  }).filter(x=>x.avg>0 && x.ratio>=1.8 && Number(x.t.amount||0)>300).slice(0,3);
+}
+function buildPredictions(){
+  const due=getDueItems(15);
+  const current=monthExpenseByCat(0);
+  const last=monthExpenseByCat(-1);
+  const projected=projectedMonthExpense();
+  const cash=accs.filter(a=>a.type!=='credit').reduce((s,a)=>s+Number(a.balance||0),0);
+  const totalDue=due.reduce((s,x)=>s+x.amount,0);
+  const insights=[];
+  Object.keys(current).forEach(cat=>{
+    const cur=current[cat], avg=categoryAverage(cat,3), prev=last[cat]||0;
+    const base=avg||prev;
+    if(base>0 && cur>base*1.25 && cur>500){
+      const pct=Math.round((cur/base-1)*100);
+      insights.push({level:pct>60?'risk':'warn',title:`${cat} viene ${pct}% arriba`,meta:`Llevas ${fmt(cur)} vs referencia de ${fmt(base)}. Revisa si fue gasto necesario o impulso.`,tag:'Categoría'});
+    }
+  });
+  detectAtypicalTx().forEach(x=>insights.push({level:'warn',title:`Gasto atípico: ${x.t.desc||'Movimiento'}`,meta:`Fue de ${fmt(x.t.amount)}; el promedio similar ronda ${fmt(x.avg)}.`,tag:'Atípico'}));
+  if(totalDue>0){
+    insights.push({level:totalDue>cash?'risk':due.some(x=>x.dpu<=3)?'warn':'good',title:`Pagos próximos por ${fmt(totalDue)}`,meta:totalDue>cash?`Tu efectivo disponible (${fmt(cash)}) no cubre todos los compromisos próximos.`:`Reserva ese monto antes de gastar libremente.`,tag:'Quincena'});
+  }
+  if(projected>0){
+    const spent=monthExpensesUntilToday();
+    insights.push({level:projected>spent*1.6?'warn':'good',title:`Proyección mensual: ${fmt(projected)}`,meta:`Con el ritmo actual, este sería tu gasto estimado al cierre del mes.`,tag:'Proyección'});
+  }
+  if(!insights.length) insights.push({level:'good',title:'Sin alertas predictivas relevantes',meta:'No detecto categorías disparadas, pagos críticos ni gastos atípicos con los datos actuales.',tag:'Estable'});
+  return {insights,due,totalDue,cash,projected};
+}
+function rPredictions(){
+  const el=document.getElementById('pred-panel'); if(!el)return;
+  const p=buildPredictions();
+  const free=p.cash-p.totalDue;
+  const top=p.insights.slice(0,8);
+  el.innerHTML=`<div class="predhero"><div class="predtitle">🧠 IA predictiva financiera</div><div class="predsub">Consulta aquí riesgos, gastos atípicos, categorías aceleradas y compromisos de la quincena. Las alertas externas dependen del permiso de notificaciones del navegador.</div><div class="predgrid"><div class="predmetric"><div class="lbl">Compromisos 15 días</div><div class="val" style="color:var(--rd)">${fmt(p.totalDue)}</div></div><div class="predmetric"><div class="lbl">Libre estimado</div><div class="val" style="color:${free>=0?'var(--gn)':'var(--rd)'}">${fmt(free)}</div></div><div class="predmetric"><div class="lbl">Gasto mensual estimado</div><div class="val" style="color:var(--yl)">${fmt(p.projected||0)}</div></div></div></div><div class="predbox"><div class="ct">Insights accionables</div>${top.map(i=>`<div class="preditem ${i.level}"><div><div class="predname">${esc(i.title)}</div><div class="predmeta">${esc(i.meta)}</div></div><div class="predtag">${esc(i.tag)}</div></div>`).join('')}</div><div class="predbox"><div class="ct">Próximos pagos detectados</div>${p.due.length?p.due.slice(0,10).map(x=>`<div class="preditem ${x.priority}"><div><div class="predname">${x.icon} ${esc(x.name)}</div><div class="predmeta">${x.meta} · ${dateShort(x.date)} · ${x.dpu===0?'hoy':x.dpu===1?'mañana':'en '+x.dpu+' días'}</div></div><div class="predtag">${fmt(x.amount)}</div></div>`).join(''):`<div class="preditem good"><div><div class="predname">✅ Sin pagos próximos configurados</div><div class="predmeta">Configura fechas límite en tarjetas, cargos y créditos para activar predicciones más útiles.</div></div></div>`}</div>`;
+}
+
 function rAccs(){
   const el=document.getElementById('acc-list');if(!el)return;
   const ct=accs.filter(a=>a.type!=='credit').reduce((s,a)=>s+(a.balance||0),0);
@@ -2521,6 +2629,13 @@ Object.assign(window, {
   today: typeof today!=="undefined" ? today : undefined,
   nowMexicoTime: typeof nowMexicoTime!=="undefined" ? nowMexicoTime : undefined,
   toggleVoice: typeof toggleVoice!=="undefined" ? toggleVoice : undefined,
+  enableFinNotifications: typeof enableFinNotifications!=="undefined" ? enableFinNotifications : undefined,
+  maybeNotifyDueItems: typeof maybeNotifyDueItems!=="undefined" ? maybeNotifyDueItems : undefined,
+  rPredictions: typeof rPredictions!=="undefined" ? rPredictions : undefined,
+  buildPredictions: typeof buildPredictions!=="undefined" ? buildPredictions : undefined,
+  monthExpenseByCat: typeof monthExpenseByCat!=="undefined" ? monthExpenseByCat : undefined,
+  categoryAverage: typeof categoryAverage!=="undefined" ? categoryAverage : undefined,
+  detectAtypicalTx: typeof detectAtypicalTx!=="undefined" ? detectAtypicalTx : undefined,
   updateAIKeyStatus: typeof updateAIKeyStatus!=="undefined" ? updateAIKeyStatus : undefined,
   renderSmartPanel: typeof renderSmartPanel!=="undefined" ? renderSmartPanel : undefined,
 
