@@ -130,7 +130,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .acb{font-size:9px;color:var(--mu);}
 .ac.sel{border-color:var(--ac);background:rgba(108,99,255,.15);}
 
-/* Account selector PRO v8.5 Centro de Control — Nubank/Klar inspired */
+/* Account selector PRO v8.6 UX Pro — Nubank/Klar inspired */
 .accpay-wrap{background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(167,139,250,.045));border:1px solid rgba(108,99,255,.18);border-radius:15px;padding:10px;margin-top:5px;}
 .accpay-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
 .accpay-title{font-size:10px;color:var(--mu);font-weight:800;letter-spacing:.7px;text-transform:uppercase;}
@@ -239,7 +239,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 @keyframes vp{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
 .sca{border:2px dashed var(--bd);border-radius:12px;padding:22px;text-align:center;cursor:pointer;margin-bottom:10px;}
 /* TOAST */
-/* TOAST PRO v8.5 Centro de Control — arriba, automático y no bloqueante */
+/* TOAST PRO v8.6 UX Pro — arriba, automático y no bloqueante */
 #toast{position:fixed!important;top:calc(var(--st) + 14px)!important;bottom:auto!important;left:50%!important;right:auto!important;transform:translateX(-50%) translateY(-18px) scale(.98)!important;min-width:min(320px,calc(100vw - 32px));max-width:calc(100vw - 32px);background:rgba(19,19,26,.96);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:11px 16px;font-size:12px;font-weight:800;letter-spacing:.1px;text-align:center;z-index:9999;opacity:0;pointer-events:none;white-space:normal;box-shadow:0 10px 30px rgba(0,0,0,.28);backdrop-filter:blur(12px);transition:opacity .22s ease,transform .22s ease;}
 #toast.on{opacity:1;transform:translateX(-50%) translateY(0) scale(1)!important;}
 #toast.s{border-color:rgba(34,211,160,.45);color:#16a87d;background:rgba(236,253,245,.96);}
@@ -281,7 +281,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .order-item-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);cursor:pointer;font-weight:700;}
 .order-item-btn:disabled{opacity:.35;cursor:not-allowed;}
 
-/* IA compacta v8.5 Centro de Control */
+/* IA compacta v8.6 UX Pro */
 .aihub{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(167,139,250,.05));border:1px solid rgba(108,99,255,.22);border-radius:15px;padding:12px;margin-bottom:12px;}
 .aiquick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 10px;}
 .aiquick button,.aiquick label{display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--bd);background:var(--sf);border-radius:12px;padding:10px;font-size:12px;font-weight:800;cursor:pointer;color:var(--tx);}
@@ -307,7 +307,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .ccinfo div{font-size:10px;color:rgba(255,255,255,.62);background:rgba(255,255,255,.08);border-radius:7px;padding:5px 7px}
 @media(max-width:700px){.ccpayname{max-width:155px}.ccinfo{grid-template-columns:1fr}}
 
-/* Inteligencia financiera v8.5 Centro de Control */
+/* Inteligencia financiera v8.6 UX Pro */
 .smartbox{background:linear-gradient(135deg,rgba(108,99,255,.12),rgba(34,211,160,.06));border:1px solid rgba(108,99,255,.24);border-radius:16px;padding:13px;margin-bottom:12px;box-shadow:0 10px 30px rgba(0,0,0,.10);}
 .smarthead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;}
 .smarttitle{font-family:var(--fh);font-size:14px;font-weight:900;}
@@ -335,7 +335,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 @media(max-width:700px){.smartgrid{grid-template-columns:1fr}.smartname{max-width:170px}.smarthead{flex-direction:column}.smartitem{align-items:flex-start}.smartamt{font-size:12px}.smartcta{grid-template-columns:1fr}}
 
 
-/* Predicciones v8.5 Centro de Control */
+/* Proyección v8.6 UX Pro */
 .predbox{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:13px;margin-bottom:12px;}
 .predhero{background:linear-gradient(135deg,rgba(108,99,255,.14),rgba(251,191,36,.06));border:1px solid rgba(108,99,255,.24);border-radius:15px;padding:14px;margin-bottom:12px;}
 .predtitle{font-family:var(--fh);font-size:15px;font-weight:900;margin-bottom:3px;}
@@ -363,10 +363,10 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 @media(max-width:700px){.predgrid{grid-template-columns:1fr}.preditem{align-items:flex-start}.predtag{display:none}.predtwocol{grid-template-columns:1fr}.predscore{align-items:flex-start}.predring{width:52px;height:52px}}
 
 
-/* Estructura PRO v8.5 Centro de Control */
+/* Estructura PRO v8.6 UX Pro */
 #nav{overflow-x:auto;scrollbar-width:none;}#nav::-webkit-scrollbar{display:none}.ni{min-width:42px;font-size:8px}.ni svg{width:18px;height:18px}.home-lite-note{font-size:11px;color:var(--mu);line-height:1.5;margin:-4px 0 12px}
 
-/* FIX CONTRASTE v8.5 Centro de Control — textos visibles en modo claro sobre tarjetas oscuras */
+/* FIX CONTRASTE v8.6 UX Pro — textos visibles en modo claro sobre tarjetas oscuras */
 .acard,.lc,.ic,.bc{color:#f0f0f5!important;}
 .acard *, .lc *, .ic *, .bc *{text-shadow:0 1px 2px rgba(0,0,0,.18);}
 .acard [style*="opacity:.4"], .lc [style*="opacity:.4"], .ic [style*="opacity:.4"]{opacity:.78!important;}
@@ -375,7 +375,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .acard [style*="rgba(255,255,255,.4)"], .lc [style*="rgba(255,255,255,.4)"], .ic [style*="rgba(255,255,255,.4)"]{color:rgba(255,255,255,.80)!important;}
 #l-mon,#l-cnt,#pat-c{color:#f0f0f5!important;}
 
-/* Orden inteligente v8.5 Centro de Control */
+/* Orden inteligente v8.6 UX Pro */
 .sortbar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--sf);border:1px solid var(--bd);border-radius:13px;padding:9px 10px;margin:-4px 0 12px;}
 .sortbar-label{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:1px;font-weight:900;white-space:nowrap;}
 .sortbar select{flex:1;min-width:0;background:var(--sf2);border:1px solid var(--bd);border-radius:10px;color:var(--tx);font-family:var(--fb);font-size:12px;font-weight:800;padding:8px 10px;outline:none;}
@@ -383,7 +383,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 @media(max-width:520px){.sortbar{align-items:stretch;flex-direction:column;gap:6px}.sortbar select{width:100%}}
 
 
-/* FILTRO POR CUENTA EN MOVIMIENTOS v8.5 Centro de Control */
+/* FILTRO POR CUENTA EN MOVIMIENTOS v8.6 UX Pro */
 .movacc-filter{background:var(--sf);border:1px solid var(--bd);border-radius:13px;padding:9px 10px;margin:-2px 0 11px;}
 .movacc-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
 .movacc-title{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:1px;font-weight:900;}
@@ -411,8 +411,8 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .acc-movs-btn{flex:1;padding:6px;border-radius:7px;background:rgba(108,99,255,.22);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:10px;font-weight:800;cursor:pointer;}
 @media(max-width:520px){.movacc-filter{padding:8px}.movacc-chips{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.movchip{font-size:9px;padding:6px 7px;min-height:36px}.movchip .dot{width:8px;height:8px}}
 
-/* FIX MOVIMIENTOS MÓVIL v8.5 Centro de Control */
-/* FIX CRÉDITOS v8.5 Centro de Control — cálculo quincenal real: día de pago + 15 días dentro del mes */
+/* FIX MOVIMIENTOS MÓVIL v8.6 UX Pro */
+/* FIX CRÉDITOS v8.6 UX Pro — cálculo quincenal real: día de pago + 15 días dentro del mes */
 #txl{display:block!important;min-height:80px;position:relative;z-index:1;}
 #txl .ti{display:flex!important;visibility:visible!important;opacity:1!important;color:var(--tx)!important;}
 #txl .tgd{display:block!important;visibility:visible!important;opacity:1!important;}
@@ -420,13 +420,13 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 [data-theme="light"] #txl .tin{color:#0a0a0f!important;}
 [data-theme="light"] #txl .tis{color:#6b6b80!important;}
 
-/* VOUCHER/TICKET PRO v8.5 Centro de Control */
+/* VOUCHER/TICKET PRO v8.6 UX Pro */
 .ticket-pill{display:inline-flex;align-items:center;gap:4px;margin-top:3px;padding:3px 7px;border-radius:999px;background:rgba(108,99,255,.10);border:1px solid rgba(108,99,255,.30);color:var(--ac);font-size:9px;font-weight:900;cursor:pointer;}
 .receipt-img{width:100%;max-height:70vh;object-fit:contain;border-radius:14px;border:1px solid var(--bd);background:var(--sf2);}
 .inst-hint{font-size:10px;color:var(--mu);line-height:1.45;margin-top:6px}
 
 
-/* TICKET EN FORMULARIO v8.5 Centro de Control */
+/* TICKET EN FORMULARIO v8.6 UX Pro */
 .tx-ticket-box{background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(167,139,250,.045));border:1px solid rgba(108,99,255,.20);border-radius:14px;padding:10px;margin-bottom:12px;}
 .tx-ticket-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
 .tx-ticket-title{font-size:10px;color:var(--mu);font-weight:900;text-transform:uppercase;letter-spacing:.8px;}
@@ -452,7 +452,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 
 
-/* APP BANCARIA v8.5 Centro de Control — estilo Nubank/Revolut, menos scroll */
+/* APP BANCARIA v8.6 UX Pro — estilo Nubank/Revolut, menos scroll */
 .bank-form-v77{max-height:92vh;padding:14px 14px calc(14px + var(--sb));background:linear-gradient(180deg,var(--sf),var(--bg));}
 .bank-form-v77 .mh{margin-bottom:10px;}
 .bank-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;}
@@ -510,7 +510,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 
 
-/* POLISHED BANKING v8.5 Centro de Control — corrección visual: alineación, menos aire y sin chips cortados */
+/* POLISHED BANKING v8.6 UX Pro — corrección visual: alineación, menos aire y sin chips cortados */
 .bank-form-v77{
   max-height:94vh!important;
   padding:12px 14px calc(14px + var(--sb))!important;
@@ -671,6 +671,64 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 @media(max-width:760px){.home-control,.home-alerts-wrap{grid-template-columns:1fr}.home-actions{grid-template-columns:1fr 1fr}.home-hero-amount{font-size:32px}}
 @media(max-width:420px){.home-actions{grid-template-columns:1fr 1fr}.home-action{min-height:66px}.home-hero{padding:15px}.home-hero-amount{font-size:29px}}
 
+
+
+/* =========================
+   UX PRO v8.6 — navegación simple, home priorizado y captura inteligente
+========================= */
+#nav{height:calc(62px + var(--sb));padding-top:7px;overflow:visible!important;box-shadow:0 -10px 30px rgba(0,0,0,.18);}
+#nav .ni{min-width:58px;font-size:9px;gap:4px;border-radius:14px;padding:5px 7px;}
+#nav .ni svg{width:20px;height:20px;}
+#nav .ni.on{background:rgba(108,99,255,.12);}
+#nav .ni-scan{margin-top:-20px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff!important;min-width:64px;min-height:58px;border-radius:20px;box-shadow:0 10px 28px rgba(108,99,255,.38);}
+#nav .ni-scan.on{background:linear-gradient(135deg,var(--ac),var(--ac2));}
+#fab{display:none!important;}
+#sc{padding-bottom:calc(78px + var(--sb));}
+.home-control{grid-template-columns:1.25fr .75fr;align-items:stretch;}
+.home-hero{border-radius:24px;padding:20px;background:radial-gradient(circle at 20% 0%,rgba(255,255,255,.18),transparent 30%),linear-gradient(135deg,#5f57ff,#8b6cff 62%,#2d2d63);}
+.home-hero-k{font-size:10px;}
+.home-hero-amount{font-size:42px;}
+.home-metrics{grid-template-columns:repeat(3,1fr);}
+.home-metrics .home-metric:nth-child(3){display:block!important;}
+.home-side{gap:10px;}
+.home-mini{border-radius:18px;min-height:92px;}
+.home-actions{grid-template-columns:repeat(4,1fr);}
+.home-action{border-radius:18px;min-height:82px;background:linear-gradient(180deg,var(--sf),rgba(108,99,255,.035));}
+.home-action .ico{font-size:18px;}
+.home-alert-card{border-radius:20px;}
+.quick-capture-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.quick-capture-card{min-height:116px;text-align:left;padding:14px;border-radius:18px;border:1px solid var(--bd);background:var(--sf2);color:var(--tx);cursor:pointer;display:flex;flex-direction:column;gap:5px;font-family:var(--fb);}
+.quick-capture-card.primary{background:linear-gradient(135deg,rgba(108,99,255,.22),rgba(167,139,250,.10));border-color:rgba(108,99,255,.35);}
+.quick-capture-card .qico{width:34px;height:34px;border-radius:12px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:3px;}
+.quick-capture-card b{font-size:14px;font-family:var(--fh);}
+.quick-capture-card small{font-size:10px;color:var(--mu);line-height:1.35;}
+.movacc-filter{padding:8px;border-radius:16px;}
+.movacc-chips{grid-template-columns:repeat(auto-fit,minmax(92px,1fr));}
+.movchip{min-height:34px;border-radius:999px;}
+.day-summary{border-radius:16px;}
+.ti{border-radius:16px;margin-bottom:6px;padding:11px 12px;}
+.tic{border-radius:12px;}
+.bank-form-v77{border-radius:24px 24px 0 0!important;}
+.aihub{border-radius:22px;}
+.aichat.compact{border-radius:18px;}
+.profile-actions-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+.profile-action{border-radius:16px;}
+@media(max-width:760px){
+  .home-control,.home-alerts-wrap{grid-template-columns:1fr;}
+  .home-hero-amount{font-size:35px;}
+  .home-metrics{grid-template-columns:repeat(3,1fr);gap:6px;}
+  .home-actions{grid-template-columns:1fr 1fr;}
+  .quick-capture-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:420px){
+  #nav .ni{min-width:52px;font-size:8px;}
+  #nav .ni-scan{min-width:58px;}
+  .home-hero{padding:16px;}
+  .home-hero-amount{font-size:31px;}
+  .home-metric .val{font-size:12px;}
+  .quick-capture-card{min-height:104px;padding:12px;}
+}
+
 </style>
 </head>
 <body>
@@ -699,23 +757,24 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- HOME -->
 <div id="s-home" class="scr on">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v8.5 Centro de Control</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v8.6 UX Pro</div></div>
     <div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-transfer')" style="background:rgba(34,211,160,.12);border-color:rgba(34,211,160,.45);color:var(--gn)">⇄ Transferir</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div>
   </div>
 
   <div class="home-control">
     <div class="home-hero">
-      <div class="home-hero-k">Disponible estimado del período</div>
+      <div class="home-hero-k">Dinero disponible</div>
       <div class="home-hero-amount" id="b-tot">$0.00</div>
-      <div class="home-hero-sub" id="home-main-sub">Balance entre ingresos y gastos del período seleccionado.</div>
+      <div class="home-hero-sub" id="home-main-sub">Saldo real en cuentas de débito, efectivo y ahorro. El crédito se muestra aparte.</div>
       <div class="home-metrics">
         <div class="home-metric"><div class="lbl">Ingresos</div><div class="val" id="b-inc" style="color:#4eff9f">$0</div></div>
         <div class="home-metric"><div class="lbl">Gastos</div><div class="val" id="b-exp" style="color:#ffb3c1">$0</div></div>
+        <div class="home-metric"><div class="lbl">Crédito disp.</div><div class="val" id="b-credit" style="color:#d8ccff">$0</div></div>
       </div>
     </div>
     <div class="home-side">
-      <div class="home-mini"><div class="lbl">Este mes</div><div class="val" id="m-cur" style="color:var(--yl)">$0</div><div class="sub" id="m-curn">—</div></div>
-      <div class="home-mini"><div class="lbl">Mes pasado</div><div class="val" id="m-last" style="color:var(--rd)">$0</div><div class="sub" id="m-lastn">—</div></div>
+      <div class="home-mini"><div class="lbl">Gasto este mes</div><div class="val" id="m-cur" style="color:var(--yl)">$0</div><div class="sub" id="m-curn">—</div></div>
+      <div class="home-mini"><div class="lbl">Gasto mes pasado</div><div class="val" id="m-last" style="color:var(--rd)">$0</div><div class="sub" id="m-lastn">—</div></div>
     </div>
   </div>
 
@@ -726,19 +785,19 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
       <div class="home-due-list" id="home-due-list"></div>
     </div>
     <div class="home-alert-card ai">
-      <div class="home-card-title">Diagnóstico financiero</div>
-      <div class="home-card-sub" id="home-ai-summary">Analiza tus pagos próximos, gasto mensual y capacidad disponible.</div>
-      <button class="bp" style="padding:10px;border-radius:11px;font-size:12px" onclick="runHomeDiagnosis()">🧠 Analizar mi situación</button>
+      <div class="home-card-title">Copiloto financiero</div>
+      <div class="home-card-sub" id="home-ai-summary">Detecta alertas, oportunidades y posibles riesgos sin que tengas que buscarlos.</div>
+      <button class="bp" style="padding:10px;border-radius:11px;font-size:12px" onclick="runHomeDiagnosis()">🧠 Ver diagnóstico</button>
       <div class="home-ai-result" id="home-ai-result"></div>
     </div>
   </div>
 
   <div class="home-section-title"><span>Acciones rápidas</span></div>
   <div class="home-actions">
-    <div class="home-action" onclick="om('m-quickadd')"><div class="ico">＋</div><div class="txt">Nuevo registro</div></div>
+    <div class="home-action" onclick="om('m-quickadd')"><div class="ico">＋</div><div class="txt">Registrar</div></div>
     <div class="home-action" onclick="om('m-transfer')"><div class="ico" style="background:rgba(34,211,160,.12);color:var(--gn)">⇄</div><div class="txt">Transferir</div></div>
     <div class="home-action" onclick="nav('mov')"><div class="ico">🧾</div><div class="txt">Movimientos</div></div>
-    <div class="home-action" onclick="nav('pred')"><div class="ico">📈</div><div class="txt">Predicciones</div></div>
+    <div class="home-action" onclick="nav('pred')"><div class="ico">📈</div><div class="txt">Proyección</div></div>
   </div>
 
 <!-- DEBUG PANEL — visible cuando hay error -->
@@ -759,7 +818,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 
 <!-- MOVIMIENTOS -->
 <div id="s-mov" class="scr">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Movimientos</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v8.5 Centro de Control</div></div><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Movimientos</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v8.6 UX Pro</div></div><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div>
   <div class="pb" id="pb-h">
     <button class="pbt on" data-p="month">Este mes</button>
     <button class="pbt" data-p="week">Semana</button>
@@ -779,7 +838,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- SALUD FINANCIERA -->
 <div id="s-health" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Salud financiera</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v8.5 Centro de Control</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Salud financiera</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v8.6 UX Pro</div></div>
     <button class="bsm" onclick="enableFinNotifications()">🔔 Alertas</button>
   </div>
   <div id="smart-panel"></div>
@@ -851,7 +910,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- IA -->
 <div id="s-ai" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">IA Financiero</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v8.5 Centro de Control</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Escanear / IA</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v8.6 UX Pro</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">🧠 Backend IA</button>
   </div>
 
@@ -860,7 +919,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   <div class="aihub">
     <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px">
       <div class="aid" style="background:var(--yl)"></div>
-      <b style="font-family:'Syne',sans-serif;font-size:14px">💬 Registro inteligente</b>
+      <b style="font-family:'Syne',sans-serif;font-size:14px">📷 Captura inteligente</b>
     </div>
     <div class="aistatusline">
       <span>Escribe, dicta o sube un ticket. Si la IA detecta monto y cuenta, registrará el movimiento automáticamente.</span>
@@ -920,7 +979,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <!-- PREDICCIONES -->
 <div id="s-pred" class="scr">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Predicciones</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v8.5 Centro de Control</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Proyección</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v8.6 UX Pro</div></div>
     <button class="bsm" onclick="enableFinNotifications()">🔔 Alertas</button>
   </div>
   <div id="pred-panel"></div>
@@ -968,17 +1027,20 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v8.5 Centro de Control · Firebase + OpenAI/Functions · ticket automático</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v8.6 UX Pro · Firebase + OpenAI/Functions · ticket automático</div>
 </div>
 
 
 <!-- MÁS -->
 <div id="s-more" class="scr">
-  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Más</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v8.5 Centro de Control</div></div></div>
+  <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Más</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v8.6 UX Pro</div></div></div>
   <div class="profile-group">
     <div class="profile-group-title">Módulos adicionales</div>
     <div class="profile-actions-grid">
-      <div class="profile-action" onclick="nav('ai')"><div class="setic">🧠</div><span>IA Financiera</span></div>
+      <div class="profile-action" onclick="nav('ai')"><div class="setic">📷</div><span>Escanear / IA</span></div>
+      <div class="profile-action" onclick="nav('pred')"><div class="setic">📈</div><span>Predicciones</span></div>
+      <div class="profile-action" onclick="nav('loans')"><div class="setic">💳</div><span>Créditos</span></div>
+      <div class="profile-action" onclick="nav('inst')"><div class="setic">🧴</div><span>Instinto</span></div>
       <div class="profile-action" onclick="nav('rec')"><div class="setic">🔄</div><span>Recurrentes</span></div>
       <div class="profile-action" onclick="nav('health')"><div class="setic">🛡️</div><span>Salud financiera</span></div>
       <div class="profile-action" onclick="nav('rep')"><div class="setic">📊</div><span>Reportes</span></div>
@@ -989,7 +1051,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
   <div class="profile-group">
     <div class="profile-group-title">Acciones rápidas</div>
     <div class="profile-actions-grid">
-      <div class="profile-action" onclick="om('m-quickadd')"><div class="setic">＋</div><span>Nuevo registro</span></div>
+      <div class="profile-action" onclick="om('m-quickadd')"><div class="setic">＋</div><span>Registrar</span></div>
       <div class="profile-action" onclick="oNewRec()"><div class="setic">🔄</div><span>Nuevo recurrente</span></div>
       <div class="profile-action" onclick="expExcel()"><div class="setic">📊</div><span>Exportar Excel</span></div>
       <div class="profile-action" onclick="document.getElementById('imp-file').click()"><div class="setic">⬆️</div><span>Importar archivo</span></div>
@@ -1006,10 +1068,8 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <nav id="nav">
   <button class="ni on" data-s="home"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Inicio</button>
   <button class="ni" data-s="mov"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18v2H3V5zm0 6h18v2H3v-2zm0 6h18v2H3v-2z"/></svg>Movs</button>
+  <button class="ni ni-scan" data-s="ai"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 2 7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-1.8a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4z"/></svg>Escanear</button>
   <button class="ni" data-s="accounts"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>Cuentas</button>
-  <button class="ni" data-s="loans"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>Créditos</button>
-  <button class="ni" data-s="pred"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 21h6v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>Pred</button>
-  <button class="ni" data-s="inst"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 2h10v2h-1v3.4c0 .4.1.8.4 1.1l2.9 3.8c.5.7.7 1.5.7 2.3V20c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2v-5.4c0-.8.3-1.6.7-2.3l2.9-3.8c.3-.3.4-.7.4-1.1V4H7V2zm3 2v3.4c0 .9-.3 1.7-.8 2.4L6.3 13.6c-.2.3-.3.6-.3 1V20h12v-5.4c0-.4-.1-.7-.3-1l-2.9-3.8c-.5-.7-.8-1.5-.8-2.4V4h-4z"/></svg>Instinto</button>
   <button class="ni" data-s="more"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>Más</button>
 </nav>
 </div><!-- /app -->
@@ -1019,17 +1079,23 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 <div class="mo" id="m-quickadd" onclick="cox(event,'m-quickadd')">
   <div class="ms">
     <div class="mh"></div>
-    <div class="mt">¿Cómo quieres registrar?</div>
-    <div style="display:grid;grid-template-columns:1fr;gap:9px;margin-bottom:8px">
-      <button class="bp" onclick="cm('m-quickadd');resetTxForm();om('m-add')" style="display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px">
-        ✍️ Registro directo
+    <div class="mt">Registrar movimiento</div>
+    <div class="quick-capture-grid">
+      <button class="quick-capture-card primary" onclick="cm('m-quickadd');document.getElementById('scanf-camera')?.click()">
+        <span class="qico">📷</span><b>Escanear ticket</b><small>La IA lee comercio, monto, fecha y cuenta.</small>
       </button>
-      <button onclick="openQuickAI()" style="width:100%;min-height:52px;padding:13px;border-radius:11px;background:var(--sf2);border:1px solid var(--bd);color:var(--tx);font-family:var(--fh);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
-        🧠 Registrar con IA
+      <button class="quick-capture-card" onclick="cm('m-quickadd');nav('ai');setTimeout(()=>document.getElementById('vbtn')?.click(),250)">
+        <span class="qico">🎤</span><b>Dictar</b><small>Di el movimiento en lenguaje natural.</small>
+      </button>
+      <button class="quick-capture-card" onclick="cm('m-quickadd');resetTxForm();om('m-add')">
+        <span class="qico">✍️</span><b>Manual</b><small>Captura directa con formulario compacto.</small>
+      </button>
+      <button class="quick-capture-card" onclick="cm('m-quickadd');om('m-transfer')">
+        <span class="qico">⇄</span><b>Transferir</b><small>Cuenta, tarjeta o crédito.</small>
       </button>
     </div>
-    <div style="font-size:11px;color:var(--mu);line-height:1.5;text-align:center">
-      Directo es para capturar manualmente. IA es para escribir, dictar o escanear un ticket.
+    <div style="font-size:11px;color:var(--mu);line-height:1.5;text-align:center;margin-top:10px">
+      Para tickets y voz se usa la IA; si detecta cuenta y monto, registra automáticamente.
     </div>
   </div>
 </div>
@@ -1040,7 +1106,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
     <div class="mh"></div>
     <div class="bank-head">
       <div>
-        <div class="bank-kicker">Finanzas v8.5 Centro de Control</div>
+        <div class="bank-kicker">Finanzas v8.6 UX Pro</div>
         <div class="mt bank-title">Nueva transacción</div>
       </div>
       <div class="bank-type-pill">
@@ -1473,6 +1539,7 @@ function afterRealtimeSync(name){
   if(active==='s-mov') rHome();
   if(active==='s-health') renderSmartPanel();
   if(active==='s-pred') rPredictions();
+  if(active==='s-ai') renderAIChat();
 }
 
 function listenMetaArray(name, localKey, fallback=[]){
@@ -1583,6 +1650,7 @@ function nav(s){
   if(s==='health')renderSmartPanel();
   if(s==='rep')rReports();
   if(s==='pred')rPredictions();
+  if(s==='ai')renderAIChat();
   if(s==='accounts'){rAccs();rAccTxList();}
   if(s==='loans')rLoans();
   if(s==='rec')rRecs();
@@ -1612,7 +1680,7 @@ async function attachReceiptToTransaction(txId,dataUrl){
   const path=`users/${UID}/receipts/${txId}.${ext}`;
   const ref=storageRef(STORAGE,path);
   try{
-    await uploadString(ref,dataUrl,'data_url',{contentType:mime,customMetadata:{txId,uid:UID,appVersion:'v8.5 Centro de Control'}});
+    await uploadString(ref,dataUrl,'data_url',{contentType:mime,customMetadata:{txId,uid:UID,appVersion:'v8.6 UX Pro'}});
     const url=await getDownloadURL(ref);
     await updateDoc(firestoreDoc(DB,`users/${UID}/transactions`,txId),{
       receiptImageUrl:url,
@@ -1884,6 +1952,7 @@ function renderAll(){
   const active = document.querySelector('.scr.on')?.id;
   if(active==='s-rep') rReports();
   if(active==='s-pred') rPredictions();
+  if(active==='s-ai') renderAIChat();
   if(active==='s-accounts'){ rAccs(); rAccTxList(); }
   if(active==='s-loans') rLoans();
   if(active==='s-rec') rRecs();
@@ -1953,12 +2022,15 @@ function rHome(){
   const inc=filt.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
   const exp=filt.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
   const bal=inc-exp;
-  document.getElementById('b-tot').textContent=fmt(bal);
-  document.getElementById('b-tot').style.color=bal<0?'#ff8fa3':'#fff';
+  const cashAvailable=accs.filter(a=>a.type!=='credit').reduce((s,a)=>s+Number(a.balance||0),0);
+  const creditAvailable=accs.filter(a=>a.type==='credit').reduce((s,a)=>s+Number(getAv(a)||0),0);
+  document.getElementById('b-tot').textContent=fmt(cashAvailable);
+  document.getElementById('b-tot').style.color=cashAvailable<0?'#ff8fa3':'#fff';
   document.getElementById('b-inc').textContent=fmt(inc);
   document.getElementById('b-exp').textContent=fmt(exp);
+  const bCredit=document.getElementById('b-credit'); if(bCredit)bCredit.textContent=fmt(creditAvailable);
   const hsub=document.getElementById('home-main-sub');
-  if(hsub) hsub.textContent = bal>=0 ? 'Vas positivo en el período seleccionado.' : 'Tus gastos superan tus ingresos en este período.';
+  if(hsub) hsub.textContent = `${bal>=0?'Vas positivo':'Vas negativo'} en el período: ${fmt(bal)}. Crédito disponible: ${fmt(creditAvailable)}.`;
   document.getElementById('txc').textContent=filt.length+' movimientos';
   // Mes comparativo
   const now=new Date(),lm=new Date(now.getFullYear(),now.getMonth()-1,1);
@@ -2211,7 +2283,7 @@ function projectedMonthExpense(){
   return spent/day*dim;
 }
 
-// ═══ AUTOMATIZACIÓN INTELIGENTE v8.5 Centro de Control ═══
+// ═══ AUTOMATIZACIÓN INTELIGENTE v8.6 UX Pro ═══
 let smartAutomationTimer=null;
 function startSmartAutomation(){
   if(smartAutomationTimer)clearInterval(smartAutomationTimer);
@@ -2232,7 +2304,7 @@ function smartDailyCoach(due){
   const key='fp_smartcoach_'+today();
   if(localStorage.getItem(key))return;
   const total=due.reduce((s,x)=>s+Number(x.amount||0),0);
-  addAIChat?.('b',`Recordatorio inteligente v8.5 Centro de Control: tienes ${due.length} compromiso(s) próximos por ${fmt(total)}. Conviene confirmar si ya se cargaron o reservar ese monto antes de nuevos gastos.`);
+  addAIChat?.('b',`Recordatorio inteligente v8.6 UX Pro: tienes ${due.length} compromiso(s) próximos por ${fmt(total)}. Conviene confirmar si ya se cargaron o reservar ese monto antes de nuevos gastos.`);
   localStorage.setItem(key,'1');
 }
 function openAICoachPrompt(){
@@ -2264,7 +2336,7 @@ function runHomeDiagnosis(){
     `<br>${esc(d.advice)}`
   ];
   if(result){result.innerHTML=lines.join('<br>');result.classList.add('on');}
-  addAIChat?.('b',`Diagnóstico financiero: ${d.level}. Disponible ${fmt(d.cash)}; compromisos próximos ${fmt(d.totalDue)}; libre estimado ${fmt(d.freeAfter)}. ${d.advice}`);
+  addAIChat?.('b',`Copiloto financiero: ${d.level}. Disponible ${fmt(d.cash)}; compromisos próximos ${fmt(d.totalDue)}; libre estimado ${fmt(d.freeAfter)}. ${d.advice}`);
   toast('Diagnóstico actualizado','s');
 }
 function renderAutomationPanel(){
@@ -2415,8 +2487,8 @@ function rPredictions(){
   const warnCount=top.filter(i=>i.level==='warn').length;
   el.innerHTML=`<div class="predhero">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
-      <div><div class="predtitle">📈 Predicciones financieras PRO</div><div class="predsub">Futuro y tendencias: anticipa riesgos, detecta categorías aceleradas y decide antes de que el gasto te alcance.</div></div>
-      <span class="predtag" style="color:var(--ac);border-color:rgba(108,99,255,.35)">v8.5 Centro de Control</span>
+      <div><div class="predtitle">📈 Proyección financieras PRO</div><div class="predsub">Futuro y tendencias: anticipa riesgos, detecta categorías aceleradas y decide antes de que el gasto te alcance.</div></div>
+      <span class="predtag" style="color:var(--ac);border-color:rgba(108,99,255,.35)">v8.6 UX Pro</span>
     </div>
     <div class="predscore"><div class="predring" style="--score:${score}"><span>${score}</span></div><div><div style="font-family:var(--fh);font-weight:900;color:${scoreInfo.color}">${scoreInfo.txt}</div><div class="predsub">${esc(scoreInfo.msg)}</div></div></div>
     <div class="predgrid"><div class="predmetric"><div class="lbl">Riesgos</div><div class="val" style="color:${riskCount?'var(--rd)':'var(--gn)'}">${riskCount}</div><div class="predmeta">Alertas de alto impacto.</div></div><div class="predmetric"><div class="lbl">Focos amarillos</div><div class="val" style="color:${warnCount?'var(--yl)':'var(--gn)'}">${warnCount}</div><div class="predmeta">Tendencias a vigilar.</div></div><div class="predmetric"><div class="lbl">Gasto estimado</div><div class="val" style="color:var(--yl)">${fmt(p.projected||0)}</div><div class="predmeta">Cierre de mes al ritmo actual.</div></div></div>
@@ -3004,7 +3076,7 @@ async function saveCatsL(){await saveMetaArray('cats','fp_cats3',cats);}
 function rCatGrid(){
   const el=document.getElementById('cg-main');if(!el)return;
   el.innerHTML=cats.map(c=>{const ico=c.idata?`<img src="${c.idata}"/>`:c.icon||'📌';return`<div class="co${sCat===c.id?' sel':''}" onclick="selCat('${c.id}')"><div class="coi">${ico}</div><span>${esc(c.name)}</span></div>`;}).join('');
-  // v8.5 Centro de Control: evita que la categoría quede cortada al abrir o editar.
+  // v8.6 UX Pro: evita que la categoría quede cortada al abrir o editar.
   setTimeout(()=>{
     const selected=el.querySelector('.co.sel');
     if(selected){ selected.scrollIntoView({behavior:'auto',block:'nearest',inline:'center'}); }
@@ -3327,7 +3399,7 @@ function sType(t){curT=t;document.getElementById('btn-e').className='tb'+(t==='e
 function resetTxForm(){editingTxId=null;['ai-amt','ai-desc','ai-note'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('ai-date').value=today();document.getElementById('ai-time').value=nowMexicoTime();sCat='';sAcc='';const as=document.getElementById('acc-search-tx');if(as)as.value='';curT='expense';sType('expense');rCatGrid();rChips('acs-tx','tx');const title=document.querySelector('#m-add .mt');if(title)title.textContent='Nueva transacción';const delBtn=document.getElementById('tx-dbtn');if(delBtn)delBtn.style.display='none';const w=document.getElementById('acc-warn');if(w)w.style.display='none';clearPendingReceiptState();renderTxReceiptBox();}
 
 
-// ═══ TICKET EN FORMULARIO v8.5 Centro de Control ═══
+// ═══ TICKET EN FORMULARIO v8.6 UX Pro ═══
 function clearPendingReceiptState(){
   window.__pendingReceiptImage='';
   window.__pendingReceiptImageUrl='';
@@ -3437,7 +3509,7 @@ function categoryFromMerchantRule(merchant){
 }
 
 async function callAIBackend(payload){
-  const finalPayload = {...(payload||{}), accounts:getAIAccounts(), categories:getAICategories(), merchantRules:getMerchantRules(), appVersion:'v8.5 Centro de Control'};
+  const finalPayload = {...(payload||{}), accounts:getAIAccounts(), categories:getAICategories(), merchantRules:getMerchantRules(), appVersion:'v8.6 UX Pro'};
   const res = await fetch(AI_ENDPOINT, {
     method:'POST',
     headers:{'Content-Type':'application/json'},
@@ -3816,7 +3888,7 @@ function renderAIChat(){
   const el=document.getElementById('aichatlog');
   if(!el)return;
   if(!aiChatMessages.length){
-    aiChatMessages=[{role:'b',text:'Hola, soy tu IA financiera v7.9. Puedes escribir, dictar o subir un ticket. Si detecto comercio, monto, categoría y cuenta/tarjeta, lo registro automáticamente y guardo el comprobante.'}];
+    aiChatMessages=[{role:'b',text:'Hola, soy tu copiloto financiero. Puedes escanear un ticket, dictar o escribir un movimiento. Si detecto comercio, monto, categoría y cuenta/tarjeta, lo registro automáticamente y guardo el comprobante.'}];
   }
   el.innerHTML=aiChatMessages.map(m=>`<div class="aibub ${m.role==='u'?'u':'b'}">${esc(m.text)}</div>`).join('');
   el.scrollTop=el.scrollHeight;
@@ -4050,7 +4122,7 @@ function openOrder(kind='accounts'){ordKind=kind;document.getElementById('ord-ti
 function rOrder(){const el=document.getElementById('ord-list');if(!el)return;const arr=getOrderArray(ordKind);if(!arr.length){el.innerHTML='<div class="es">Sin elementos para ordenar</div>';return;}el.innerHTML=arr.map((it,i)=>`<div style="display:flex;align-items:center;gap:8px;background:var(--sf2);border:1px solid var(--bd);border-radius:10px;padding:10px;margin-bottom:7px"><span style="font-size:11px;color:var(--mu);width:20px">${i+1}</span><span style="flex:1;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(itemOrderName(ordKind,it))}</span><button class="order-item-btn" onclick="moveOrder('${ordKind}','${it.id}',-1)" ${i===0?'disabled':''}>↑</button><button class="order-item-btn" onclick="moveOrder('${ordKind}','${it.id}',1)" ${i===arr.length-1?'disabled':''}>↓</button></div>`).join('');}
 async function moveOrder(kind,id,dir){const arr=getOrderArray(kind);const i=arr.findIndex(x=>x.id===id);if(i<0)return;const j=i+dir;if(j<0||j>=arr.length)return;[arr[i],arr[j]]=[arr[j],arr[i]];await saveOrderArray(kind);rOrder();renderAll();rChips('acs-tx','tx');}
 
-// ═══ ORDEN INTELIGENTE v8.5 Centro de Control ═══
+// ═══ ORDEN INTELIGENTE v8.6 UX Pro ═══
 let sortModes = JSON.parse(localStorage.getItem('fp_sort_modes_v62')||'{}');
 function getSortMode(kind){return sortModes[kind]||'manual';}
 function setSortMode(kind,mode){sortModes[kind]=mode||'manual';localStorage.setItem('fp_sort_modes_v62',JSON.stringify(sortModes));syncSortSelect(kind);renderByKind(kind);toast('Vista ordenada: '+getSortLabel(kind,mode),'s');}
@@ -4385,7 +4457,7 @@ function cox(e,id){
 
 // ═══ ESTADO BACKEND IA ═══
 function getAIKey(){ return ''; }
-function saveAIKey(){ toast('La v8.5 Centro de Control usa Firebase Functions; no pegues API key en el navegador','s'); }
+function saveAIKey(){ toast('La v8.6 UX Pro usa Firebase Functions; no pegues API key en el navegador','s'); }
 function updateAIKeyStatus(){
   const el = document.getElementById('ai-key-status');
   if(!el) return;
