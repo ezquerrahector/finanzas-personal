@@ -933,7 +933,7 @@ html,body{letter-spacing:-.01em;background:var(--bg);}
         <div class="apple-kicker">Hoy</div>
         <div class="apple-focus-title">Tu panorama financiero</div>
       </div>
-      <button class="apple-link" onclick="runHomeDiagnosis()">Ver diagnóstico</button>
+      <button class="apple-link diag-trigger" onclick="runHomeDiagnosis()">Ver diagnóstico</button>
     </div>
     <div class="apple-focus-grid">
       <div class="apple-focus-item"><span>Liquidez</span><b id="apple-liquidity">$0</b><small id="apple-liquidity-sub">Disponible real</small></div>
@@ -951,7 +951,7 @@ html,body{letter-spacing:-.01em;background:var(--bg);}
     <div class="home-alert-card ai">
       <div class="home-card-title">Copiloto financiero</div>
       <div class="home-card-sub" id="home-ai-summary">Detecta alertas, oportunidades y posibles riesgos sin que tengas que buscarlos.</div>
-      <button class="bp" style="padding:10px;border-radius:11px;font-size:12px" onclick="runHomeDiagnosis()">🧠 Ver diagnóstico</button>
+      <button class="bp diag-trigger" style="padding:10px;border-radius:11px;font-size:12px" onclick="runHomeDiagnosis()">🧠 Ver diagnóstico</button>
       <div class="home-ai-result" id="home-ai-result"></div>
     </div>
   </div>
@@ -5012,7 +5012,10 @@ Object.assign(window, {
   setTransferDestType: typeof setTransferDestType!=="undefined" ? setTransferDestType : undefined,
   renderTransferOptions: typeof renderTransferOptions!=="undefined" ? renderTransferOptions : undefined,
   renderTransferPreview: typeof renderTransferPreview!=="undefined" ? renderTransferPreview : undefined,
-  saveTransfer: typeof saveTransfer!=="undefined" ? saveTransfer : undefined
+  saveTransfer: typeof saveTransfer!=="undefined" ? saveTransfer : undefined,
+  buildHomeDiagnosis: typeof buildHomeDiagnosis!=="undefined" ? buildHomeDiagnosis : undefined,
+  runHomeDiagnosis: typeof runHomeDiagnosis!=="undefined" ? runHomeDiagnosis : undefined,
+  closeDiagnosis: typeof closeDiagnosis!=="undefined" ? closeDiagnosis : undefined
 });
 
 // Delegación de clics — respaldo para edición de transacciones en navegador móvil/escritorio.
@@ -5046,4 +5049,14 @@ document.addEventListener('click', (ev)=>{
     if(id && typeof omitRecCharge === 'function') omitRecCharge(id);
   }
 }, true);
+
+// Respaldo adicional: si el onclick inline no ejecuta por alcance del módulo, este listener abre el diagnóstico.
+document.addEventListener('click', (ev)=>{
+  const btn = ev.target.closest?.('.diag-trigger');
+  if(!btn) return;
+  ev.preventDefault();
+  ev.stopPropagation();
+  if(typeof runHomeDiagnosis === 'function') runHomeDiagnosis();
+}, true);
+
 </script>
