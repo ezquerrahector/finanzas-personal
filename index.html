@@ -1628,20 +1628,34 @@ html,body{background:radial-gradient(circle at 18% -10%,rgba(124,92,255,.12),tra
     <div id="ip-sum" class="inst-summary" aria-readonly="true" tabindex="-1"></div>
     <div class="fg"><label class="fl">Monto recibido ($)</label><input class="fi" id="ip-amt" type="number" inputmode="decimal" placeholder="0.00" autocomplete="off"/></div>
     <div class="fg"><label class="fl">Fecha del pago</label><input class="fi" id="ip-dt" type="date"/></div>
+
     <div class="fg">
-      <label class="fl">Se depositó en (cuenta)</label>
+      <label class="fl">¿De dónde salió el recurso?</label>
       <div class="accpay-wrap">
-        <div class="accpay-top"><div class="accpay-title">Cuenta original del préstamo</div><div class="accpay-count" id="acs-ipay-count">0 disponibles</div></div>
+        <div class="accpay-top"><div class="accpay-title">Cuenta origen del dinero</div><div class="accpay-count" id="acs-ipaysrc-count">0 disponibles</div></div>
         <div class="accpay-search">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99 1.49-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-          <input id="acc-search-ipay" placeholder="Cuenta original del préstamo…" oninput="rChips('acs-ipay','ipay')"/>
+          <input id="acc-search-ipaysrc" placeholder="Efectivo, cuenta o tarjeta de origen…" oninput="rChips('acs-ipaysrc','ipaysrc')"/>
+        </div>
+        <div class="acs pro" id="acs-ipaysrc"></div>
+      </div>
+      <div class="inst-hint">Se descontará automáticamente de esta cuenta para que tu balance no se infle.</div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">¿Dónde quedó depositado?</label>
+      <div class="accpay-wrap">
+        <div class="accpay-top"><div class="accpay-title">Cuenta destino del abono</div><div class="accpay-count" id="acs-ipay-count">0 disponibles</div></div>
+        <div class="accpay-search">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99 1.49-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <input id="acc-search-ipay" placeholder="Cuenta donde quedó el dinero…" oninput="rChips('acs-ipay','ipay')"/>
         </div>
         <div class="acs pro" id="acs-ipay"></div>
       </div>
-      <div class="inst-hint">El abono se registrará automáticamente en la cuenta original del préstamo para mantener consistencia.</div>
+      <div class="inst-hint">Se generará un ingreso en esta cuenta y se reducirá el pendiente del préstamo.</div>
     </div>
     <div class="fg"><label class="fl">Nota opcional</label><textarea class="fta" id="ip-note" rows="2" placeholder="Escribe una nota si quieres, por ejemplo: venta perfume X" autocomplete="off"></textarea></div>
-    <button class="bp" onclick="saveInstPay()">Registrar abono</button>
+    <button class="bp" onclick="saveInstPay()">Registrar abono balanceado</button>
   </div>
 </div>
 
@@ -1786,7 +1800,7 @@ let txs=[],accs=[],loans=[],recs=[],insts=[],cats=[];
 let curP='month',repP='month';
 let curT='expense';
 let editingTxId=null;
-let sCat='',sAcc='',sRecA='',sInstA='',sIPA='';
+let sCat='',sAcc='',sRecA='',sInstA='',sIPA='',sIPSrc='';
 let nAT='debit',nLT='mortgage';
 let dChart=null,bChart=null;
 let voiceP=null,scanP=null,notesP=[];
@@ -3015,6 +3029,7 @@ async function reorderAccountByDrop(fromId,toId){
   rChips('acs-rec','rec');
   rChips('acs-inst','inst');
   rChips('acs-ipay','ipay');
+  rChips('acs-ipaysrc','ipaysrc');
   toast('✓ Orden de cuentas actualizado','s');
 }
 
@@ -3357,7 +3372,7 @@ function rRecs(){
 function isInstintoPaymentTx(t,id){
   if(!t)return false;
   const sameId = id ? String(t.instintoId||t.linkedLoanId||'')===String(id) : true;
-  const marked = t.instintoPayment===true || t.source==='ai_instinto_payment' || String(t.desc||t.description||'').toLowerCase().includes('abono instinto');
+  const marked = t.instintoPayment===true || t.source==='ai_instinto_payment' || (String(t.type||'')==='income' && String(t.desc||t.description||'').toLowerCase().includes('abono instinto'));
   return sameId && marked && t.type==='income';
 }
 function getInstintoPayments(id){
@@ -3382,14 +3397,17 @@ async function deleteInstintoPaymentTx(txId,instId){
   const tx=(txs||[]).find(t=>String(t.id)===String(txId));
   if(!tx){toast('No encontré el abono en Movimientos','e');return;}
   if(!isInstintoPaymentTx(tx,instId)){toast('Este registro no parece ser abono de Instinto','e');return;}
-  if(!confirm('¿Eliminar este abono de Instinto? También se eliminará de Movimientos y se ajustará el saldo de la cuenta.'))return;
+  if(!confirm('¿Eliminar este abono de Instinto? También se eliminará de Movimientos y se ajustarán las cuentas origen/destino.'))return;
   try{
-    reverseTxBalance(tx);
+    const pairId=tx.instintoPairId||tx.transferPairId||'';
+    const pair=(pairId?(txs||[]).filter(x=>String(x.instintoPairId||x.transferPairId||'')===String(pairId)):[tx]);
+    const unique=[...new Map(pair.map(x=>[String(x.id),x])).values()];
+    for(const item of unique){ reverseTxBalance(item); }
     await saveAccsL();
-    await deleteDoc(firestoreDoc(DB,`users/${UID}/transactions`,txId));
+    for(const item of unique){ await deleteDoc(firestoreDoc(DB,`users/${UID}/transactions`,item.id)); }
     rInsts();
     rHome();
-    toast('✓ Abono eliminado y sincronizado','s');
+    toast('✓ Abono balanceado eliminado y sincronizado','s');
   }catch(e){
     console.error('Error eliminando abono Instinto:',e);
     toast('No pude eliminar el abono: '+(e.message||e),'e');
@@ -3432,14 +3450,19 @@ function oInstPay(id){
   const noteEl=document.getElementById('ip-note');
   if(amtEl)amtEl.value='';
   if(noteEl){noteEl.value='';noteEl.removeAttribute('value');}
-  const search=document.getElementById('acc-search-ipay');
-  if(search)search.value='';
-  sIPA=it.accountId||'';
+  const searchDest=document.getElementById('acc-search-ipay');
+  const searchSrc=document.getElementById('acc-search-ipaysrc');
+  if(searchDest)searchDest.value='';
+  if(searchSrc)searchSrc.value='';
+  sIPA=it.depositAccountId||it.accountId||'';
+  sIPSrc='';
   const p=getInstintoPending(it);
+  const original=accs.find(a=>a.id===it.accountId);
   const sum=document.getElementById('ip-sum');
   if(sum){
-    sum.innerHTML=`<div class="inst-summary-title">Resumen del préstamo</div><div class="inst-summary-main">${esc(it.desc||'Préstamo a Instinto')}</div><div class="inst-summary-meta">Total: <b>${fmt(it.amount)}</b> · Pendiente: <b>${fmt(p)}</b></div>`;
+    sum.innerHTML=`<div class="inst-summary-title">Resumen del préstamo</div><div class="inst-summary-main">${esc(it.desc||'Préstamo a Instinto')}</div><div class="inst-summary-meta">Total: <b>${fmt(it.amount)}</b> · Pendiente: <b>${fmt(p)}</b>${original?' · Cuenta original: <b>'+esc(original.name)+'</b>':''}</div>`;
   }
+  rChips('acs-ipaysrc','ipaysrc');
   rChips('acs-ipay','ipay');
   om('m-ipay');
   setTimeout(()=>{document.getElementById('ip-amt')?.focus();},120);
@@ -3455,58 +3478,100 @@ async function saveInstPay(){
 
   if(i<0){toast('No encontré el préstamo de Instinto','e');return;}
   if(!amt||amt<=0){toast('Ingresa monto','e');return;}
+  if(!sIPSrc){toast('Selecciona de dónde salió el recurso','e');return;}
+  if(!sIPA){toast('Selecciona dónde quedó depositado el abono','e');return;}
+  if(String(sIPSrc)===String(sIPA)){toast('La cuenta origen y destino no deben ser la misma para un abono balanceado','e');return;}
 
   const inst=insts[i];
-  const targetAccountId=inst.accountId||sIPA;
-  if(!targetAccountId){toast('Este préstamo no tiene cuenta original. Edita el préstamo y selecciona la cuenta usada.','e');return;}
-  const acc=accs.find(a=>a.id===targetAccountId);
+  const sourceAcc=accs.find(a=>a.id===sIPSrc);
+  const destAcc=accs.find(a=>a.id===sIPA);
+  if(!sourceAcc){toast('No encontré la cuenta origen','e');return;}
+  if(!destAcc){toast('No encontré la cuenta destino','e');return;}
+
   const p=getInstintoPending(inst);
   const paidAmount=Math.min(amt,p || amt);
+  const pairId='instpay_'+Date.now();
 
-  const cat=cats.find(c=>normTxText(c.name)==='ingreso')
+  const incomeCat=cats.find(c=>normTxText(c.name)==='ingreso')
     || cats.find(c=>c.id==='salary')
     || cats.find(c=>c.id==='other')
     || {id:'other',name:'Otro',icon:'📌',color:'#9ca3af'};
+  const expenseCat=cats.find(c=>normTxText(c.name)==='transferencia')
+    || cats.find(c=>normTxText(c.name)==='instinto')
+    || cats.find(c=>c.id==='other')
+    || {id:'other',name:'Otro',icon:'📌',color:'#9ca3af'};
 
-  const tx={
+  const baseDesc=inst.desc||'Préstamo';
+  const sourceTx={
     amount:paidAmount,
-    desc:'Abono Instinto · '+(inst.desc||'Préstamo'),
-    description:'Abono Instinto · '+(inst.desc||'Préstamo'),
+    desc:'Salida recurso Instinto · '+baseDesc,
+    description:'Salida recurso Instinto · '+baseDesc,
     date,
     time:nowMexicoTime(),
-    cat:cat.id,
-    note:note ? ('Abono recibido de Instinto · '+note) : 'Abono recibido de Instinto',
-    type:'income',
-    catIcon:cat.idata||cat.icon||'💰',
-    catName:cat.name||'Ingreso',
-    accountId:targetAccountId,
-    accountName:acc?.name||'',
-    accountColor:acc?.color||'',
+    cat:expenseCat.id,
+    note:[`Recurso usado para abono de Instinto hacia ${destAcc.name}`,note].filter(Boolean).join(' · '),
+    type:'expense',
+    catIcon:expenseCat.idata||expenseCat.icon||'📌',
+    catName:expenseCat.name||'Otro',
+    accountId:sIPSrc,
+    accountName:sourceAcc?.name||'',
+    accountColor:sourceAcc?.color||'',
     instintoId:id,
     linkedLoanId:id,
-    instintoPayment:true,
+    instintoFunding:true,
+    instintoPairId:pairId,
+    transferPairId:pairId,
+    source:'instinto_payment_source',
     createdAt:new Date().toISOString(),
     updatedAt:new Date().toISOString()
   };
 
-  if(isDuplicateTransaction(tx)){
+  const incomeTx={
+    amount:paidAmount,
+    desc:'Abono Instinto · '+baseDesc,
+    description:'Abono Instinto · '+baseDesc,
+    date,
+    time:nowMexicoTime(),
+    cat:incomeCat.id,
+    note:[`Abono recibido de Instinto desde ${sourceAcc.name}`,note].filter(Boolean).join(' · '),
+    type:'income',
+    catIcon:incomeCat.idata||incomeCat.icon||'💰',
+    catName:incomeCat.name||'Ingreso',
+    accountId:sIPA,
+    accountName:destAcc?.name||'',
+    accountColor:destAcc?.color||'',
+    instintoId:id,
+    linkedLoanId:id,
+    instintoPayment:true,
+    instintoSourceAccountId:sIPSrc,
+    instintoPairId:pairId,
+    transferPairId:pairId,
+    source:'instinto_payment_deposit',
+    createdAt:new Date().toISOString(),
+    updatedAt:new Date().toISOString()
+  };
+
+  if(isDuplicateTransaction(incomeTx)){
     toast('Este abono ya parece estar registrado como movimiento','e');
     return;
   }
 
   try{
-    await addDoc(collection(DB,`users/${UID}/transactions`),tx);
-    applyTxBalance(tx);
+    await addDoc(collection(DB,`users/${UID}/transactions`),sourceTx);
+    await addDoc(collection(DB,`users/${UID}/transactions`),incomeTx);
+    applyTxBalance(sourceTx);
+    applyTxBalance(incomeTx);
     await saveAccsL();
     rInsts();
     rHome();
     cm('m-ipay');
-    toast(`✓ Abono ${fmt(paidAmount)} registrado como ingreso`,'s');
+    toast(`✓ Abono balanceado: ${fmt(paidAmount)} de ${sourceAcc.name} a ${destAcc.name}`,'s');
   }catch(e){
     console.error(e);
     toast('Error al registrar abono Instinto: '+(e.message||e),'e');
   }
 }
+
 function rInsts(){
   const el=document.getElementById('inst-list');if(!el)return;
   const tot=insts.reduce((s,i)=>s+getInstintoPending(i),0);
@@ -3619,7 +3684,7 @@ function accTypeLabel(a){
 }
 function rChips(cid,ctx){
   const el=document.getElementById(cid);if(!el)return;
-  const sel=ctx==='tx'?sAcc:ctx==='rec'?sRecA:ctx==='inst'?sInstA:sIPA;
+  const sel=ctx==='tx'?sAcc:ctx==='rec'?sRecA:ctx==='inst'?sInstA:(ctx==='ipaysrc'?sIPSrc:sIPA);
   if(!accs.length){el.innerHTML='<p style="font-size:10px;color:var(--mu)">Sin cuentas registradas</p>';const c=document.getElementById(cid+'-count');if(c)c.textContent='0 disponibles';return;}
   const q=(document.getElementById('acc-search-'+ctx)?.value||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
   const filtered=accs.filter(a=>{
@@ -3630,7 +3695,7 @@ function rChips(cid,ctx){
   const count=document.getElementById(cid+'-count');
   if(count)count.textContent=filtered.length===1?'1 disponible':`${filtered.length} disponibles`;
   if(!filtered.length){el.innerHTML='<div class="accpay-empty">No se encontraron cuentas</div>';return;}
-  const pro=cid==='acs-tx'||cid==='acs-rec'||cid==='acs-inst'||cid==='acs-ipay';
+  const pro=cid==='acs-tx'||cid==='acs-rec'||cid==='acs-inst'||cid==='acs-ipay'||cid==='acs-ipaysrc';
   el.innerHTML=filtered.map(a=>{
     const av=getAv(a);
     const ico=a.idata?`<img src="${a.idata}"/>`:a.icon||'💳';
@@ -3664,7 +3729,7 @@ function chipSelectClick(ev,id,cid,ctx){
 }
 function selAcc(id,cid,ctx){
   if(ctx==='tx'){sAcc=id;const a=accs.find(x=>x.id===id);const amt=parseFloat(document.getElementById('ai-amt')?.value||0);const w=document.getElementById('acc-warn');if(a&&amt>0&&curT==='expense'){const av=getAv(a);if(w)w.style.display=av<amt?'block':'none';}else if(w)w.style.display='none';}
-  else if(ctx==='rec')sRecA=id;else if(ctx==='inst')sInstA=id;else if(ctx==='ipay')sIPA=id;
+  else if(ctx==='rec')sRecA=id;else if(ctx==='inst')sInstA=id;else if(ctx==='ipay')sIPA=id;else if(ctx==='ipaysrc')sIPSrc=id;
   rChips(cid,ctx);
 }
 
@@ -3674,6 +3739,7 @@ function rAccSel(){
   rChips('acs-rec','rec');
   rChips('acs-inst','inst');
   rChips('acs-ipay','ipay');
+  rChips('acs-ipaysrc','ipaysrc');
   renderTransferOptions();
 }
 
@@ -4368,7 +4434,7 @@ Lo registro automáticamente ahora.`);
   }
 }
 let aiChatMessages = [];
-let aiChatStep = 'idle'; // idle | waiting_payment | waiting_confirmation | waiting_instinto_loan | waiting_instinto_amount
+let aiChatStep = 'idle'; // idle | waiting_payment | waiting_confirmation | waiting_instinto_loan | waiting_instinto_amount | waiting_instinto_source
 let pendingInstintoAI = null;
 function renderAIChat(){
   const el=document.getElementById('aichatlog');
@@ -4415,6 +4481,17 @@ function instintoOptionsText(){
   if(!items.length)return 'No tienes préstamos de Instinto con saldo pendiente.';
   return items.slice(0,8).map((i,idx)=>`${idx+1}) ${i.desc||'Préstamo'} — pendiente ${fmt(instintoItemPending(i))}`).join('\n');
 }
+
+function findInstintoSourceAccountFromText(text){
+  const q=aiNorm(text);
+  const sourceMatch=String(text||'').match(/(?:desde|de la cuenta|de mi cuenta|con|usando|tomado de|salio de|salió de|origen)\s+(.{2,80})/i);
+  if(sourceMatch){
+    const acc=detectAccountSmart(sourceMatch[1]);
+    if(acc)return acc;
+  }
+  return detectAccountSmart(text) || null;
+}
+
 function findInstintoItemFromText(text){
   const q=aiNorm(text);
   const items=activeInstintoItems();
@@ -4446,59 +4523,107 @@ async function saveInstPayAI(payload){
   const amt=Number(payload?.amount||0);
   const date=payload?.date||today();
   const note=String(payload?.note||'Abono interpretado por IA').trim();
+  const sourceAccountId=payload?.sourceAccountId || payload?.originAccountId || '';
   const i=insts.findIndex(x=>String(x.id)===String(id));
   if(i<0){addAIChat('b','No encontré el préstamo de Instinto para aplicar el abono.');return false;}
-  if(!amt||amt<=0){addAIChat('b','Me falta el monto del abono. Ejemplo: “Abono a Instinto 500 del préstamo de esencias”.');return false;}
+  if(!amt||amt<=0){addAIChat('b','Me falta el monto del abono. Ejemplo: “Abono a Instinto 500 del préstamo de esencias desde efectivo”.');return false;}
   const inst=insts[i];
-
-  // v9.5: un abono a Instinto NO debe pedir/adivinar cuenta.
-  // La cuenta/tarjeta se toma del préstamo original, porque ahí se originó el préstamo.
-  // Esto evita interpretar una terminación como importe (ej. 4542 => $4,542).
-  const accountId=payload?.accountId || inst.accountId || inst.sourceAccountId || inst.originAccountId || '';
-  if(!accountId){
-    addAIChat('b','Encontré el préstamo, pero ese préstamo no tiene cuenta/tarjeta de origen guardada. Abre el préstamo y asigna la cuenta original para poder registrar el abono sin adivinar.');
+  const destAccountId=payload?.depositAccountId || payload?.accountId || inst.depositAccountId || inst.accountId || '';
+  if(!sourceAccountId){
+    aiChatStep='waiting_instinto_source';
+    pendingInstintoAI={...payload,instintoId:id,amount:amt,date,note};
+    addAIChat('b',`Detecté el abono de Instinto por ${fmt(amt)}, pero necesito saber de dónde salió el recurso. Escríbeme, por ejemplo: “desde efectivo”, “desde BanBajío” o “desde Plata”.
+${accountOptionsText()}`);
+    return false;
+  }
+  if(!destAccountId){
+    addAIChat('b','Encontré el préstamo, pero no tiene cuenta destino/original guardada. Abre el préstamo y asigna la cuenta donde debe reflejarse el abono.');
     aiChatStep='idle';
     pendingInstintoAI=null;
     return false;
   }
-  const acc=accs.find(a=>String(a.id)===String(accountId));
+  if(String(sourceAccountId)===String(destAccountId)){
+    addAIChat('b','La cuenta origen y la cuenta destino son la misma. Para mantener el balance, dime otra cuenta origen o registra sólo un ajuste manual si realmente no hubo movimiento de dinero.');
+    aiChatStep='waiting_instinto_source';
+    pendingInstintoAI={...payload,instintoId:id,amount:amt,date,note,sourceAccountId:''};
+    return false;
+  }
+  const sourceAcc=accs.find(a=>String(a.id)===String(sourceAccountId));
+  const destAcc=accs.find(a=>String(a.id)===String(destAccountId));
+  if(!sourceAcc){addAIChat('b','No encontré la cuenta origen. Escríbeme el nombre como aparece en Cuentas.'); aiChatStep='waiting_instinto_source'; return false;}
+  if(!destAcc){addAIChat('b','No encontré la cuenta destino del abono.'); return false;}
+
   const pending=instintoItemPending(inst);
   const paidAmount=Math.min(amt,pending||amt);
-  const cat=cats.find(c=>aiNorm(c.name)==='ingreso') || cats.find(c=>c.id==='salary') || cats.find(c=>c.id==='other') || {id:'other',name:'Otro',icon:'📌',color:'#9ca3af'};
-  const tx={
+  const pairId='ai_instpay_'+Date.now();
+  const incomeCat=cats.find(c=>aiNorm(c.name)==='ingreso') || cats.find(c=>c.id==='salary') || cats.find(c=>c.id==='other') || {id:'other',name:'Otro',icon:'📌',color:'#9ca3af'};
+  const expenseCat=cats.find(c=>aiNorm(c.name)==='transferencia') || cats.find(c=>aiNorm(c.name)==='instinto') || cats.find(c=>c.id==='other') || {id:'other',name:'Otro',icon:'📌',color:'#9ca3af'};
+  const baseDesc=inst.desc||'Préstamo';
+  const sourceTx={
     amount:paidAmount,
-    desc:'Abono Instinto · '+(inst.desc||'Préstamo'),
-    description:'Abono Instinto · '+(inst.desc||'Préstamo'),
+    desc:'Salida recurso Instinto · '+baseDesc,
+    description:'Salida recurso Instinto · '+baseDesc,
     date,
     time:nowMexicoTime(),
-    cat:cat.id,
-    note:'Abono recibido de Instinto · IA: '+note,
+    cat:expenseCat.id,
+    note:'Recurso usado para abono de Instinto hacia '+destAcc.name+' · IA: '+note,
+    type:'expense',
+    catIcon:expenseCat.idata||expenseCat.icon||'📌',
+    catName:expenseCat.name||'Otro',
+    accountId:sourceAccountId,
+    accountName:sourceAcc?.name||'',
+    accountColor:sourceAcc?.color||'',
+    instintoId:id,
+    linkedLoanId:id,
+    instintoFunding:true,
+    instintoPairId:pairId,
+    transferPairId:pairId,
+    source:'ai_instinto_payment_source',
+    createdAt:new Date().toISOString(),
+    updatedAt:new Date().toISOString()
+  };
+  const incomeTx={
+    amount:paidAmount,
+    desc:'Abono Instinto · '+baseDesc,
+    description:'Abono Instinto · '+baseDesc,
+    date,
+    time:nowMexicoTime(),
+    cat:incomeCat.id,
+    note:'Abono recibido de Instinto desde '+sourceAcc.name+' · IA: '+note,
     type:'income',
-    catIcon:cat.idata||cat.icon||'💰',
-    catName:cat.name||'Ingreso',
-    accountId,
-    accountName:acc?.name||'',
-    accountColor:acc?.color||'',
+    catIcon:incomeCat.idata||incomeCat.icon||'💰',
+    catName:incomeCat.name||'Ingreso',
+    accountId:destAccountId,
+    accountName:destAcc?.name||'',
+    accountColor:destAcc?.color||'',
     instintoId:id,
     linkedLoanId:id,
     instintoPayment:true,
+    instintoSourceAccountId:sourceAccountId,
+    instintoPairId:pairId,
+    transferPairId:pairId,
     source:'ai_instinto_payment',
     createdAt:new Date().toISOString(),
     updatedAt:new Date().toISOString()
   };
-  if(isDuplicateTransaction(tx)){
+  if(isDuplicateTransaction(incomeTx)){
     addAIChat('b','Ese abono parece ya estar registrado. No lo dupliqué.');
     return false;
   }
   try{
-    await addDoc(collection(DB,`users/${UID}/transactions`),tx);
-    applyTxBalance(tx);
+    await addDoc(collection(DB,`users/${UID}/transactions`),sourceTx);
+    await addDoc(collection(DB,`users/${UID}/transactions`),incomeTx);
+    applyTxBalance(sourceTx);
+    applyTxBalance(incomeTx);
     await saveAccsL();
     pendingInstintoAI=null;
     aiChatStep='idle';
     renderAll();
-    addAIChat('b',`Listo, registré el abono de Instinto por ${fmt(paidAmount)} en la cuenta original: ${acc?.name||'cuenta del préstamo'} ✅\nPendiente restante: ${fmt(getInstintoPending(insts[i]))}`);
-    toast('✓ Abono Instinto registrado por IA','s');
+    addAIChat('b',`Listo, registré el abono balanceado de Instinto por ${fmt(paidAmount)} ✅
+Origen: ${sourceAcc.name} (-${fmt(paidAmount)})
+Destino: ${destAcc.name} (+${fmt(paidAmount)})
+Pendiente restante: ${fmt(getInstintoPending(insts[i]))}`);
+    toast('✓ Abono Instinto balanceado por IA','s');
     return true;
   }catch(e){
     console.error('AI Instinto payment error:',e);
@@ -4506,18 +4631,19 @@ async function saveInstPayAI(payload){
     return false;
   }
 }
+
 async function handleInstintoPaymentAI(text){
   const amount=aiAmountFromText(text);
   const loan=findInstintoItemFromText(text);
   const active=activeInstintoItems();
   if(!active.length){addAIChat('b','No tienes préstamos de Instinto con saldo pendiente para aplicar un abono.');return true;}
-  pendingInstintoAI={amount,date:today(),note:text,instintoId:loan?.id||''};
+  const sourceAcc=findInstintoSourceAccountFromText(text);
+  pendingInstintoAI={amount,date:today(),note:text,instintoId:loan?.id||'',sourceAccountId:sourceAcc?.id||''};
   if(!amount){aiChatStep='waiting_instinto_amount';addAIChat('b','Detecté que quieres registrar un abono a Instinto, pero me falta el monto. Ejemplo: “500”.');return true;}
   if(!pendingInstintoAI.instintoId){aiChatStep='waiting_instinto_loan';addAIChat('b',`Detecté un abono a Instinto por ${fmt(amount)}. ¿A qué préstamo lo aplico?
-No necesito que me digas la cuenta: usaré automáticamente la cuenta/tarjeta original del préstamo.
+También necesito la cuenta origen del recurso si no la mencionaste.
 ${instintoOptionsText()}`);return true;}
-  const ok=await saveInstPayAI(pendingInstintoAI);
-  if(!ok){aiChatStep='idle'; pendingInstintoAI=null;}
+  await saveInstPayAI(pendingInstintoAI);
   return true;
 }
 function showPendingNotes(){
@@ -4575,7 +4701,7 @@ async function doNotes(){
     pendingInstintoAI.amount=amount;
     const loan=findInstintoItemFromText(t); if(loan){pendingInstintoAI.instintoId=loan.id;}
     if(!pendingInstintoAI.instintoId){aiChatStep='waiting_instinto_loan';addAIChat('b',`Perfecto. ¿A qué préstamo lo aplico?
-No necesito que me digas la cuenta: usaré automáticamente la cuenta/tarjeta original del préstamo.
+También necesito la cuenta origen del recurso si no la mencionaste.
 ${instintoOptionsText()}`);return;}
     await saveInstPayAI(pendingInstintoAI);return;
   }
@@ -4585,6 +4711,14 @@ ${instintoOptionsText()}`);return;}
     if(!loan){addAIChat('b',`No identifiqué el préstamo. No lo voy a adivinar. Responde con el número de la opción o con una palabra del concepto.
 ${instintoOptionsText()}`);return;}
     pendingInstintoAI.instintoId=loan.id;
+    await saveInstPayAI(pendingInstintoAI);return;
+  }
+
+  if(aiChatStep==='waiting_instinto_source' && pendingInstintoAI){
+    const acc=findInstintoSourceAccountFromText(t);
+    if(!acc){addAIChat('b',`No encontré esa cuenta origen. Escríbeme el nombre como aparece en Cuentas.
+${accountOptionsText()}`);return;}
+    pendingInstintoAI.sourceAccountId=acc.id;
     await saveInstPayAI(pendingInstintoAI);return;
   }
 
@@ -5095,7 +5229,8 @@ function om(id){
     rChips('acs-rec','rec');
   }
   if(id==='m-inst') rChips('acs-inst','inst');
-  if(id==='m-ipay') rChips('acs-ipay','ipay');
+  if(id==='m-ipay'){ rChips('acs-ipay','ipay'); rChips('acs-ipaysrc','ipaysrc'); }
+  rChips('acs-ipaysrc','ipaysrc');
   renderTransferOptions();
 }
 function cm(id){
