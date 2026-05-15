@@ -1523,7 +1523,7 @@ body,#sc{background:
   </div>
 
   <div class="seti" onclick="doLogout()" style="margin-top:4px"><div class="setic" style="background:rgba(255,95,126,.1);color:var(--rd)">↪</div><span style="flex:1;color:var(--rd)">Cerrar sesión</span></div>
-  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v10.1 UX Banking PRO · Firebase + OpenAI/Functions · ticket automático</div>
+  <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--mu)">Finanzas v10.2 UX Banking PRO · Firebase + OpenAI/Functions · ticket automático</div>
 </div>
 
 
@@ -1602,7 +1602,7 @@ body,#sc{background:
     <div class="mh"></div>
     <div class="bank-head">
       <div>
-        <div class="bank-kicker">Finanzas v10.1 UX Banking PRO</div>
+        <div class="bank-kicker">Finanzas v10.2 UX Banking PRO</div>
         <div class="mt bank-title">Nueva transacción</div>
       </div>
       <div class="bank-type-pill">
@@ -2285,7 +2285,7 @@ async function deleteReceiptFromStorage(t){
 }
 
 
-// ═══ PRIORIDAD ALTA v9.9: LOGS, BACKUP Y DUPLICADOS ROBUSTOS ═══
+// ═══ PRIORIDAD ALTA v10.2: LOGS, BACKUP Y DUPLICADOS ROBUSTOS ═══
 function hashStringV99(str){
   str=String(str||'');let h=2166136261;
   for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619);}
@@ -2308,7 +2308,7 @@ async function logAppEventV99(level,area,message,details={}){
   try{
     await addDoc(collection(DB,`users/${UID}/appLogs`),{
       level:String(level||'info'),area:String(area||'app'),message:String(message||'').slice(0,400),
-      details:safeSmall(details,900),version:'v10.1 UX Banking PRO',createdAt:new Date().toISOString(),ua:navigator.userAgent||''
+      details:safeSmall(details,900),version:'v10.2 UX Banking PRO',createdAt:new Date().toISOString(),ua:navigator.userAgent||''
     });
   }catch(e){console.warn('No pude guardar log:',e.message||e);}
 }
@@ -2326,7 +2326,7 @@ async function createAutoBackupV99(reason='auto'){
   if(!UID||!DB)return;
   try{
     const payload={
-      version:'v10.1 UX Banking PRO',reason,createdAt:new Date().toISOString(),
+      version:'v10.2 UX Banking PRO',reason,createdAt:new Date().toISOString(),
       counts:{transactions:txs.length,accounts:accs.length,loans:loans.length,recurrent:recs.length,instinto:insts.length,categories:cats.length},
       transactions:txs.slice(-500),accounts:accs,loans,recurrent:recs,instinto:insts,categories:cats
     };
@@ -2349,11 +2349,13 @@ function isDuplicateTransaction(newTx,ignoreId=''){
   const fp=txFingerprint(newTx);
   const stable=txStableIdV99(newTx);
   return txs.some(tx=>{
+    // v10.2: al editar, la validación de duplicados debe ignorar la misma transacción.
+    // Esto permite cambiar ícono, categoría, cuenta, nota, fecha u hora sin bloquear el guardado.
     if(String(tx.id)===String(ignoreId||''))return false;
     if(String(tx.id)===stable)return true;
     if(tx.duplicateKey && tx.duplicateKey===fp)return true;
     if(txFingerprint(tx)===fp)return true;
-    return isNearDuplicateTransaction ? isNearDuplicateTransaction(newTx) : false;
+    return isNearDuplicateTransaction ? isNearDuplicateTransaction(newTx,ignoreId) : false;
   });
 }
 async function saveTx(){
@@ -4546,11 +4548,12 @@ function fallbackAITransactionFromText(text){
     aiWarnings: accObj ? [] : ['falta cuenta/tarjeta']
   };
 }
-function isNearDuplicateTransaction(t){
+function isNearDuplicateTransaction(t,ignoreId=''){
   const amt=(Number(t.amount)||0).toFixed(2);
   const d0=new Date((t.date||today())+'T12:00:00');
   const q=aiNorm(t.desc||t.description||'');
   return txs.some(x=>{
+    if(String(x.id)===String(ignoreId||''))return false;
     if(String(x.type||'expense')!==String(t.type||'expense'))return false;
     if((Number(x.amount)||0).toFixed(2)!==amt)return false;
     const dx=new Date((x.date||today())+'T12:00:00');
