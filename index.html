@@ -1209,13 +1209,12 @@ body,#sc{background:
 }
 
 
-/* v10.4 Metas y Financiamiento Balance PRO — estados claros */
-.goal-state-due{background:rgba(167,139,250,.16)!important;color:#b9a7ff!important;border:1px solid rgba(167,139,250,.35)!important;}
-.goal-state-saved{background:rgba(34,211,160,.14)!important;color:#22d3a0!important;border:1px solid rgba(34,211,160,.35)!important;}
-.goal-state-closed{background:rgba(148,163,184,.14)!important;color:#94a3b8!important;border:1px solid rgba(148,163,184,.30)!important;}
-.goal-balance-positive{color:#22d3a0!important;}
-.goal-balance-negative{color:#ff5f7e!important;}
-.goal-section-note{font-size:11px;color:var(--mu);line-height:1.45;margin:4px 0 12px;}
+/* v10.4 Metas y Financiamiento Balance PRO — claridad visual */
+.inst-status-pill{letter-spacing:.8px}
+.ic.inst-paid .inst-status-pill{background:rgba(34,211,160,.14)!important;border-color:rgba(34,211,160,.32)!important;color:var(--gn)!important;}
+.ic.inst-paid{background:linear-gradient(135deg,rgba(20,48,36,.88),rgba(18,30,30,.92))!important;border:1px solid rgba(34,211,160,.28)!important;}
+.inst-summary-line{font-size:11px!important;}
+.inst-summary-line b{font-weight:950!important;}
 
 </style>
 </head>
@@ -1411,7 +1410,7 @@ body,#sc{background:
     </div>
     <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:8px">Separa lo que falta recuperar de lo que ya está guardado como ahorro o excedente.</div>
   </div>
-  <div style="font-size:11px;color:var(--mu);line-height:1.45;margin:-4px 2px 10px">Separa lo que falta por recuperar, lo que ya está guardado como ahorro/excedente y los registros cerrados sin saldo pendiente.</div>
+  <div style="font-size:11px;color:var(--mu);line-height:1.45;margin:-4px 2px 10px">Los abonos bajan el saldo por cubrir. El ahorro/excedente representa dinero reservado o disponible que no necesariamente es deuda.</div>
   <div class="priority-status"><span class="priority-chip ok">Duplicados PRO</span><span class="priority-chip ok">Backup auto</span><span class="priority-chip ok">Logs activos</span></div>
   <div id="inst-list"></div>
 </div>
@@ -1798,7 +1797,7 @@ body,#sc{background:
     <input type="hidden" id="inst-eid"/>
     <div class="fg"><label class="fl">Concepto / meta / negocio</label><input class="fi" id="inst-desc" placeholder="Instinto, moto, viaje a la playa, proveedor, ahorro negocio…"/></div>
     <div class="fg"><label class="fl">Monto financiado u objetivo ($)</label><input class="fi" id="inst-amt" type="number" inputmode="decimal" placeholder="0.00"/></div>
-    <div class="fg"><label class="fl">Ahorro / excedente disponible ($)</label><input class="fi" id="inst-save" type="number" inputmode="decimal" placeholder="0.00"/><div class="inst-hint">Úsalo cuando el negocio o la meta ya tenga dinero reservado. No se considera deuda.</div></div>
+    <div class="fg"><label class="fl">Ahorro / excedente guardado ($)</label><input class="fi" id="inst-save" type="number" inputmode="decimal" placeholder="0.00"/><div class="inst-hint">Úsalo cuando el negocio o la meta ya tenga dinero reservado. No se considera deuda.</div></div>
     <div class="fg"><label class="fl">Fecha</label><input class="fi" id="inst-dt" type="date"/></div>
     <div class="fg"><label class="fl">Pagado con / cuenta relacionada</label><div class="accpay-wrap"><div class="accpay-top"><div class="accpay-title">Selecciona cuenta o tarjeta</div><div class="accpay-count" id="acs-inst-count">0 disponibles</div></div><div class="accpay-search"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99 1.49-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg><input id="acc-search-inst" placeholder="Buscar cuenta, banco o tarjeta…" oninput="rChips('acs-inst','inst')"/></div><div class="acs pro" id="acs-inst"></div></div><div class="inst-hint">Si capturas monto financiado, se genera automáticamente el movimiento de gasto en la cuenta/tarjeta seleccionada. Si sólo registras ahorro, no afecta tus cuentas hasta que registres un movimiento.</div></div>
     <div class="fg"><label class="fl">Notas</label><textarea class="fta" id="inst-note" rows="2" placeholder="Detalles del registro, origen del ahorro o condiciones…"></textarea></div>
@@ -1964,7 +1963,8 @@ body,#sc{background:
   <button class="danger" onclick="deleteSelectedTxs()">Eliminar</button>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
 
 /* =========================================================
    v10.4 Metas y Financiamiento Balance PRO — Mobile keyboard/layout stabilizer
@@ -2851,7 +2851,7 @@ function checkRecurringAutomation(){
     const total=due.reduce((s,r)=>s+Number(r.amount||0),0);
     new Notification('Finanzas · cargos por confirmar',{body:`Tienes ${due.length} cargo(s) recurrente(s) por confirmar por ${fmt(total)}.`});
   }
-  toast(`Tienes ${due.length} cargo(s) recurrente(s) por recuperar de confirmar`,'w');
+  toast(`Tienes ${due.length} cargo(s) recurrente(s) pendiente(s) de confirmar`,'w');
 }
 
 // ═══ REPORTES ═══
@@ -3892,7 +3892,7 @@ function rInsts(){
   const openPaid=localStorage.getItem('fp_inst_paid_open_v98')==='1';
   const sorted=getSortedArray('insts');
   const renderCard=(it)=>{const p=getInstintoPending(it),paid=getInstintoPaid(it.id),pct=getInstintoProgress(it),acc=accs.find(a=>a.id===it.accountId),done=p<=0,pays=getInstintoPayments(it.id),sv=Number(it.savings)||0,net=sv-p;return`<div class="ic ${done?'inst-paid':'inst-pending'}" onclick="oEditInst('${it.id}')">
-    <div class="inst-status-pill">${done?'Cerrado ✓':'Por recuperar'}</div>
+    <div class="inst-status-pill">${done?'Saldo cerrado ✓':'Por recuperar'}</div>
     <div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1">
       <div style="font-size:9px;color:rgba(200,200,255,.62);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">${it.date||''}${acc?' · '+esc(acc.name):''}${sv?' · Ahorro '+fmt(sv):''}</div>
       <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:4px;color:#f0f0f5">${esc(it.desc)}</div>
@@ -3908,7 +3908,7 @@ function rInsts(){
   const listForMode = mode==='paid_first' ? sorted : sorted.filter(i=>getInstintoPending(i)>0);
   const paidSorted = mode==='paid_first' ? [] : sorted.filter(i=>getInstintoPending(i)<=0);
   el.innerHTML=`
-    <div class="inst-summary-line"><div><b>${pendingItems.length}</b> por recuperar · <b>${paidItems.length}</b> cerrado(s)</div><div>Recuperado: <b>${fmt(totalPaid)}</b></div></div>
+    <div class="inst-summary-line"><div><b>${pendingItems.length}</b> pendiente(s) · <b>${paidItems.length}</b> cerrado(s)</div><div>Recuperado: <b>${fmt(totalPaid)}</b></div></div>
     ${listForMode.length?listForMode.map(renderCard).join(''):`<div class="es" style="padding:18px 10px">No tienes saldos por cubrir activos.</div>`}
     ${paidSorted.length?`<button type="button" class="inst-paid-toggle" data-inst-paid-toggle="1"><div>Cerrados / completados<br><span>${paidSorted.length} movimiento(s) cerrado(s)</span></div><div>${openPaid?'Ocultar':'Ver'} <span class="chev">${openPaid?'▴':'▾'}</span></div></button>${openPaid?paidSorted.map(renderCard).join(''):''}`:''}
   `;
@@ -5215,18 +5215,7 @@ function expExcel(){
     table('Créditos',['Tipo','Nombre','Deuda actual','Monto original','Pago','Plazo','Pagos realizados','Fecha fin'],loans.map(l=>[l.type,l.name,l.balance||0,l.orig||0,l.pay||0,l.tp||'',l.pc||'',l.end||'']))+
     table('Recurrentes',['Nombre','Monto','Frecuencia','Día','Cuenta'],recs.map(r=>[r.name,r.amount,r.freq,r.day,(accs.find(a=>a.id===r.accountId)||{}).name||'']))+
     table('Instinto',['Descripción','Monto','Por recuperar','Fecha','Cuenta'],insts.map(i=>[i.desc,i.amount,getInstintoPending(i),i.date||'',(accs.find(a=>a.id===i.accountId)||{}).name||'']))+
-    `
-<script>
-/* v10.4 helper visual: Metas y Financiamiento Balance PRO */
-window.goalBalanceLabelV104 = function(pending, saved){
-  pending = Number(pending||0); saved = Number(saved||0);
-  if(pending > 0) return {label:'Por recuperar', cls:'goal-state-due', balance: saved - pending};
-  if(saved > 0) return {label:'Saldo a favor', cls:'goal-state-saved', balance: saved};
-  return {label:'Cerrado', cls:'goal-state-closed', balance: 0};
-};
-</script>
-
-</body></html>`;
+    `</body></html>`;
   downloadText(`finanzas_completo_${today()}.xls`,html,'application/vnd.ms-excel;charset=utf-8;');toast('✓ Excel descargado','s');
 }
 function dlTemplate(){
