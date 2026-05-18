@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <meta name="theme-color" content="#0a0a0f"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
-<title>Finanzas · v10.2 Metas y Financiamiento PRO</title>
+<title>Finanzas · Apple Minimal UX</title>
 <link rel="manifest" href="manifest.json?v=7.6"/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
@@ -1208,20 +1208,6 @@ body,#sc{background:
   #sc{content-visibility:auto;}
 }
 
-
-/* Descripciones discretas de módulos · v10.2 Metas y Financiamiento PRO */
-.mod-desc{
-  margin:-12px 0 14px;
-  color:var(--mu);
-  font-size:12px;
-  line-height:1.45;
-  letter-spacing:-.01em;
-  max-width:760px;
-}
-@media(max-width:700px){
-  .mod-desc{font-size:11px;margin:-8px 0 12px;}
-}
-
 </style>
 </head>
 <body>
@@ -1253,7 +1239,6 @@ body,#sc{background:
     <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v10.2 Metas y Financiamiento PRO</div></div>
     <div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-transfer')" style="background:rgba(34,211,160,.12);border-color:rgba(34,211,160,.45);color:var(--gn)">⇄ Transferir</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div>
   </div>
-  <div class="mod-desc">Resumen ejecutivo de tu dinero disponible, gastos, ingresos, próximos pagos y salud financiera.</div>
 
   <div class="home-control">
     <div class="home-hero">
@@ -1328,7 +1313,6 @@ body,#sc{background:
 <!-- MOVIMIENTOS -->
 <div id="s-mov" class="scr">
   <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Movimientos</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v10.2 Metas y Financiamiento PRO</div></div><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div>
-  <div class="mod-desc">Consulta, busca, filtra y administra cada ingreso, gasto, transferencia o abono registrado.</div>
   <div class="pb" id="pb-h">
     <button class="pbt on" data-p="month">Este mes</button>
     <button class="pbt" data-p="week">Semana</button>
@@ -1351,14 +1335,12 @@ body,#sc{background:
     <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Salud financiera</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v10.2 Metas y Financiamiento PRO</div></div>
     <button class="bsm" onclick="enableFinNotifications()">🔔 Alertas</button>
   </div>
-  <div class="mod-desc">Lectura rápida de liquidez, compromisos próximos, riesgos y oportunidades de mejora.</div>
   <div id="smart-panel"></div>
 </div>
 
 <!-- CUENTAS -->
 <div id="s-accounts" class="scr">
   <div class="sh"><div class="st">Cuentas</div><div style="display:flex;gap:6px"><button class="bsm" onclick="om('m-transfer')" style="background:rgba(34,211,160,.12);border-color:rgba(34,211,160,.45);color:var(--gn)">⇄ Transferir</button><button class="bsm" onclick="openOrder('accounts')">Mi orden</button><button class="bsm" onclick="oNewAcc()">+ Nueva</button></div></div>
-  <div class="mod-desc">Administra tus cuentas, efectivo, tarjetas y saldos disponibles en un solo lugar.</div>
   <div class="sortbar"><div class="sortbar-label">Ordenar vista</div><select id="sort-accounts" onchange="setSortMode('accounts',this.value)">
     <option value="manual">Mi orden</option><option value="max_available">Mayor disponible</option><option value="min_available">Menor disponible</option><option value="max_debt">Mayor deuda</option><option value="min_debt">Menor deuda</option><option value="type">Tipo de cuenta</option><option value="name">Nombre A-Z</option>
   </select></div>
@@ -1377,7 +1359,6 @@ body,#sc{background:
 <!-- CRÉDITOS -->
 <div id="s-loans" class="scr">
   <div class="sh"><div class="st">Créditos</div><div style="display:flex;gap:6px"><button class="bsm" onclick="openOrder('loans')">Mi orden</button><button class="bsm" onclick="oNewLoan()">+ Nuevo</button></div></div>
-  <div class="mod-desc">Controla tarjetas, préstamos bancarios, fechas de pago, deuda activa y avance de liquidación.</div>
   <div class="sortbar"><div class="sortbar-label">Ordenar vista</div><select id="sort-loans" onchange="setSortMode('loans',this.value)">
     <option value="manual">Mi orden</option><option value="max_debt">Mayor deuda</option><option value="min_debt">Menor deuda</option><option value="max_payment">Pago más alto</option><option value="next_payment">Próximo pago</option><option value="progress">Mayor avance</option><option value="name">Nombre A-Z</option>
   </select></div>
@@ -1396,7 +1377,6 @@ body,#sc{background:
 <!-- RECURRENTES -->
 <div id="s-rec" class="scr">
   <div class="sh"><div class="st">Recurrentes</div><div style="display:flex;gap:6px"><button class="bsm" onclick="openOrder('recs')">Mi orden</button><button class="bsm" onclick="oNewRec()">+ Nuevo</button></div></div>
-  <div class="mod-desc">Da seguimiento a servicios, suscripciones y cargos que se repiten cada mes.</div>
   <div class="sortbar"><div class="sortbar-label">Ordenar vista</div><select id="sort-recs" onchange="setSortMode('recs',this.value)">
     <option value="manual">Mi orden</option><option value="max_amount">Mayor monto</option><option value="min_amount">Menor monto</option><option value="next_charge">Próximo cobro</option><option value="account">Cuenta asociada</option><option value="name">Nombre A-Z</option>
   </select></div>
@@ -1409,17 +1389,20 @@ body,#sc{background:
 
 <!-- METAS Y FINANCIAMIENTO -->
 <div id="s-inst" class="scr">
-  <div class="sh"><div class="st">Metas y financiamiento</div><div style="display:flex;gap:6px"><button class="bsm" onclick="openOrder('insts')">Mi orden</button><button class="bsm" onclick="oNewInst()">+ Nuevo</button></div></div>
-  <div class="mod-desc">Controla préstamos a negocios, compras a plazos, deudas personales y objetivos de ahorro.</div>
+  <div class="sh"><div><div class="st">Metas y financiamiento</div><div class="home-lite-note">Controla préstamos, compras a plazos, aportaciones a negocios, objetivos de ahorro y excedentes guardados.</div></div><div style="display:flex;gap:6px"><button class="bsm" onclick="openOrder('insts')">Mi orden</button><button class="bsm" onclick="oNewInst()">+ Nuevo</button></div></div>
   <div class="sortbar"><div class="sortbar-label">Ordenar vista</div><select id="sort-insts" onchange="setSortMode('insts',this.value)">
     <option value="pending_first">Pendientes primero</option><option value="paid_first">Liquidados primero</option><option value="max_pending">Mayor saldo pendiente</option><option value="min_pending">Menor saldo pendiente</option><option value="max_original">Mayor importe original</option><option value="min_original">Menor importe original</option><option value="recent">Más recientes</option><option value="oldest">Más antiguos</option><option value="progress">Mayor avance de pago</option><option value="manual">Mi orden</option><option value="name">Nombre A-Z</option>
   </select></div>
   <div style="background:linear-gradient(135deg,#12122a,#1e1e3a);border:1px solid rgba(108,99,255,.2);border-radius:15px;padding:15px;margin-bottom:13px">
     <div style="font-size:9px;color:rgba(200,200,255,.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:2px">Saldo por cubrir</div>
     <div id="inst-tot" style="font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--ac2)">$0</div>
-    <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:4px">Préstamos, compras a plazos y metas con saldo pendiente.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08)">
+      <div><div style="font-size:9px;color:rgba(255,255,255,.42);text-transform:uppercase;letter-spacing:1px">Ahorro / excedente</div><div id="inst-save-tot" style="font-family:'Syne',sans-serif;font-size:17px;font-weight:900;color:var(--gn)">$0</div></div>
+      <div><div style="font-size:9px;color:rgba(255,255,255,.42);text-transform:uppercase;letter-spacing:1px">Balance neto</div><div id="inst-net-tot" style="font-family:'Syne',sans-serif;font-size:17px;font-weight:900;color:var(--ac2)">$0</div></div>
+    </div>
+    <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:8px">Separa lo que falta recuperar de lo que ya está guardado como ahorro o excedente.</div>
   </div>
-  <div style="font-size:11px;color:var(--mu);line-height:1.45;margin:-4px 2px 10px">Los abonos y aportaciones se sincronizan desde Movimientos. Si eliminas un registro, también se actualiza aquí.</div>
+  <div style="font-size:11px;color:var(--mu);line-height:1.45;margin:-4px 2px 10px">Los abonos bajan el saldo por cubrir. El ahorro/excedente representa dinero reservado o disponible que no necesariamente es deuda.</div>
   <div class="priority-status"><span class="priority-chip ok">Duplicados PRO</span><span class="priority-chip ok">Backup auto</span><span class="priority-chip ok">Logs activos</span></div>
   <div id="inst-list"></div>
 </div>
@@ -1430,7 +1413,6 @@ body,#sc{background:
     <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Captura inteligente</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v10.2 Metas y Financiamiento PRO</div></div>
     <button class="bsm" onclick="om('m-aikey')" style="background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)">Estado IA</button>
   </div>
-  <div class="mod-desc">Escanea tickets, dicta movimientos o escribe instrucciones para registrarlos con ayuda de IA.</div>
 
   <div id="ai-key-status" style="font-size:11px;padding:8px 12px;border-radius:9px;background:var(--sf);border:1px solid var(--bd);margin-bottom:10px;cursor:pointer" onclick="om('m-aikey')">IA lista para interpretar tickets, voz y texto</div>
 
@@ -1476,7 +1458,6 @@ body,#sc{background:
 <!-- REPORTES -->
 <div id="s-rep" class="scr">
   <div class="sh"><div class="st">Reportes</div><button class="bsm" onclick="expCSV()">↓ CSV</button></div>
-  <div class="mod-desc">Analiza ingresos, gastos, balance, categorías y flujo financiero por periodo.</div>
   <div class="pb" id="pb-r">
     <button class="pbt on" data-p="month">Mes</button>
     <button class="pbt" data-p="week">Semana</button>
@@ -1501,14 +1482,12 @@ body,#sc{background:
     <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Proyección</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v10.2 Metas y Financiamiento PRO</div></div>
     <button class="bsm" onclick="enableFinNotifications()">🔔 Alertas</button>
   </div>
-  <div class="mod-desc">Anticipa pagos, cargos recurrentes y posibles escenarios de liquidez.</div>
   <div id="pred-panel"></div>
 </div>
 
 <!-- PERFIL -->
 <div id="s-prof" class="scr">
   <div class="sh"><div class="st">Perfil</div></div>
-  <div class="mod-desc">Configura apariencia, archivos, categorías, organización y opciones generales de la app.</div>
   <div style="text-align:center;margin-bottom:16px">
     <div id="pav" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin:0 auto 7px;overflow:hidden"></div>
     <div id="pnm" style="font-family:'Syne',sans-serif;font-size:17px;font-weight:700"></div>
@@ -1555,7 +1534,6 @@ body,#sc{background:
 <!-- MÁS -->
 <div id="s-more" class="scr">
   <div class="sh"><div style="display:flex;align-items:baseline;gap:8px"><div class="st">Más</div><div style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700">v10.2 Metas y Financiamiento PRO</div></div></div>
-  <div class="mod-desc">Accede a módulos adicionales, herramientas de análisis y configuración avanzada.</div>
   <div class="profile-group">
     <div class="profile-group-title">Módulos adicionales</div>
     <div class="profile-actions-grid">
@@ -1809,12 +1787,13 @@ body,#sc{background:
   <div class="ms">
     <div class="mh"></div><div class="mt" id="inst-mtit">Nuevo registro</div>
     <input type="hidden" id="inst-eid"/>
-    <div class="fg"><label class="fl">Concepto / objetivo</label><input class="fi" id="inst-desc" placeholder="Ej. préstamo a negocio, moto, viaje a la playa…"/></div>
-    <div class="fg"><label class="fl">Monto objetivo / financiado ($)</label><input class="fi" id="inst-amt" type="number" inputmode="decimal" placeholder="0.00"/></div>
+    <div class="fg"><label class="fl">Concepto / meta / negocio</label><input class="fi" id="inst-desc" placeholder="Instinto, moto, viaje a la playa, proveedor, ahorro negocio…"/></div>
+    <div class="fg"><label class="fl">Monto financiado u objetivo ($)</label><input class="fi" id="inst-amt" type="number" inputmode="decimal" placeholder="0.00"/></div>
+    <div class="fg"><label class="fl">Ahorro / excedente guardado ($)</label><input class="fi" id="inst-save" type="number" inputmode="decimal" placeholder="0.00"/><div class="inst-hint">Úsalo cuando el negocio o la meta ya tenga dinero reservado. No se considera deuda.</div></div>
     <div class="fg"><label class="fl">Fecha</label><input class="fi" id="inst-dt" type="date"/></div>
-    <div class="fg"><label class="fl">Cuenta origen / asociada</label><div class="accpay-wrap"><div class="accpay-top"><div class="accpay-title">Selecciona cuenta o tarjeta</div><div class="accpay-count" id="acs-inst-count">0 disponibles</div></div><div class="accpay-search"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99 1.49-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg><input id="acc-search-inst" placeholder="Buscar cuenta, banco o tarjeta…" oninput="rChips('acs-inst','inst')"/></div><div class="acs pro" id="acs-inst"></div></div><div class="inst-hint">Al registrar el préstamo, también se genera automáticamente un movimiento de gasto en la cuenta/tarjeta seleccionada.</div></div>
-    <div class="fg"><label class="fl">Notas del pedido</label><textarea class="fta" id="inst-note" rows="2" placeholder="Detalles del pedido…"></textarea></div>
-    <button class="bp" onclick="saveInst()">Registrar préstamo</button>
+    <div class="fg"><label class="fl">Pagado con / cuenta relacionada</label><div class="accpay-wrap"><div class="accpay-top"><div class="accpay-title">Selecciona cuenta o tarjeta</div><div class="accpay-count" id="acs-inst-count">0 disponibles</div></div><div class="accpay-search"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99 1.49-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg><input id="acc-search-inst" placeholder="Buscar cuenta, banco o tarjeta…" oninput="rChips('acs-inst','inst')"/></div><div class="acs pro" id="acs-inst"></div></div><div class="inst-hint">Si capturas monto financiado, se genera automáticamente el movimiento de gasto en la cuenta/tarjeta seleccionada. Si sólo registras ahorro, no afecta tus cuentas hasta que registres un movimiento.</div></div>
+    <div class="fg"><label class="fl">Notas</label><textarea class="fta" id="inst-note" rows="2" placeholder="Detalles del registro, origen del ahorro o condiciones…"></textarea></div>
+    <button class="bp" onclick="saveInst()">Guardar registro</button>
     <button class="bd" id="inst-dbtn" style="display:none" onclick="delInst()">Eliminar</button>
   </div>
 </div>
@@ -1822,10 +1801,10 @@ body,#sc{background:
 <!-- Metas y financiamiento - Abono -->
 <div class="mo" id="m-ipay" onclick="cox(event,'m-ipay')">
   <div class="ms">
-    <div class="mh"></div><div class="mt">Registrar abono de Instinto</div>
+    <div class="mh"></div><div class="mt">Registrar abono / recuperación</div>
     <input type="hidden" id="ip-id"/>
     <div id="ip-sum" class="inst-summary" aria-readonly="true" tabindex="-1"></div>
-    <div class="fg"><label class="fl">Monto recibido ($)</label><input class="fi" id="ip-amt" type="number" inputmode="decimal" placeholder="0.00" autocomplete="off"/></div>
+    <div class="fg"><label class="fl">Monto abonado o recuperado ($)</label><input class="fi" id="ip-amt" type="number" inputmode="decimal" placeholder="0.00" autocomplete="off"/></div>
     <div class="fg"><label class="fl">Fecha del pago</label><input class="fi" id="ip-dt" type="date"/></div>
 
     <div class="fg">
@@ -1838,7 +1817,7 @@ body,#sc{background:
         </div>
         <div class="acs pro" id="acs-ipaysrc"></div>
       </div>
-      <div class="inst-hint">Se descontará automáticamente de esta cuenta para que tu balance no se infle.</div>
+      <div class="inst-hint">Se descontará automáticamente de esta cuenta origen para que tu balance no se infle.</div>
     </div>
 
     <div class="fg">
@@ -3707,8 +3686,8 @@ async function deleteInstintoPaymentTx(txId,instId){
   if(!UID){toast('Inicia sesión primero','e');return;}
   const tx=(txs||[]).find(t=>String(t.id)===String(txId));
   if(!tx){toast('No encontré el abono en Movimientos','e');return;}
-  if(!isInstintoPaymentTx(tx,instId)){toast('Este registro no parece ser abono de Instinto','e');return;}
-  if(!confirm('¿Eliminar este abono de Instinto? También se eliminará de Movimientos y se ajustarán las cuentas origen/destino.'))return;
+  if(!isInstintoPaymentTx(tx,instId)){toast('Este registro no parece ser abono del registro','e');return;}
+  if(!confirm('¿Eliminar este abono del registro? También se eliminará de Movimientos y se ajustarán las cuentas origen/destino.'))return;
   try{
     const pairId=tx.instintoPairId||tx.transferPairId||'';
     const pair=(pairId?(txs||[]).filter(x=>String(x.instintoPairId||x.transferPairId||'')===String(pairId)):[tx]);
@@ -3725,31 +3704,33 @@ async function deleteInstintoPaymentTx(txId,instId){
   }
 }
 async function saveInstsL(){await saveMetaArray('insts','fp_insts3',insts);}
-function oNewInst(){document.getElementById('inst-mtit').textContent='Préstamo a Instinto';document.getElementById('inst-eid').value='';['inst-desc','inst-amt','inst-note'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('inst-dt').value=today();document.getElementById('inst-dbtn').style.display='none';sInstA='';rChips('acs-inst','inst');om('m-inst');}
-function oEditInst(id){const it=insts.find(x=>x.id===id);if(!it)return;document.getElementById('inst-mtit').textContent='Editar préstamo';document.getElementById('inst-eid').value=id;document.getElementById('inst-desc').value=it.desc;document.getElementById('inst-amt').value=it.amount;document.getElementById('inst-dt').value=it.date||today();document.getElementById('inst-note').value=it.note||'';sInstA=it.accountId||'';rChips('acs-inst','inst');document.getElementById('inst-dbtn').style.display='block';om('m-inst');}
+function oNewInst(){document.getElementById('inst-mtit').textContent='Nuevo registro';document.getElementById('inst-eid').value='';['inst-desc','inst-amt','inst-save','inst-note'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('inst-dt').value=today();document.getElementById('inst-dbtn').style.display='none';sInstA='';rChips('acs-inst','inst');om('m-inst');}
+function oEditInst(id){const it=insts.find(x=>x.id===id);if(!it)return;document.getElementById('inst-mtit').textContent='Editar registro';document.getElementById('inst-eid').value=id;document.getElementById('inst-desc').value=it.desc;document.getElementById('inst-amt').value=it.amount||0;document.getElementById('inst-save').value=it.savings||0;document.getElementById('inst-dt').value=it.date||today();document.getElementById('inst-note').value=it.note||'';sInstA=it.accountId||'';rChips('acs-inst','inst');document.getElementById('inst-dbtn').style.display='block';om('m-inst');}
 async function saveInst(){
-  const desc=document.getElementById('inst-desc').value.trim(),amt=parseFloat(document.getElementById('inst-amt').value)||0,date=document.getElementById('inst-dt').value||today(),note=document.getElementById('inst-note').value.trim(),eid=document.getElementById('inst-eid').value;
+  const desc=document.getElementById('inst-desc').value.trim(),amt=parseFloat(document.getElementById('inst-amt').value)||0,savings=parseFloat(document.getElementById('inst-save')?.value)||0,date=document.getElementById('inst-dt').value||today(),note=document.getElementById('inst-note').value.trim(),eid=document.getElementById('inst-eid').value;
   if(!desc){toast('Escribe descripción','e');return;}
-  if(!amt){toast('Ingresa monto','e');return;}
-  if(!sInstA){toast('Selecciona la cuenta o tarjeta con la que pagaste','e');return;}
+  if(!amt&&!savings){toast('Ingresa monto financiado, objetivo o ahorro guardado','e');return;}
+  if(amt&&!sInstA){toast('Selecciona la cuenta o tarjeta relacionada','e');return;}
   const acc=accs.find(a=>a.id===sInstA);
   if(eid){
     const i=insts.findIndex(x=>x.id===eid);
-    if(i>=0)insts[i]={...insts[i],desc,note,accountId:sInstA,date};
+    if(i>=0)insts[i]={...insts[i],desc,amount:amt,savings,note,accountId:sInstA,date};
     await saveInstsL();rInsts();cm('m-inst');toast('✓ Actualizado','s');return;
   }
   const instId='i'+Date.now();
   let txId='';
   try{
+    if(amt>0){
     const cat=cats.find(c=>aiNorm(c.name).includes('compras'))||cats.find(c=>c.id==='shop')||cats.find(c=>c.id==='other')||cats[0];
-    const tx={amount:amt,desc:'Instinto · '+desc,description:'Instinto · '+desc,date,time:nowMexicoTime(),cat:cat?.id||'other',note:[note,'Préstamo a Instinto registrado automáticamente'].filter(Boolean).join(' · '),type:'expense',catIcon:cat?.idata||cat?.icon||'📌',catName:cat?.name||'Otro',accountId:sInstA,accountName:acc?.name||'',accountColor:acc?.color||'',createdAt:new Date().toISOString(),source:'instinto'};
+    const tx={amount:amt,desc:'Instinto · '+desc,description:'Instinto · '+desc,date,time:nowMexicoTime(),cat:cat?.id||'other',note:[note,'Nuevo registro registrado automáticamente'].filter(Boolean).join(' · '),type:'expense',catIcon:cat?.idata||cat?.icon||'📌',catName:cat?.name||'Otro',accountId:sInstA,accountName:acc?.name||'',accountColor:acc?.color||'',createdAt:new Date().toISOString(),source:'instinto'};
     const ref=await addDoc(collection(DB,`users/${UID}/transactions`),tx);
     txId=ref.id;
     applyTxBalance(tx);
     await saveAccsL();
-  }catch(e){console.error('Instinto tx error',e);toast('No pude crear el movimiento: '+(e.message||e),'e');return;}
-  insts.push({id:instId,desc,amount:amt,pending:amt,date,note,accountId:sInstA,txId,payments:[]});
-  await saveInstsL();rInsts();renderAll();cm('m-inst');toast('✓ Préstamo y movimiento registrados','s');
+    }
+  }catch(e){console.error('Metas/financiamiento tx error',e);toast('No pude crear el movimiento: '+(e.message||e),'e');return;}
+  insts.push({id:instId,desc,amount:amt,savings,pending:amt,date,note,accountId:sInstA,txId,payments:[]});
+  await saveInstsL();rInsts();renderAll();cm('m-inst');toast('✓ Registro guardado','s');
 }
 function delInst(){const id=document.getElementById('inst-eid').value;if(!id||!confirm('¿Eliminar?'))return;insts=insts.filter(i=>i.id!==id);saveInstsL();rInsts();cm('m-inst');}
 function oInstPay(id){
@@ -3771,7 +3752,7 @@ function oInstPay(id){
   const original=accs.find(a=>a.id===it.accountId);
   const sum=document.getElementById('ip-sum');
   if(sum){
-    sum.innerHTML=`<div class="inst-summary-title">Resumen del préstamo</div><div class="inst-summary-main">${esc(it.desc||'Préstamo a Instinto')}</div><div class="inst-summary-meta">Total: <b>${fmt(it.amount)}</b> · Pendiente: <b>${fmt(p)}</b>${original?' · Cuenta original: <b>'+esc(original.name)+'</b>':''}</div>`;
+    sum.innerHTML=`<div class="inst-summary-title">Resumen del registro</div><div class="inst-summary-main">${esc(it.desc||'Registro')}</div><div class="inst-summary-meta">Financiado/objetivo: <b>${fmt(it.amount||0)}</b> · Pendiente: <b>${fmt(p)}</b> · Ahorro/excedente: <b>${fmt(it.savings||0)}</b>${original?' · Cuenta relacionada: <b>'+esc(original.name)+'</b>':''}</div>`;
   }
   rChips('acs-ipaysrc','ipaysrc');
   rChips('acs-ipay','ipay');
@@ -3787,7 +3768,7 @@ async function saveInstPay(){
   const note=document.getElementById('ip-note').value.trim();
   const i=insts.findIndex(x=>x.id===id);
 
-  if(i<0){toast('No encontré el préstamo de Instinto','e');return;}
+  if(i<0){toast('No encontré el registro','e');return;}
   if(!amt||amt<=0){toast('Ingresa monto','e');return;}
   if(!sIPSrc){toast('Selecciona de dónde salió el recurso','e');return;}
   if(!sIPA){toast('Selecciona dónde quedó depositado el abono','e');return;}
@@ -3815,12 +3796,12 @@ async function saveInstPay(){
   const baseDesc=inst.desc||'Préstamo';
   const sourceTx={
     amount:paidAmount,
-    desc:'Salida recurso Instinto · '+baseDesc,
-    description:'Salida recurso Instinto · '+baseDesc,
+    desc:'Salida recurso meta/financiamiento · '+baseDesc,
+    description:'Salida recurso meta/financiamiento · '+baseDesc,
     date,
     time:nowMexicoTime(),
     cat:expenseCat.id,
-    note:[`Recurso usado para abono de Instinto hacia ${destAcc.name}`,note].filter(Boolean).join(' · '),
+    note:[`Recurso usado para abono del registro hacia ${destAcc.name}`,note].filter(Boolean).join(' · '),
     type:'expense',
     catIcon:expenseCat.idata||expenseCat.icon||'📌',
     catName:expenseCat.name||'Otro',
@@ -3835,17 +3816,17 @@ async function saveInstPay(){
     source:'instinto_payment_source',
     createdAt:new Date().toISOString(),
     updatedAt:new Date().toISOString(),
-    duplicateKey: txDuplicateKeyV99({amount:paidAmount,desc:'Salida recurso Instinto · '+baseDesc,date,time:nowMexicoTime(),type:'expense',accountId:sIPSrc})
+    duplicateKey: txDuplicateKeyV99({amount:paidAmount,desc:'Salida recurso meta/financiamiento · '+baseDesc,date,time:nowMexicoTime(),type:'expense',accountId:sIPSrc})
   };
 
   const incomeTx={
     amount:paidAmount,
-    desc:'Abono Instinto · '+baseDesc,
-    description:'Abono Instinto · '+baseDesc,
+    desc:'Abono meta/financiamiento · '+baseDesc,
+    description:'Abono meta/financiamiento · '+baseDesc,
     date,
     time:nowMexicoTime(),
     cat:incomeCat.id,
-    note:[`Abono recibido de Instinto desde ${sourceAcc.name}`,note].filter(Boolean).join(' · '),
+    note:[`Abono recibido para meta/financiamiento desde ${sourceAcc.name}`,note].filter(Boolean).join(' · '),
     type:'income',
     catIcon:incomeCat.idata||incomeCat.icon||'💰',
     catName:incomeCat.name||'Ingreso',
@@ -3861,7 +3842,7 @@ async function saveInstPay(){
     source:'instinto_payment_deposit',
     createdAt:new Date().toISOString(),
     updatedAt:new Date().toISOString(),
-    duplicateKey: txDuplicateKeyV99({amount:paidAmount,desc:'Abono Instinto · '+baseDesc,date,time:nowMexicoTime(),type:'income',accountId:sIPA})
+    duplicateKey: txDuplicateKeyV99({amount:paidAmount,desc:'Abono meta/financiamiento · '+baseDesc,date,time:nowMexicoTime(),type:'income',accountId:sIPA})
   };
 
   if(isDuplicateTransaction(incomeTx)){
@@ -3881,7 +3862,7 @@ async function saveInstPay(){
     toast(`✓ Abono balanceado: ${fmt(paidAmount)} de ${sourceAcc.name} a ${destAcc.name}`,'s');
   }catch(e){
     console.error(e);
-    toast('Error al registrar abono Instinto: '+(e.message||e),'e');
+    toast('Error al registrar abono: '+(e.message||e),'e');
   }
 }
 
@@ -3889,24 +3870,28 @@ function rInsts(){
   const el=document.getElementById('inst-list');if(!el)return;
   const totalPending=insts.reduce((s,i)=>s+getInstintoPending(i),0);
   const totalPaid=insts.reduce((s,i)=>s+getInstintoPaid(i.id),0);
+  const totalSavings=insts.reduce((s,i)=>s+(Number(i.savings)||0),0);
+  const net=totalSavings-totalPending;
+  const saveEl=document.getElementById('inst-save-tot'); if(saveEl)saveEl.textContent=fmt(totalSavings);
+  const netEl=document.getElementById('inst-net-tot'); if(netEl){netEl.textContent=(net>=0?'+':'')+fmt(net); netEl.style.color=net>=0?'var(--gn)':'var(--rd)';}
   const paidItems=insts.filter(i=>getInstintoPending(i)<=0);
   const pendingItems=insts.filter(i=>getInstintoPending(i)>0);
   document.getElementById('inst-tot').textContent=fmt(totalPending);
-  if(!insts.length){el.innerHTML=`<div class="es"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg><p>Sin préstamos.<br>Toca "+ Préstamo"</p></div>`;return;}
+  if(!insts.length){el.innerHTML=`<div class="es"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg><p>Sin metas ni financiamientos.<br>Toca "+ Nuevo"</p></div>`;return;}
   syncSortSelect('insts');
   const mode=getSortMode('insts');
   const openPaid=localStorage.getItem('fp_inst_paid_open_v98')==='1';
   const sorted=getSortedArray('insts');
-  const renderCard=(it)=>{const p=getInstintoPending(it),paid=getInstintoPaid(it.id),pct=getInstintoProgress(it),acc=accs.find(a=>a.id===it.accountId),done=p<=0,pays=getInstintoPayments(it.id);return`<div class="ic ${done?'inst-paid':'inst-pending'}" onclick="oEditInst('${it.id}')">
+  const renderCard=(it)=>{const p=getInstintoPending(it),paid=getInstintoPaid(it.id),pct=getInstintoProgress(it),acc=accs.find(a=>a.id===it.accountId),done=p<=0,pays=getInstintoPayments(it.id),sv=Number(it.savings)||0,net=sv-p;return`<div class="ic ${done?'inst-paid':'inst-pending'}" onclick="oEditInst('${it.id}')">
     <div class="inst-status-pill">${done?'Liquidado ✅':'Pendiente'}</div>
     <div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1">
-      <div style="font-size:9px;color:rgba(200,200,255,.62);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">${it.date||''}${acc?' · '+esc(acc.name):''}</div>
+      <div style="font-size:9px;color:rgba(200,200,255,.62);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">${it.date||''}${acc?' · '+esc(acc.name):''}${sv?' · Ahorro '+fmt(sv):''}</div>
       <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:4px;color:#f0f0f5">${esc(it.desc)}</div>
     </div>
     <div style="text-align:right;margin-left:9px"><div style="font-size:9px;color:rgba(255,255,255,.46)">${done?'Liquidado':'Pendiente'}</div>
       <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:900;color:${done?'var(--gn)':'var(--ac2)'}">${fmt(p)}</div></div></div>
     <div class="ip"><div class="ipf" style="width:${pct}%"></div></div>
-    <div style="display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,.55);margin-bottom:${pays.length?'8px':'0'}"><span>Pagado: ${fmt(paid)} de ${fmt(it.amount)}</span><span>${pct}%${done?' ✓':''}</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,.55);margin-bottom:${pays.length?'8px':'0'}"><span>Pagado: ${fmt(paid)} de ${fmt(it.amount||0)} · Ahorro: ${fmt(sv)}</span><span>Balance: ${(net>=0?'+':'')+fmt(net)}</span></div>
     ${pays.length?`<div style="border-top:1px solid rgba(255,255,255,.08);padding-top:8px">${pays.slice(-4).map(py=>`<div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;font-size:10px;color:rgba(255,255,255,.62);margin-bottom:5px"><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${py.date}${py.note?' · '+esc(py.note):''}</span><span style="color:var(--gn);font-weight:900">+${fmt(py.amount)}</span><button type="button" data-instpay-delete="${py.txId}" data-inst-id="${it.id}" onclick="event.stopPropagation();deleteInstintoPaymentTx('${py.txId}','${it.id}')" title="Eliminar abono" style="width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,95,126,.34);background:rgba(255,95,126,.10);color:#ff8fa3;font-size:13px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center">×</button></div>`).join('')}<div style="font-size:9px;color:rgba(255,255,255,.42);margin-top:4px">Los abonos se controlan desde Movimientos. Puedes eliminarlos aquí si capturaste uno por error.</div></div>`:''}
     ${!done?`<button onclick="event.stopPropagation();oInstPay('${it.id}')" style="margin-top:8px;width:100%;padding:8px;border-radius:12px;background:rgba(108,99,255,.18);border:1px solid rgba(108,99,255,.35);color:var(--ac2);font-size:12px;font-weight:800;cursor:pointer">💰 Registrar abono</button>`:''}
   </div>`;};
@@ -3915,8 +3900,8 @@ function rInsts(){
   const paidSorted = mode==='paid_first' ? [] : sorted.filter(i=>getInstintoPending(i)<=0);
   el.innerHTML=`
     <div class="inst-summary-line"><div><b>${pendingItems.length}</b> pendiente(s) · <b>${paidItems.length}</b> liquidado(s)</div><div>Recuperado: <b>${fmt(totalPaid)}</b></div></div>
-    ${listForMode.length?listForMode.map(renderCard).join(''):`<div class="es" style="padding:18px 10px">No tienes pendientes activos de Instinto.</div>`}
-    ${paidSorted.length?`<button type="button" class="inst-paid-toggle" data-inst-paid-toggle="1"><div>Liquidados / recuperados<br><span>${paidSorted.length} movimiento(s) liquidado(s)</span></div><div>${openPaid?'Ocultar':'Ver'} <span class="chev">${openPaid?'▴':'▾'}</span></div></button>${openPaid?paidSorted.map(renderCard).join(''):''}`:''}
+    ${listForMode.length?listForMode.map(renderCard).join(''):`<div class="es" style="padding:18px 10px">No tienes saldos por cubrir activos.</div>`}
+    ${paidSorted.length?`<button type="button" class="inst-paid-toggle" data-inst-paid-toggle="1"><div>Liquidados / completados<br><span>${paidSorted.length} movimiento(s) liquidado(s)</span></div><div>${openPaid?'Ocultar':'Ver'} <span class="chev">${openPaid?'▴':'▾'}</span></div></button>${openPaid?paidSorted.map(renderCard).join(''):''}`:''}
   `;
 }
 function toggleInstintoPaid(){
@@ -4785,7 +4770,7 @@ function renderAIChat(){
   const el=document.getElementById('aichatlog');
   if(!el)return;
   if(!aiChatMessages.length){
-    aiChatMessages=[{role:'b',text:'Hola, soy tu copiloto financiero. Puedes escanear un ticket, dictar o escribir un movimiento. También puedo registrar abonos a Instinto si me dices el monto y a qué préstamo corresponde; usaré la cuenta original del préstamo. Si detecto comercio, monto, categoría y cuenta/tarjeta, lo registro automáticamente y guardo el comprobante.'}];
+    aiChatMessages=[{role:'b',text:'Hola, soy tu copiloto financiero. Puedes escanear un ticket, dictar o escribir un movimiento. También puedo registrar abonos a metas o financiamientos si me dices el monto y a qué registro corresponde; usaré la cuenta original cuando aplique. Si detecto comercio, monto, categoría y cuenta/tarjeta, lo registro automáticamente y guardo el comprobante.'}];
   }
   el.innerHTML=aiChatMessages.map(m=>`<div class="aibub ${m.role==='u'?'u':'b'}">${esc(m.text)}</div>`).join('');
   el.scrollTop=el.scrollHeight;
@@ -4870,14 +4855,14 @@ async function saveInstPayAI(payload){
   const note=String(payload?.note||'Abono interpretado por IA').trim();
   const sourceAccountId=payload?.sourceAccountId || payload?.originAccountId || '';
   const i=insts.findIndex(x=>String(x.id)===String(id));
-  if(i<0){addAIChat('b','No encontré el registro de metas y financiamiento para aplicar el abono.');return false;}
-  if(!amt||amt<=0){addAIChat('b','Me falta el monto del abono. Ejemplo: “Abono / aportación 500 del préstamo de esencias desde efectivo”.');return false;}
+  if(i<0){addAIChat('b','No encontré el registro para aplicar el abono.');return false;}
+  if(!amt||amt<=0){addAIChat('b','Me falta el monto del abono. Ejemplo: “Abono a Instinto 500 del préstamo de esencias desde efectivo”.');return false;}
   const inst=insts[i];
   const destAccountId=payload?.depositAccountId || payload?.accountId || inst.depositAccountId || inst.accountId || '';
   if(!sourceAccountId){
     aiChatStep='waiting_instinto_source';
     pendingInstintoAI={...payload,instintoId:id,amount:amt,date,note};
-    addAIChat('b',`Detecté el abono por ${fmt(amt)}, pero necesito saber de dónde salió el recurso. Escríbeme, por ejemplo: “desde efectivo”, “desde BanBajío” o “desde Plata”.
+    addAIChat('b',`Detecté el abono del registro por ${fmt(amt)}, pero necesito saber de dónde salió el recurso. Escríbeme, por ejemplo: “desde efectivo”, “desde BanBajío” o “desde Plata”.
 ${accountOptionsText()}`);
     return false;
   }
@@ -4906,12 +4891,12 @@ ${accountOptionsText()}`);
   const baseDesc=inst.desc||'Préstamo';
   const sourceTx={
     amount:paidAmount,
-    desc:'Salida recurso Instinto · '+baseDesc,
-    description:'Salida recurso Instinto · '+baseDesc,
+    desc:'Salida recurso meta/financiamiento · '+baseDesc,
+    description:'Salida recurso meta/financiamiento · '+baseDesc,
     date,
     time:nowMexicoTime(),
     cat:expenseCat.id,
-    note:'Recurso usado para abono de Instinto hacia '+destAcc.name+' · IA: '+note,
+    note:'Recurso usado para abono del registro hacia '+destAcc.name+' · IA: '+note,
     type:'expense',
     catIcon:expenseCat.idata||expenseCat.icon||'📌',
     catName:expenseCat.name||'Otro',
@@ -4931,12 +4916,12 @@ ${accountOptionsText()}`);
   };
   const incomeTx={
     amount:paidAmount,
-    desc:'Abono Instinto · '+baseDesc,
-    description:'Abono Instinto · '+baseDesc,
+    desc:'Abono meta/financiamiento · '+baseDesc,
+    description:'Abono meta/financiamiento · '+baseDesc,
     date,
     time:nowMexicoTime(),
     cat:incomeCat.id,
-    note:'Abono recibido de Instinto desde '+sourceAcc.name+' · IA: '+note,
+    note:'Abono recibido para meta/financiamiento desde '+sourceAcc.name+' · IA: '+note,
     type:'income',
     catIcon:incomeCat.idata||incomeCat.icon||'💰',
     catName:incomeCat.name||'Ingreso',
@@ -4972,11 +4957,11 @@ ${accountOptionsText()}`);
 Origen: ${sourceAcc.name} (-${fmt(paidAmount)})
 Destino: ${destAcc.name} (+${fmt(paidAmount)})
 Pendiente restante: ${fmt(getInstintoPending(insts[i]))}`);
-    toast('✓ Abono Instinto balanceado por IA','s');
+    toast('✓ Abono meta/financiamiento balanceado por IA','s');
     return true;
   }catch(e){
     console.error('AI Instinto payment error:',e);
-    addAIChat('b','No pude registrar el abono de Instinto: '+(e.message||e));
+    addAIChat('b','No pude registrar el abono del registro: '+(e.message||e));
     return false;
   }
 }
@@ -4985,7 +4970,7 @@ async function handleInstintoPaymentAI(text){
   const amount=aiAmountFromText(text);
   const loan=findInstintoItemFromText(text);
   const active=activeInstintoItems();
-  if(!active.length){addAIChat('b','No tienes préstamos de Instinto con saldo pendiente para aplicar un abono.');return true;}
+  if(!active.length){addAIChat('b','No tienes registros con saldo pendiente para aplicar un abono.');return true;}
   const sourceAcc=findInstintoSourceAccountFromText(text);
   pendingInstintoAI={amount,date:today(),note:text,instintoId:loan?.id||'',sourceAccountId:sourceAcc?.id||''};
   if(!amount){aiChatStep='waiting_instinto_amount';addAIChat('b','Detecté que quieres registrar un abono a Instinto, pero me falta el monto. Ejemplo: “500”.');return true;}
@@ -5939,7 +5924,7 @@ setTimeout(()=>{
           <span class="apple-intel-pill">Ingresos ${money(inc)}</span>
           <span class="apple-intel-pill">Gastos ${money(exp)}</span>
           <span class="apple-intel-pill">Crédito disp. ${money(credit)}</span>
-          <span class="apple-intel-pill">Metas/financ. pendiente ${money(instPending)}</span>
+          <span class="apple-intel-pill">Instinto pendiente ${money(instPending)}</span>
           ${topDue}
         </div>
       </section>`;
