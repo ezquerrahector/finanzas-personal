@@ -130,7 +130,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .acb{font-size:9px;color:var(--mu);}
 .ac.sel{border-color:var(--ac);background:rgba(108,99,255,.15);}
 
-/* Account selector PRO v11.9.2 Metas, Financiamiento y Bolsas PRO ESTABLE — Nubank/Klar inspired */
+/* Account selector PRO v11.9.3 Recurrentes FIX — Nubank/Klar inspired */
 .accpay-wrap{background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(167,139,250,.045));border:1px solid rgba(108,99,255,.18);border-radius:15px;padding:10px;margin-top:5px;}
 .accpay-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
 .accpay-title{font-size:10px;color:var(--mu);font-weight:800;letter-spacing:.7px;text-transform:uppercase;}
@@ -1510,6 +1510,19 @@ body,#sc{background:
   .goal-type-select-v113{
     grid-template-columns:1fr!important;
   }
+}
+
+
+
+/* FIX RECURRENTES v11.9.3 — botones Confirmado/Omitir siempre reciben clic */
+#rec-list button[data-rec-confirm],
+#rec-list button[data-rec-omit]{
+  position:relative!important;
+  z-index:20!important;
+  pointer-events:auto!important;
+  touch-action:manipulation!important;
+  user-select:none!important;
+  -webkit-user-select:none!important;
 }
 
 </style>
@@ -3819,6 +3832,8 @@ async function confirmRecCharge(id){
   if(!UID){toast('Inicia sesión primero','e');return;}
   const r=recs.find(x=>x.id===id);
   if(!r){toast('No encontré el recurrente','e');return;}
+  const currentInfo=recChargeInfo(r);
+  if(currentInfo.status==='confirmed'){toast('Este cargo ya está confirmado','s');return;}
   const acc=r.accountId?accs.find(a=>a.id===r.accountId):null;
   if(!acc){toast('Este recurrente no tiene cuenta asociada','e');oEditRec(id);return;}
   const cat=cats.find(c=>c.id===r.cat)||cats.find(c=>c.id==='bills')||cats[cats.length-1]||{id:'other',name:'Otro',icon:'📌'};
@@ -3864,6 +3879,8 @@ async function omitRecCharge(id){
   const i=recs.findIndex(x=>x.id===id);
   if(i<0)return;
   const info=recChargeInfo(recs[i]);
+  if(info.status==='confirmed'){toast('Este cargo ya está confirmado; no se puede omitir','w');return;}
+  if(info.status==='omitted'){toast('Este cargo ya estaba omitido','w');return;}
   recs[i].lastOmittedAt=today();
   recs[i].lastOmittedDue=isoFromDate(info.due);
   recs[i].lastChargeStatus='omitted';
@@ -3954,8 +3971,8 @@ function rRecs(){
         </div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px">
-        <button data-rec-confirm="${r.id}" onclick="event.stopPropagation();confirmRecCharge('${r.id}')" ${doneToday?'disabled':''} style="padding:8px;border-radius:9px;background:${doneToday?'rgba(34,211,160,.06)':'rgba(34,211,160,.12)'};border:1px solid rgba(34,211,160,.4);color:var(--gn);font-size:11px;font-weight:900;cursor:${doneToday?'default':'pointer'}">${doneToday?'✓ Confirmado':'✓ Confirmar cargo'}</button>
-        <button data-rec-omit="${r.id}" onclick="event.stopPropagation();omitRecCharge('${r.id}')" ${omittedToday||doneToday?'disabled':''} style="padding:8px;border-radius:9px;background:var(--sf2);border:1px solid var(--bd);color:var(--tx);font-size:11px;font-weight:900;cursor:${omittedToday||doneToday?'default':'pointer'}">${omittedToday?'Omitido':'Omitir'}</button>
+        <button type="button" data-rec-confirm="${r.id}" onclick="event.stopPropagation();confirmRecCharge('${r.id}')" style="padding:8px;border-radius:9px;background:${doneToday?'rgba(34,211,160,.10)':'rgba(34,211,160,.12)'};border:1px solid rgba(34,211,160,.4);color:var(--gn);font-size:11px;font-weight:900;cursor:pointer;pointer-events:auto">${doneToday?'✓ Confirmado':'✓ Confirmar cargo'}</button>
+        <button type="button" data-rec-omit="${r.id}" onclick="event.stopPropagation();omitRecCharge('${r.id}')" style="padding:8px;border-radius:9px;background:var(--sf2);border:1px solid var(--bd);color:var(--tx);font-size:11px;font-weight:900;cursor:pointer;pointer-events:auto">${omittedToday?'Omitido':'Omitir'}</button>
       </div>
     </div>`;
   }).join('');
