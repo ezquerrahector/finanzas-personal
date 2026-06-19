@@ -130,7 +130,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .acb{font-size:9px;color:var(--mu);}
 .ac.sel{border-color:var(--ac);background:rgba(108,99,255,.15);}
 
-/* Account selector PRO v11.9.5 Créditos con confirmación — Nubank/Klar inspired */
+/* Account selector PRO v11.10.0 Créditos click + orden — Nubank/Klar inspired */
 .accpay-wrap{background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(167,139,250,.045));border:1px solid rgba(108,99,255,.18);border-radius:15px;padding:10px;margin-top:5px;}
 .accpay-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
 .accpay-title{font-size:10px;color:var(--mu);font-weight:800;letter-spacing:.7px;text-transform:uppercase;}
@@ -1579,7 +1579,7 @@ body,#sc{background:
 <!-- HOME -->
 <div id="s-home" class="scr on">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v11.9.5 Créditos con confirmación</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v11.10.0 Créditos click + orden</div></div>
     <div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-transfer')" style="background:rgba(34,211,160,.12);border-color:rgba(34,211,160,.45);color:var(--gn)">⇄ Transferir</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div>
   </div>
 
@@ -2369,6 +2369,153 @@ body,#sc{background:
   document.addEventListener('click', ev=>{
     if(ev.target.closest?.('.mo')) setTimeout(setKeyboardState,30);
   }, true);
+})();
+
+
+
+/* =========================================================
+   v11.10.0 FIX DEFINITIVO CRÉDITOS — botones + orden por confirmar
+   Motivo: en <script type="module"> los onclick inline pueden no ver funciones
+   y algunas capas visuales se comen el click. Esto amarra click/pointer/touch
+   al documento y expone funciones en window.
+========================================================= */
+(function(){
+  try{
+    const ver=document.getElementById('app-ver');
+    if(ver) ver.textContent='v11.10.0 Créditos click + orden';
+  }catch(e){}
+
+  function loanPeriodRankV1110(ln){
+    try{
+      const inf=loanPaymentInfo(ln)||{};
+      const st=lStats(ln)||{};
+      if(inf.status==='due') return -1000000 + (st.dpu||0);
+      if(inf.status==='upcoming') return Number(st.dpu==null?999999:st.dpu);
+      if(inf.status==='omitted') return 900000;
+      if(inf.status==='confirmed') return 950000;
+      return 999999;
+    }catch(e){return 999999;}
+  }
+
+  window.handleLoanConfirmV1110=function(ev,id){
+    try{
+      if(ev){ev.preventDefault?.(); ev.stopPropagation?.(); ev.stopImmediatePropagation?.();}
+      id=String(id||'').trim();
+      if(!id){toast?.('No encontré el crédito para confirmar','e');return false;}
+      window.__lastLoanClickV1110={id,type:'confirm',at:Date.now()};
+      if(typeof openLoanPayModal==='function') openLoanPayModal(id);
+      else if(typeof window.openLoanPayModal==='function') window.openLoanPayModal(id);
+      else toast?.('No está disponible la función para confirmar crédito. Recarga la app.','e');
+    }catch(err){console.error('handleLoanConfirmV1110',err); toast?.('No pude abrir la confirmación: '+(err.message||err),'e');}
+    return false;
+  };
+
+  window.handleLoanOmitV1110=function(ev,id){
+    try{
+      if(ev){ev.preventDefault?.(); ev.stopPropagation?.(); ev.stopImmediatePropagation?.();}
+      id=String(id||'').trim();
+      if(!id){toast?.('No encontré el crédito para omitir','e');return false;}
+      window.__lastLoanClickV1110={id,type:'omit',at:Date.now()};
+      if(typeof omitLoanPayment==='function') omitLoanPayment(id);
+      else if(typeof window.omitLoanPayment==='function') window.omitLoanPayment(id);
+      else toast?.('No está disponible la función para omitir crédito. Recarga la app.','e');
+    }catch(err){console.error('handleLoanOmitV1110',err); toast?.('No pude omitir el pago: '+(err.message||err),'e');}
+    return false;
+  };
+
+  // Exposición explícita para botones inline y modal.
+  try{
+    window.openLoanPayModal = openLoanPayModal;
+    window.omitLoanPayment = omitLoanPayment;
+    window.confirmLoanPaymentFromModal = confirmLoanPaymentFromModal;
+    window.setLoanPayMode = setLoanPayMode;
+    window.regLnPay = regLnPay;
+  }catch(e){}
+
+  function handleDelegatedLoanButtonV1110(ev){
+    const btn=ev.target && ev.target.closest ? ev.target.closest('[data-loan-confirm],[data-loan-omit]') : null;
+    if(!btn) return;
+    const now=Date.now();
+    const isConfirm=btn.hasAttribute('data-loan-confirm');
+    const id=btn.getAttribute(isConfirm?'data-loan-confirm':'data-loan-omit');
+    const last=window.__lastLoanClickV1110||{};
+    if(last.id===id && last.type===(isConfirm?'confirm':'omit') && now-last.at<450){
+      ev.preventDefault?.(); ev.stopPropagation?.(); ev.stopImmediatePropagation?.();
+      return false;
+    }
+    return isConfirm ? window.handleLoanConfirmV1110(ev,id) : window.handleLoanOmitV1110(ev,id);
+  }
+  ['pointerdown','mousedown','touchstart','click','pointerup','touchend'].forEach(evt=>{
+    try{document.addEventListener(evt,handleDelegatedLoanButtonV1110,{capture:true,passive:false});}catch(e){document.addEventListener(evt,handleDelegatedLoanButtonV1110,true);}
+  });
+
+  function safeMonthV1110(iso){try{return loanDueMonthText(iso)}catch(e){return 'este período'}}
+  function safeFullV1110(iso){try{return iso?loanDueFullLabel(iso):'—'}catch(e){try{return iso?fmtDS(iso):'—'}catch(_){return '—'}}}
+
+  window.renderLoanCardV1110=function(ln){
+    try{
+      const m=(typeof LM!=='undefined' && LM[ln.type]) ? LM[ln.type] : {e:'💳',l:'Crédito',cls:'lco',c:'#22d3a0'};
+      const s=(typeof lStats==='function') ? lStats(ln) : {};
+      const payInfo=(typeof loanPaymentInfo==='function') ? loanPaymentInfo(ln) : {status:'upcoming',dueIso:s.npd};
+      const dueIso=payInfo.dueIso||s.npd||'';
+      const dueNow=payInfo.status==='due';
+      const payLabel=payInfo.status==='confirmed'?'Confirmado':payInfo.status==='omitted'?'Omitido':dueNow?'Pendiente de confirmar':'Próximo';
+      const pct=Math.max(0,Math.min(100,Number(s.pct)||0));
+      const dpu=(s.dpu===null||s.dpu===undefined)?null:Number(s.dpu);
+      const rightLabel=dueNow?'Confirmar':dpu===null?'—':dpu<=0?'¡Hoy!':dpu+'d';
+      const rightColor=dueNow?'#ff8fa3':(dpu!==null&&dpu<=3?'#ff8fa3':'#22d3a0');
+      const id=String(ln.id||'').replace(/'/g,'');
+      const monthText=safeMonthV1110(dueIso);
+      return `<div class="lc ${m.cls||'lco'}" onclick="oEditLoan('${id}')">
+        <div style="font-size:9px;opacity:.55;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">${m.e||'💳'} ${m.l||'Crédito'}${ln.bank?' · '+esc(ln.bank):''}</div>
+        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:8px;color:#fff">${esc(ln.name||'Crédito')}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px">
+          <div><div style="font-size:9px;opacity:.4;margin-bottom:1px">Saldo</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:${m.c||'#22d3a0'}">${fmt(Number(ln.balance)||0)}</div></div>
+          <div><div style="font-size:9px;opacity:.4;margin-bottom:1px">Pago ${(typeof FL!=='undefined'&&FL[ln.freq])?FL[ln.freq]:''}</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:#f0f0f5">${fmt(Number(ln.pay)||0)}</div></div>
+          <div><div style="font-size:9px;opacity:.4;margin-bottom:1px">Termina</div><div style="font-size:10px;font-weight:600;color:#f0f0f5">${s.ed?fmtDS(s.ed):'—'}</div></div>
+        </div>
+        ${s.tp>0?`<div style="font-size:10px;color:rgba(255,255,255,.45);margin-bottom:4px">Pago ${Number(s.pc)||0} de ${Number(s.tp)||0} · faltan ${Math.max(0,(Number(s.tp)||0)-(Number(s.pc)||0))} (${pct}%)</div>`:''}
+        <div class="lpb"><div class="lpf" style="width:${pct}%;background:${m.c||'#22d3a0'}"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:9px;opacity:.4;margin-bottom:6px"><span>Pagado ${fmt(Number(s.paid)||0)}</span><span>${pct}%</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+          <div style="font-size:10px;color:rgba(255,255,255,.35)">${payLabel}: <span style="font-weight:600;color:#fff">${dueIso?safeFullV1110(dueIso):'—'}</span>${s.ni>0?' · Int: '+fmt(s.ni):''}</div>
+          <div style="font-size:10px;font-weight:700;color:${rightColor}">${rightLabel}</div>
+        </div>
+        ${dueNow?`<div class="loan-pay-actions" onclick="event.stopPropagation();return false;">
+          <button type="button" class="confirm" data-loan-confirm="${id}" onpointerdown="return window.handleLoanConfirmV1110(event,'${id}')" onclick="return window.handleLoanConfirmV1110(event,'${id}')">✓ Ya se cobró ${monthText}</button>
+          <button type="button" class="omit" data-loan-omit="${id}" onpointerdown="return window.handleLoanOmitV1110(event,'${id}')" onclick="return window.handleLoanOmitV1110(event,'${id}')">Omitir por ahora</button>
+        </div><div class="loan-pay-note">Puedes confirmar sin descontar saldo si ya venía rebajado de tu nómina.</div>`:''}
+      </div>`;
+    }catch(e){console.error('renderLoanCardV1110',e,ln);return `<div class="lc lco"><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff">${esc(ln&&ln.name?ln.name:'Crédito')}</div></div>`;}
+  };
+
+  window.rLoans=function(){
+    const el=document.getElementById('loan-list'); if(!el)return;
+    try{ if(typeof syncSortSelect==='function')syncSortSelect('loans'); }catch(e){}
+    const src=(typeof getSortedArray==='function'?getSortedArray('loans'):(loans||[]))||[];
+    const act=src.filter(l=>!l.paid).slice().sort((a,b)=>{
+      const ra=loanPeriodRankV1110(a), rb=loanPeriodRankV1110(b);
+      if(ra!==rb) return ra-rb;
+      try{return (Number(lStats(a).dpu??999999)-Number(lStats(b).dpu??999999));}catch(e){return String(a.name||'').localeCompare(String(b.name||''));}
+    });
+    const lt=document.getElementById('l-tot'), lm=document.getElementById('l-mon'), lc=document.getElementById('l-cnt');
+    if(lt)lt.textContent=fmt(act.reduce((sum,l)=>sum+(Number(l.balance)||0),0));
+    if(lm)lm.textContent=fmt(act.reduce((sum,l)=>{try{return sum+((lStats(l)||{}).me||0)}catch(e){return sum}},0));
+    if(lc)lc.textContent=act.length;
+    let sn=null; act.forEach(l=>{try{const st=lStats(l)||{}; if(st.dpu!==null&&st.dpu!==undefined&&(sn===null||st.dpu<sn))sn=st.dpu;}catch(e){}});
+    const nx=document.getElementById('l-nxt');
+    if(nx){ if(sn!==null){nx.textContent=sn<=0?'¡Hoy!':sn===1?'Mañana':'En '+sn+'d';nx.style.color=sn<=3?'#ff8fa3':sn<=7?'#fbbf24':'#22d3a0';} else nx.textContent='—'; }
+    if(!act.length){el.innerHTML='<div class="es"><p>Sin créditos activos</p></div>';return;}
+    el.innerHTML=act.map(window.renderLoanCardV1110).join('');
+  };
+  try{ rLoans = window.rLoans; }catch(e){}
+
+  // Asegurar estilos de click sobre botones.
+  const st=document.createElement('style');
+  st.textContent=`#loan-list .loan-pay-actions{position:relative!important;z-index:999!important;pointer-events:auto!important}#loan-list .loan-pay-actions button{pointer-events:auto!important;position:relative!important;z-index:1000!important;cursor:pointer!important;user-select:none!important;-webkit-user-select:none!important}`;
+  document.head.appendChild(st);
+
+  setTimeout(()=>{try{window.rLoans()}catch(e){}},300);
 })();
 
 </script>
@@ -6673,133 +6820,6 @@ setTimeout(()=>{
   }
   document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{try{window.renderAppleIntelligence91()}catch(e){}},900));
   setTimeout(()=>{try{window.renderAppleIntelligence91()}catch(e){}},1500);
-})();
-
-
-/* =========================================================
-   FIX CRÉDITOS v11.9.9 — click real + orden por pagos pendientes
-   - Captura click, pointerup, touchend y pointerdown.
-   - Evita que la tarjeta abra edición cuando se pulsa el botón.
-   - Ordena primero créditos con pago pendiente de confirmar, luego los próximos.
-========================================================= */
-(function(){
-  const VERSION_TXT='v11.9.9 Créditos: click y orden por pago';
-  try{
-    const ver=document.getElementById('app-ver');
-    if(ver) ver.textContent=VERSION_TXT;
-  }catch(e){}
-
-  function loanClickTarget(ev){
-    return ev && ev.target && ev.target.closest ? ev.target.closest('[data-loan-confirm],[data-loan-omit]') : null;
-  }
-  function handleLoanPayEvent(ev){
-    const btn=loanClickTarget(ev);
-    if(!btn) return;
-    try{
-      ev.preventDefault && ev.preventDefault();
-      ev.stopPropagation && ev.stopPropagation();
-      ev.stopImmediatePropagation && ev.stopImmediatePropagation();
-    }catch(e){}
-    const id=btn.getAttribute('data-loan-confirm') || btn.getAttribute('data-loan-omit');
-    if(!id) return;
-    if(btn.hasAttribute('data-loan-confirm')){
-      if(typeof openLoanPayModal==='function') openLoanPayModal(id);
-      else if(window.openLoanPayModal) window.openLoanPayModal(id);
-      else if(typeof toast==='function') toast('No pude abrir la confirmación del crédito. Recarga la app.','e');
-      return false;
-    }
-    if(btn.hasAttribute('data-loan-omit')){
-      if(typeof omitLoanPayment==='function') omitLoanPayment(id);
-      else if(window.omitLoanPayment) window.omitLoanPayment(id);
-      else if(typeof toast==='function') toast('No pude omitir el pago. Recarga la app.','e');
-      return false;
-    }
-  }
-  ['pointerdown','pointerup','touchstart','touchend','click'].forEach(evt=>{
-    document.addEventListener(evt,handleLoanPayEvent,true);
-  });
-
-  try{
-    Object.assign(window,{
-      openLoanPayModal: typeof openLoanPayModal==='function'?openLoanPayModal:window.openLoanPayModal,
-      confirmLoanPaymentFromModal: typeof confirmLoanPaymentFromModal==='function'?confirmLoanPaymentFromModal:window.confirmLoanPaymentFromModal,
-      omitLoanPayment: typeof omitLoanPayment==='function'?omitLoanPayment:window.omitLoanPayment,
-      regLnPay: typeof regLnPay==='function'?regLnPay:window.regLnPay,
-      setLoanPayMode: typeof setLoanPayMode==='function'?setLoanPayMode:window.setLoanPayMode
-    });
-  }catch(e){}
-
-  function loanSortPriorityV1199(ln){
-    try{
-      const info=(typeof loanPaymentInfo==='function')?loanPaymentInfo(ln):{status:'upcoming'};
-      const st=(typeof lStats==='function')?lStats(ln):{};
-      if(info.status==='due') return -1000000 + (st.dpu||0);
-      if(info.status==='upcoming') return (st.dpu==null?999999:st.dpu);
-      if(info.status==='omitted') return 700000 + (st.dpu||0);
-      if(info.status==='confirmed') return 800000 + (st.dpu||0);
-      return 900000;
-    }catch(e){return 999999;}
-  }
-  function sortLoansByPaymentV1199(arr){
-    return (arr||[]).slice().sort((a,b)=>{
-      const pa=loanSortPriorityV1199(a), pb=loanSortPriorityV1199(b);
-      if(pa!==pb) return pa-pb;
-      try{
-        const an=(a.name||'').localeCompare(b.name||'','es');
-        return an;
-      }catch(e){return 0;}
-    });
-  }
-
-  if(typeof renderLoanCardV1197==='function'){
-    const oldRender=renderLoanCardV1197;
-    window.renderLoanCardV1199=function(ln){
-      let html=oldRender(ln);
-      // Quita onclick directo de los botones si existiera y refuerza pointer-events.
-      html=html.replace(/<button type="button" class="confirm" data-loan-confirm="([^"]+)"/g,'<button type="button" class="confirm" data-loan-confirm="$1" style="pointer-events:auto;position:relative;z-index:999"');
-      html=html.replace(/<button type="button" class="omit" data-loan-omit="([^"]+)"/g,'<button type="button" class="omit" data-loan-omit="$1" style="pointer-events:auto;position:relative;z-index:999"');
-      return html;
-    };
-  }
-
-  window.rLoans=function(){
-    const el=document.getElementById('loan-list'); if(!el)return;
-    try{ if(typeof syncSortSelect==='function')syncSortSelect('loans'); }catch(e){}
-    let base=[];
-    try{ base=(typeof getSortedArray==='function'?getSortedArray('loans'):(loans||[]))||[]; }catch(e){ base=loans||[]; }
-    let act=base.filter(l=>!l.paid);
-    act=sortLoansByPaymentV1199(act);
-
-    const lt=document.getElementById('l-tot'), lm=document.getElementById('l-mon'), lc=document.getElementById('l-cnt');
-    if(lt)lt.textContent=fmt(act.reduce((sum,l)=>sum+(Number(l.balance)||0),0));
-    if(lm)lm.textContent=fmt(act.reduce((sum,l)=>{try{return sum+((lStats(l)||{}).me||0)}catch(e){return sum}},0));
-    if(lc)lc.textContent=act.length;
-    let sn=null;
-    act.forEach(l=>{try{const st=lStats(l)||{}; if(st.dpu!==null&&st.dpu!==undefined&&(sn===null||st.dpu<sn))sn=st.dpu;}catch(e){}});
-    const nx=document.getElementById('l-nxt');
-    if(nx){
-      if(sn!==null){nx.textContent=sn<=0?'¡Hoy!':sn===1?'Mañana':'En '+sn+'d';nx.style.color=sn<=3?'#ff8fa3':sn<=7?'#fbbf24':'#22d3a0';}
-      else{nx.textContent='—';}
-    }
-    if(!act.length){
-      el.innerHTML=`<div class="es"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg><p>Sin créditos activos</p></div>`;
-      return;
-    }
-    const renderer=window.renderLoanCardV1199 || (typeof renderLoanCardV1197==='function'?renderLoanCardV1197:null) || (typeof renderLoanCardV1197!=='undefined'?renderLoanCardV1197:null);
-    el.innerHTML=act.map(l=>renderer?renderer(l):'').join('');
-    // Asignación directa después de pintar: respaldo adicional.
-    setTimeout(()=>{
-      document.querySelectorAll('#loan-list [data-loan-confirm],#loan-list [data-loan-omit]').forEach(btn=>{
-        btn.style.pointerEvents='auto';
-        btn.style.position='relative';
-        btn.style.zIndex='999';
-        btn.onclick=function(ev){ return handleLoanPayEvent(ev||window.event); };
-      });
-    },0);
-  };
-
-  // Re-renderiza al cargar para aplicar orden y listeners.
-  setTimeout(()=>{try{window.rLoans()}catch(e){console.warn('rLoans v11.9.9',e)}},700);
 })();
 
 window.setInstGoalTypeV113=setInstGoalTypeV113;
