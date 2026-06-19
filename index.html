@@ -6248,6 +6248,74 @@ function updateAIKeyStatus(){
   el.style.color = 'var(--ac)';
 }
 
+
+
+/* FIX CRÉDITOS v11.9.7 — render seguro + mes visible + botones funcionales */
+function safeLoanDueMonthTextV1197(iso){
+  try{ return loanDueMonthText(iso); }catch(e){ return 'este período'; }
+}
+function safeLoanDueFullLabelV1197(iso){
+  try{ return iso ? loanDueFullLabel(iso) : '—'; }catch(e){
+    try{ return iso ? fmtDS(iso) : '—'; }catch(_){ return String(iso||'—'); }
+  }
+}
+function renderLoanCardV1197(ln){
+  try{
+    const m=(typeof LM!=='undefined' && LM[ln.type]) ? LM[ln.type] : {e:'💳',l:'Crédito',cls:'lco',c:'#22d3a0'};
+    const s=(typeof lStats==='function') ? lStats(ln) : {};
+    const payInfo=(typeof loanPaymentInfo==='function') ? loanPaymentInfo(ln) : {status:'upcoming',dueIso:s.npd};
+    const dueIso=payInfo.dueIso||s.npd||'';
+    const dueNow=payInfo.status==='due';
+    const payLabel=payInfo.status==='confirmed'?'Confirmado':payInfo.status==='omitted'?'Omitido':dueNow?'Pendiente de confirmar':'Próximo';
+    const pct=Math.max(0,Math.min(100,Number(s.pct)||0));
+    const dpu=(s.dpu===null||s.dpu===undefined)?null:Number(s.dpu);
+    const rightLabel=dueNow?'Confirmar':dpu===null?'—':dpu<=0?'¡Hoy!':dpu+'d';
+    const rightColor=dueNow?'#ff8fa3':(dpu!==null&&dpu<=3?'#ff8fa3':'#22d3a0');
+    return `<div class="lc ${m.cls||'lco'}" onclick="oEditLoan('${ln.id}')">
+      <div style="font-size:9px;opacity:.55;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">${m.e||'💳'} ${m.l||'Crédito'}${ln.bank?' · '+esc(ln.bank):''}</div>
+      <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:8px;color:#fff">${esc(ln.name||'Crédito')}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px">
+        <div><div style="font-size:9px;opacity:.4;margin-bottom:1px">Saldo</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:${m.c||'#22d3a0'}">${fmt(Number(ln.balance)||0)}</div></div>
+        <div><div style="font-size:9px;opacity:.4;margin-bottom:1px">Pago ${(typeof FL!=='undefined'&&FL[ln.freq])?FL[ln.freq]:''}</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:#f0f0f5">${fmt(Number(ln.pay)||0)}</div></div>
+        <div><div style="font-size:9px;opacity:.4;margin-bottom:1px">Termina</div><div style="font-size:10px;font-weight:600;color:#f0f0f5">${s.ed?fmtDS(s.ed):'—'}</div></div>
+      </div>
+      ${s.tp>0?`<div style="font-size:10px;color:rgba(255,255,255,.45);margin-bottom:4px">Pago ${Number(s.pc)||0} de ${Number(s.tp)||0} · faltan ${Math.max(0,(Number(s.tp)||0)-(Number(s.pc)||0))} (${pct}%)</div>`:''}
+      <div class="lpb"><div class="lpf" style="width:${pct}%;background:${m.c||'#22d3a0'}"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:9px;opacity:.4;margin-bottom:6px"><span>Pagado ${fmt(Number(s.paid)||0)}</span><span>${pct}%</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <div style="font-size:10px;color:rgba(255,255,255,.35)">${payLabel}: <span style="font-weight:600;color:#fff">${dueIso?safeLoanDueFullLabelV1197(dueIso):'—'}</span>${s.ni>0?' · Int: '+fmt(s.ni):''}</div>
+        <div style="font-size:10px;font-weight:700;color:${rightColor}">${rightLabel}</div>
+      </div>
+      ${dueNow?`<div class="loan-pay-actions" onclick="event.stopPropagation()"><button type="button" class="confirm" data-loan-confirm="${ln.id}">✓ Ya se cobró ${safeLoanDueMonthTextV1197(dueIso)}</button><button type="button" class="omit" data-loan-omit="${ln.id}">Omitir por ahora</button></div><div class="loan-pay-note">Puedes confirmar sin descontar saldo si ya venía rebajado de tu nómina.</div>`:''}
+    </div>`;
+  }catch(e){
+    console.error('Error renderizando crédito', ln, e);
+    return `<div class="lc lco"><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff">${esc(ln&&ln.name?ln.name:'Crédito')}</div><div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:6px">No pude pintar el detalle completo, pero el registro sigue guardado.</div></div>`;
+  }
+}
+var rLoansV1197 = function(){
+  const el=document.getElementById('loan-list'); if(!el)return;
+  try{ if(typeof syncSortSelect==='function')syncSortSelect('loans'); }catch(e){}
+  const act=((typeof getSortedArray==='function'?getSortedArray('loans'):(loans||[]))||[]).filter(l=>!l.paid);
+  const lt=document.getElementById('l-tot'), lm=document.getElementById('l-mon'), lc=document.getElementById('l-cnt');
+  if(lt)lt.textContent=fmt(act.reduce((sum,l)=>sum+(Number(l.balance)||0),0));
+  if(lm)lm.textContent=fmt(act.reduce((sum,l)=>{try{return sum+((lStats(l)||{}).me||0)}catch(e){return sum}},0));
+  if(lc)lc.textContent=act.length;
+  let sn=null;
+  act.forEach(l=>{try{const st=lStats(l)||{}; if(st.dpu!==null&&st.dpu!==undefined&&(sn===null||st.dpu<sn))sn=st.dpu;}catch(e){}});
+  const nx=document.getElementById('l-nxt');
+  if(nx){
+    if(sn!==null){nx.textContent=sn<=0?'¡Hoy!':sn===1?'Mañana':'En '+sn+'d';nx.style.color=sn<=3?'#ff8fa3':sn<=7?'#fbbf24':'#22d3a0';}
+    else{nx.textContent='—';}
+  }
+  if(!act.length){
+    el.innerHTML=`<div class="es"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg><p>Sin créditos activos</p></div>`;
+    return;
+  }
+  el.innerHTML=act.map(renderLoanCardV1197).join('');
+};
+rLoans = rLoansV1197;
+
 // Exponer TODAS las funciones al window para que los onclick inline funcionen desde el HTML.
 Object.assign(window, {
   addCat: typeof addCat!=="undefined" ? addCat : undefined,
