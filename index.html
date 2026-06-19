@@ -130,7 +130,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .acb{font-size:9px;color:var(--mu);}
 .ac.sel{border-color:var(--ac);background:rgba(108,99,255,.15);}
 
-/* Account selector PRO v11.9.4 Recurrentes Quincenal Claro — Nubank/Klar inspired */
+/* Account selector PRO v11.9.5 Créditos con confirmación — Nubank/Klar inspired */
 .accpay-wrap{background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(167,139,250,.045));border:1px solid rgba(108,99,255,.18);border-radius:15px;padding:10px;margin-top:5px;}
 .accpay-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
 .accpay-title{font-size:10px;color:var(--mu);font-weight:800;letter-spacing:.7px;text-transform:uppercase;}
@@ -1525,6 +1525,20 @@ body,#sc{background:
   -webkit-user-select:none!important;
 }
 
+
+/* FIX CRÉDITOS v11.9.5 — confirmar pago con o sin descuento de cuenta */
+.loan-pay-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px;position:relative;z-index:25;}
+.loan-pay-actions button{border-radius:14px;border:1px solid rgba(255,255,255,.16);padding:10px 11px;font-size:11px;font-weight:950;cursor:pointer;touch-action:manipulation;color:#fff;}
+.loan-pay-actions .confirm{background:linear-gradient(135deg,rgba(34,211,160,.88),rgba(16,185,129,.74));color:#052e24;}
+.loan-pay-actions .omit{background:rgba(255,255,255,.10);color:#fff;}
+.loan-pay-note{font-size:10px;line-height:1.45;color:rgba(255,255,255,.62);margin-top:8px;}
+.loan-pay-mode{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 12px;}
+.loan-pay-mode button{border-radius:18px;border:1px solid var(--bd);background:var(--sf2);color:var(--tx);padding:12px 10px;font-size:12px;font-weight:950;cursor:pointer;text-align:left;}
+.loan-pay-mode button.on{border-color:rgba(34,211,160,.48);background:rgba(34,211,160,.12);color:var(--gn);box-shadow:0 0 0 2px rgba(34,211,160,.10) inset;}
+.loan-pay-summary{background:linear-gradient(135deg,rgba(124,92,255,.12),rgba(34,211,160,.06));border:1px solid rgba(124,92,255,.22);border-radius:18px;padding:13px;margin-bottom:12px;font-size:12px;line-height:1.55;}
+.loan-pay-summary b{font-family:var(--fh);font-size:18px;}
+@media(max-width:520px){.loan-pay-actions,.loan-pay-mode{grid-template-columns:1fr}.loan-pay-actions button{width:100%;}}
+
 </style>
 </head>
 <body>
@@ -1553,7 +1567,7 @@ body,#sc{background:
 <!-- HOME -->
 <div id="s-home" class="scr on">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v11.9.4 Recurrentes Quincenal Claro</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v11.9.5 Créditos con confirmación</div></div>
     <div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-transfer')" style="background:rgba(34,211,160,.12);border-color:rgba(34,211,160,.45);color:var(--gn)">⇄ Transferir</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div>
   </div>
 
@@ -2058,7 +2072,40 @@ body,#sc{background:
     <button onclick="calcLnP()" style="width:100%;padding:10px;border-radius:9px;background:transparent;border:1px solid var(--ac);color:var(--ac);font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px">🔢 Calcular estimación</button>
     <button class="bp" onclick="saveLoan()">Guardar crédito</button>
     <button class="bd" id="ln-dbtn" style="display:none" onclick="delLoan()">Eliminar crédito</button>
-    <button class="bgs" id="ln-pbtn" style="display:none" onclick="regLnPay()">✓ Registrar pago de este período</button>
+    <button class="bgs" id="ln-pbtn" style="display:none" onclick="openLoanPayModal(document.getElementById('ln-eid').value)">✓ Registrar pago de este período</button>
+  </div>
+</div>
+
+
+<!-- Confirmar pago de crédito -->
+<div class="mo" id="m-loanpay" onclick="cox(event,'m-loanpay')">
+  <div class="ms">
+    <div class="mh"></div><div class="mt">Confirmar pago del crédito</div>
+    <input type="hidden" id="loanpay-id"/>
+    <div class="loan-pay-summary" id="loanpay-summary">Selecciona cómo se aplicó el pago.</div>
+
+    <div class="fg"><label class="fl">¿Descontar del dinero disponible?</label>
+      <div class="loan-pay-mode">
+        <button type="button" id="loanpay-mode-deduct" class="on" onclick="setLoanPayMode(true)">Sí, descontar de una cuenta<small style="display:block;margin-top:4px;color:var(--mu);font-weight:750">Úsalo si todavía no se reflejó en tu saldo.</small></button>
+        <button type="button" id="loanpay-mode-nodeduct" onclick="setLoanPayMode(false)">No, ya venía descontado<small style="display:block;margin-top:4px;color:var(--mu);font-weight:750">Úsalo si tu nómina ya llegó neta.</small></button>
+      </div>
+    </div>
+
+    <div class="fg" id="loanpay-account-wrap">
+      <label class="fl">Cuenta de donde salió</label>
+      <div class="accpay-wrap">
+        <div class="accpay-top"><div class="accpay-title">Selecciona cuenta</div><div class="accpay-count" id="acs-loanpay-count">0 disponibles</div></div>
+        <div class="accpay-search">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99 1.49-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <input id="acc-search-loanpay" placeholder="Buscar cuenta…" oninput="rChips('acs-loanpay','loanpay')"/>
+        </div>
+        <div class="acs pro" id="acs-loanpay"></div>
+      </div>
+      <div style="font-size:10px;color:var(--mu);line-height:1.45;margin-top:6px">Si eliges no descontar, no se moverá tu saldo disponible; solo avanzará el crédito.</div>
+    </div>
+
+    <button class="bp" onclick="confirmLoanPaymentFromModal()">✓ Confirmar pago</button>
+    <button class="bd" onclick="cm('m-loanpay')">Cancelar</button>
   </div>
 </div>
 
@@ -2335,7 +2382,8 @@ let txs=[],accs=[],loans=[],recs=[],insts=[],cats=[];
 let curP='month',repP='month';
 let curT='expense';
 let editingTxId=null;
-let sCat='',sAcc='',sRecA='',sInstA='',sIPA='',sIPSrc='';
+let sCat='',sAcc='',sRecA='',sInstA='',sIPA='',sIPSrc='',sLoanPayA='';
+let loanPayShouldDeduct=true;
 let nAT='debit',nLT='mortgage';
 let dChart=null,bChart=null;
 let voiceP=null,scanP=null,notesP=[];
@@ -3790,7 +3838,126 @@ function saveLoan(){
   saveLoansL();rLoans();cm('m-loan');toast(eid?'✓ Crédito actualizado':'✓ Crédito registrado','s');
 }
 function delLoan(){const id=document.getElementById('ln-eid').value;if(!id||!confirm('¿Eliminar?'))return;loans=loans.filter(l=>l.id!==id);saveLoansL();rLoans();cm('m-loan');}
-function regLnPay(){const id=document.getElementById('ln-eid').value;const i=loans.findIndex(l=>l.id===id);if(i<0)return;const s=lStats(loans[i]);loans[i].balance=Math.max(0,(loans[i].balance||0)-s.np);loans[i].pc=(loans[i].pc||0)+1;if(loans[i].balance<=0)loans[i].paid=true;saveLoansL();rLoans();cm('m-loan');toast(`✓ Pago registrado. Saldo: ${fmt(loans[i].balance)}`,'s');}
+function loanPaymentCandidates(ln,base=new Date()){
+  const n=new Date(base);n.setHours(12,0,0,0);
+  const freq=ln?.freq||'monthly';
+  const day=parseInt(ln?.day)||n.getDate();
+  const y=n.getFullYear(),m=n.getMonth();
+  const out=[];
+  if(freq==='monthly'||freq==='biweekly'){
+    for(let off=-1;off<=2;off++){
+      const d0=new Date(y,m+off,1,12,0,0,0), yy=d0.getFullYear(), mm=d0.getMonth();
+      if(freq==='biweekly') out.push(...biweeklyCandidatesForMonth(yy,mm,day));
+      else out.push(new Date(yy,mm,clampDay(yy,mm,day),12,0,0,0));
+    }
+  }else{
+    const start=ln?.start?localDateFromISO(ln.start):new Date(n);
+    start.setHours(12,0,0,0);
+    for(let k=-8;k<=12;k++){const d=new Date(start);d.setDate(start.getDate()+k*7);d.setHours(12,0,0,0);out.push(d);}
+  }
+  return out.filter((d,i,a)=>a.findIndex(x=>toISODateLocal(x)===toISODateLocal(d))===i).sort((a,b)=>a-b);
+}
+function loanPaymentInfo(ln){
+  const n=new Date();n.setHours(12,0,0,0);
+  const c=loanPaymentCandidates(ln,n);
+  const due=c.filter(d=>d<=n).pop()||null;
+  const next=c.find(d=>d>n)||null;
+  const dueIso=toISODateLocal(due), nextIso=toISODateLocal(next);
+  if(dueIso && ln.lastPaymentDue===dueIso)return{status:'confirmed',due,next,nextIso,dueIso};
+  if(dueIso && ln.lastOmittedDue===dueIso)return{status:'omitted',due,next,nextIso,dueIso};
+  if(due)return{status:'due',due,next,nextIso,dueIso};
+  return{status:'upcoming',due:next,next,nextIso,dueIso:nextIso};
+}
+function loanPaymentToastText(ln){
+  const inf=loanPaymentInfo(ln);
+  if(inf.status==='confirmed')return `Este pago ya fue confirmado para ${fmtDS(inf.dueIso||ln.lastPaymentDue)}`;
+  if(inf.status==='omitted')return `Este pago fue omitido por ahora para ${fmtDS(inf.dueIso||ln.lastOmittedDue)}`;
+  if(inf.status==='upcoming')return `Aún no llega la fecha de pago. Próximo pago: ${fmtDS(inf.dueIso)}`;
+  return '';
+}
+function setLoanPayMode(shouldDeduct){
+  loanPayShouldDeduct=!!shouldDeduct;
+  const a=document.getElementById('loanpay-mode-deduct'),b=document.getElementById('loanpay-mode-nodeduct'),w=document.getElementById('loanpay-account-wrap');
+  if(a)a.classList.toggle('on',loanPayShouldDeduct);
+  if(b)b.classList.toggle('on',!loanPayShouldDeduct);
+  if(w)w.style.display=loanPayShouldDeduct?'block':'none';
+}
+function openLoanPayModal(id){
+  const ln=loans.find(x=>x.id===id);
+  if(!ln){toast('No encontré el crédito','e');return;}
+  const inf=loanPaymentInfo(ln);
+  if(inf.status==='confirmed'||inf.status==='omitted'){toast(loanPaymentToastText(ln),inf.status==='confirmed'?'s':'w');return;}
+  if(inf.status==='upcoming'){
+    const ok=confirm(`${loanPaymentToastText(ln)}. ¿Quieres registrarlo de todos modos?`);
+    if(!ok)return;
+  }
+  const s=lStats(ln), m=LM[ln.type]||LM.other;
+  const sum=document.getElementById('loanpay-summary');
+  if(sum)sum.innerHTML=`<div style="font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">${m.e} ${esc(ln.name)}</div><b>${fmt(ln.pay||0)}</b><div>Capital a crédito: ${fmt(s.np)}${s.ni>0?' · Interés aprox: '+fmt(s.ni):''}</div><div>Periodo: ${fmtDS(inf.dueIso||s.npd)} · Saldo actual: ${fmt(ln.balance||0)}</div>`;
+  document.getElementById('loanpay-id').value=id;
+  sLoanPayA='';
+  setLoanPayMode(true);
+  const search=document.getElementById('acc-search-loanpay');if(search)search.value='';
+  rChips('acs-loanpay','loanpay');
+  om('m-loanpay');
+}
+async function confirmLoanPaymentFromModal(){
+  const id=document.getElementById('loanpay-id')?.value||'';
+  await regLnPay(id,{deduct:loanPayShouldDeduct,accountId:sLoanPayA});
+}
+async function omitLoanPayment(id){
+  const i=loans.findIndex(l=>l.id===id);if(i<0)return;
+  const inf=loanPaymentInfo(loans[i]);
+  if(inf.status==='confirmed'||inf.status==='omitted'){toast(loanPaymentToastText(loans[i]),inf.status==='confirmed'?'s':'w');return;}
+  loans[i].lastOmittedAt=today();
+  loans[i].lastOmittedDue=inf.dueIso||toISODateLocal(new Date());
+  loans[i].lastPaymentStatus='omitted';
+  loans[i].updatedAt=new Date().toISOString();
+  await saveLoansL();
+  rLoans();renderSmartPanel();rPredictions();
+  toast(`Pago de ${loans[i].name} omitido por ahora`,'w');
+}
+async function regLnPay(id,opts={}){
+  id=id||document.getElementById('ln-eid')?.value;
+  const i=loans.findIndex(l=>l.id===id);if(i<0)return;
+  const ln=loans[i];
+  const s=lStats(ln);
+  const inf=loanPaymentInfo(ln);
+  if(inf.status==='confirmed'){toast(loanPaymentToastText(ln),'s');return;}
+  const deduct=!!opts.deduct;
+  const accountId=opts.accountId||'';
+  if(deduct && !accountId){toast('Selecciona la cuenta de donde salió el pago, o marca que ya venía descontado de nómina','e');return;}
+  let acc=accountId?accs.find(a=>a.id===accountId):null;
+  try{
+    if(deduct){
+      if(!acc){toast('No encontré la cuenta seleccionada','e');return;}
+      if(UID){
+        const cat=cats.find(c=>c.id==='loan')||cats.find(c=>c.id==='bills')||cats[cats.length-1]||{id:'other',name:'Crédito',icon:'💳'};
+        const tx={amount:Number(ln.pay)||0,desc:`Pago crédito: ${ln.name}`,description:`Pago crédito: ${ln.name}`,date:today(),time:nowMexicoTime(),cat:cat.id,note:'Pago de crédito confirmado manualmente',type:'expense',catIcon:cat.idata||cat.icon||'💳',catName:cat.name,accountId:acc.id,accountName:acc.name,accountColor:acc.color||'',loanId:ln.id,loanDue:inf.dueIso||'',createdAt:new Date().toISOString(),duplicateKey:'',source:'loan'};
+        tx.duplicateKey=txDuplicateKeyV99(tx);
+        if(!isDuplicateTransaction(tx))await addDoc(collection(DB,`users/${UID}/transactions`),tx);
+      }
+      applyTxBalance({amount:Number(ln.pay)||0,type:'expense',accountId:acc.id});
+      await saveAccsL();
+    }
+    loans[i].balance=Math.max(0,(ln.balance||0)-s.np);
+    loans[i].pc=(ln.pc||0)+1;
+    loans[i].lastPaymentAt=today();
+    loans[i].lastPaymentDue=inf.dueIso||toISODateLocal(new Date());
+    loans[i].lastPaymentStatus=deduct?'deducted':'payroll_or_already_discounted';
+    loans[i].lastPaymentAccountId=deduct?accountId:'';
+    loans[i].updatedAt=new Date().toISOString();
+    if(loans[i].balance<=0)loans[i].paid=true;
+    await saveLoansL();
+    rLoans();rAccs();rHome();renderSmartPanel();rPredictions();
+    cm('m-loanpay');cm('m-loan');
+    toast(deduct?`✓ Pago registrado y descontado. Saldo crédito: ${fmt(loans[i].balance)}`:`✓ Pago registrado sin descontar disponible. Saldo crédito: ${fmt(loans[i].balance)}`,'s');
+  }catch(e){
+    console.error('Error registrando pago de crédito:',e);
+    toast('No pude registrar el pago: '+(e.message||e),'e');
+  }
+}
+
 function rLoans(){
   const el=document.getElementById('loan-list');if(!el)return;
   syncSortSelect('loans');
@@ -3801,21 +3968,22 @@ function rLoans(){
   let sn=null;act.forEach(l=>{const s=lStats(l);if(s.dpu!==null&&(sn===null||s.dpu<sn))sn=s.dpu;});
   const nx=document.getElementById('l-nxt');if(sn!==null){nx.textContent=sn<=0?'¡Hoy!':sn===1?'Mañana':'En '+sn+'d';nx.style.color=sn<=3?'#ff8fa3':sn<=7?'#fbbf24':'#22d3a0';}
   if(!act.length){el.innerHTML=`<div class="es"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg><p>Sin créditos activos</p></div>`;return;}
-  el.innerHTML=act.map(ln=>{const m=LM[ln.type]||LM.other;const s=lStats(ln);return`<div class="lc ${m.cls}" onclick="oEditLoan('${ln.id}')">
+  el.innerHTML=act.map(ln=>{const m=LM[ln.type]||LM.other;const s=lStats(ln);const payInfo=loanPaymentInfo(ln);const dueNow=payInfo.status==='due';const payLabel=payInfo.status==='confirmed'?'Confirmado':payInfo.status==='omitted'?'Omitido':dueNow?'Pendiente de confirmar':'Próximo';return`<div class="lc ${m.cls}" onclick="oEditLoan('${ln.id}')">
     <div style="font-size:9px;opacity:.55;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">${m.e} ${m.l}${ln.bank?' · '+esc(ln.bank):''}</div>
-    <div style="font-family:\'Syne\',sans-serif;font-size:14px;font-weight:700;margin-bottom:8px;color:#fff">${esc(ln.name)}</div>
+    <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:8px;color:#fff">${esc(ln.name)}</div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px">
-      <div><div style="font-size:9px;opacity:.4;margin-bottom:1px">Saldo</div><div style="font-family:\'Syne\',sans-serif;font-size:12px;font-weight:700;color:${m.c}">${fmt(ln.balance||0)}</div></div>
-      <div><div style="font-size:9px;opacity:.4;margin-bottom:1px">Pago ${FL[ln.freq]||''}</div><div style="font-family:\'Syne\',sans-serif;font-size:12px;font-weight:700;color:#f0f0f5">${fmt(ln.pay||0)}</div></div>
+      <div><div style="font-size:9px;opacity:.4;margin-bottom:1px">Saldo</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:${m.c}">${fmt(ln.balance||0)}</div></div>
+      <div><div style="font-size:9px;opacity:.4;margin-bottom:1px">Pago ${FL[ln.freq]||''}</div><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:#f0f0f5">${fmt(ln.pay||0)}</div></div>
       <div><div style="font-size:9px;opacity:.4;margin-bottom:1px">Termina</div><div style="font-size:10px;font-weight:600;color:#f0f0f5">${s.ed?fmtDS(s.ed):'—'}</div></div>
     </div>
     ${s.tp>0?`<div style="font-size:10px;color:rgba(255,255,255,.45);margin-bottom:4px">Pago ${s.pc} de ${s.tp} · faltan ${s.tp-s.pc} (${s.pct}%)</div>`:''}
     <div class="lpb"><div class="lpf" style="width:${s.pct}%;background:${m.c}"></div></div>
     <div style="display:flex;justify-content:space-between;font-size:9px;opacity:.4;margin-bottom:6px"><span>Pagado ${fmt(s.paid)}</span><span>${s.pct}%</span></div>
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <div style="font-size:10px;color:rgba(255,255,255,.35)">Próx: <span style="font-weight:600;color:#fff">${s.npd?fmtDS(s.npd):'—'}</span>${s.ni>0?' · Int: '+fmt(s.ni):''}</div>
-      <div style="font-size:10px;font-weight:700;color:${s.dpu!==null&&s.dpu<=3?'#ff8fa3':'#22d3a0'}">${s.dpu===null?'—':s.dpu<=0?'¡Hoy!':s.dpu+'d'}</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.35)">${payLabel}: <span style="font-weight:600;color:#fff">${(payInfo.dueIso||s.npd)?fmtDS(payInfo.dueIso||s.npd):'—'}</span>${s.ni>0?' · Int: '+fmt(s.ni):''}</div>
+      <div style="font-size:10px;font-weight:700;color:${dueNow?'#ff8fa3':(s.dpu!==null&&s.dpu<=3?'#ff8fa3':'#22d3a0')}">${dueNow?'Confirmar':s.dpu===null?'—':s.dpu<=0?'¡Hoy!':s.dpu+'d'}</div>
     </div>
+    ${dueNow?`<div class="loan-pay-actions" onclick="event.stopPropagation()"><button class="confirm" onclick="openLoanPayModal('${ln.id}')">✓ Ya se cobró</button><button class="omit" onclick="omitLoanPayment('${ln.id}')">Omitir por ahora</button></div><div class="loan-pay-note">Puedes confirmar sin descontar saldo si ya venía rebajado de tu nómina.</div>`:''}
   </div>`;}).join('');
 }
 
@@ -4464,7 +4632,7 @@ function accTypeLabel(a){
 }
 function rChips(cid,ctx){
   const el=document.getElementById(cid);if(!el)return;
-  const sel=ctx==='tx'?sAcc:ctx==='rec'?sRecA:ctx==='inst'?sInstA:(ctx==='ipaysrc'?sIPSrc:sIPA);
+  const sel=ctx==='tx'?sAcc:ctx==='rec'?sRecA:ctx==='inst'?sInstA:(ctx==='ipaysrc'?sIPSrc:(ctx==='loanpay'?sLoanPayA:sIPA));
   if(!accs.length){el.innerHTML='<p style="font-size:10px;color:var(--mu)">Sin cuentas registradas</p>';const c=document.getElementById(cid+'-count');if(c)c.textContent='0 disponibles';return;}
   const q=(document.getElementById('acc-search-'+ctx)?.value||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
   const filtered=accs.filter(a=>{
@@ -4475,7 +4643,7 @@ function rChips(cid,ctx){
   const count=document.getElementById(cid+'-count');
   if(count)count.textContent=filtered.length===1?'1 disponible':`${filtered.length} disponibles`;
   if(!filtered.length){el.innerHTML='<div class="accpay-empty">No se encontraron cuentas</div>';return;}
-  const pro=cid==='acs-tx'||cid==='acs-rec'||cid==='acs-inst'||cid==='acs-ipay'||cid==='acs-ipaysrc';
+  const pro=cid==='acs-tx'||cid==='acs-rec'||cid==='acs-inst'||cid==='acs-ipay'||cid==='acs-ipaysrc'||cid==='acs-loanpay';
   el.innerHTML=filtered.map(a=>{
     const av=getAv(a);
     const ico=a.idata?`<img src="${a.idata}"/>`:a.icon||'💳';
@@ -4509,7 +4677,7 @@ function chipSelectClick(ev,id,cid,ctx){
 }
 function selAcc(id,cid,ctx){
   if(ctx==='tx'){sAcc=id;const a=accs.find(x=>x.id===id);const amt=parseFloat(document.getElementById('ai-amt')?.value||0);const w=document.getElementById('acc-warn');if(a&&amt>0&&curT==='expense'){const av=getAv(a);if(w)w.style.display=av<amt?'block':'none';}else if(w)w.style.display='none';}
-  else if(ctx==='rec')sRecA=id;else if(ctx==='inst')sInstA=id;else if(ctx==='ipay')sIPA=id;else if(ctx==='ipaysrc')sIPSrc=id;
+  else if(ctx==='rec')sRecA=id;else if(ctx==='inst')sInstA=id;else if(ctx==='ipay')sIPA=id;else if(ctx==='ipaysrc')sIPSrc=id;else if(ctx==='loanpay')sLoanPayA=id;
   rChips(cid,ctx);
 }
 
@@ -4520,6 +4688,7 @@ function rAccSel(){
   rChips('acs-inst','inst');
   rChips('acs-ipay','ipay');
   rChips('acs-ipaysrc','ipaysrc');
+  rChips('acs-loanpay','loanpay');
   renderTransferOptions();
 }
 
@@ -6017,6 +6186,7 @@ function om(id){
   if(id==='m-inst') rChips('acs-inst','inst');
   if(id==='m-ipay'){ rChips('acs-ipay','ipay'); rChips('acs-ipaysrc','ipaysrc'); }
   rChips('acs-ipaysrc','ipaysrc');
+  rChips('acs-loanpay','loanpay');
   renderTransferOptions();
 }
 function cm(id){
