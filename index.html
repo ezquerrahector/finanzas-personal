@@ -130,7 +130,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:var(--fb);height:100%
 .acb{font-size:9px;color:var(--mu);}
 .ac.sel{border-color:var(--ac);background:rgba(108,99,255,.15);}
 
-/* Account selector PRO v11.10.1 Créditos pago corregido — Nubank/Klar inspired */
+/* Account selector PRO v11.10.2 Créditos pago corregido — Nubank/Klar inspired */
 .accpay-wrap{background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(167,139,250,.045));border:1px solid rgba(108,99,255,.18);border-radius:15px;padding:10px;margin-top:5px;}
 .accpay-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
 .accpay-title{font-size:10px;color:var(--mu);font-weight:800;letter-spacing:.7px;text-transform:uppercase;}
@@ -1552,7 +1552,7 @@ body,#sc{background:
 }
 
 
-/* FIX CRÉDITOS v11.10.1 — botones realmente clickeables */
+/* FIX CRÉDITOS v11.10.2 — botones realmente clickeables */
 #loan-list .loan-pay-actions,
 #loan-list .loan-pay-actions *,
 #loan-list button[data-loan-confirm],
@@ -1592,7 +1592,7 @@ body,#sc{background:
 <!-- HOME -->
 <div id="s-home" class="scr on">
   <div class="sh">
-    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v11.10.1 Créditos pago corregido</div></div>
+    <div style="display:flex;align-items:baseline;gap:8px"><div class="st">Finanzas</div><div id="app-ver" style="font-size:10px;color:var(--ac);background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);border-radius:6px;padding:2px 7px;font-weight:700;letter-spacing:.5px">v11.10.2 Créditos pago corregido</div></div>
     <div style='display:flex;gap:6px'><button class="bsm" onclick="showDbg()" style='background:rgba(108,99,255,.15);border-color:var(--ac);color:var(--ac)'>🔍</button><button class="bsm" onclick="om('m-transfer')" style="background:rgba(34,211,160,.12);border-color:rgba(34,211,160,.45);color:var(--gn)">⇄ Transferir</button><button class="bsm" onclick="om('m-quickadd')">+ Agregar</button></div>
   </div>
 
@@ -3902,7 +3902,12 @@ function loanPaymentToastText(ln){
 }
 function loanDueMonthText(iso){
   if(!iso)return 'este período';
-  const d=parseLocalDate(iso)||new Date(iso+'T12:00:00');
+  let d=null;
+  try{
+    if(typeof parseLocalDate==='function') d=parseLocalDate(iso);
+  }catch(e){d=null;}
+  if(!d || isNaN(d.getTime())) d=new Date(String(iso).slice(0,10)+'T12:00:00');
+  if(!d || isNaN(d.getTime())) return 'este período';
   const ms=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
   return `pago de ${ms[d.getMonth()]} ${d.getFullYear()}`;
 }
@@ -6691,7 +6696,7 @@ setTimeout(()=>{
 
 
 /* =========================================================
-   v11.10.1 Créditos — FIX VERIFICADO
+   v11.10.2 Créditos — FIX VERIFICADO
    - Expone funciones de pago al window.
    - Botón verde usa onclick inline + delegación por click/pointer/touch.
    - Ordena primero pendientes por confirmar; después próximos pagos.
@@ -6758,7 +6763,7 @@ setTimeout(()=>{
         ${dueNow?`<div class="loan-pay-actions"><button type="button" class="confirm" data-loan-confirm="${id}" onclick="event.preventDefault();event.stopPropagation();window.__loanPayOpen('${id}');return false;">✓ Ya se cobró ${month}</button><button type="button" class="omit" data-loan-omit="${id}" onclick="event.preventDefault();event.stopPropagation();window.__loanPayOmit('${id}');return false;">Omitir por ahora</button></div><div class="loan-pay-note">Puedes confirmar sin descontar saldo si ya venía rebajado de tu nómina.</div>`:''}
       </div>`;
     }catch(e){
-      console.error('Error renderizando crédito v11.10.1', ln, e);
+      console.error('Error renderizando crédito v11.10.2', ln, e);
       return `<div class="lc lco"><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff">${esc(ln&&ln.name?ln.name:'Crédito')}</div><div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:6px">No pude pintar el detalle completo, pero el registro sigue guardado.</div></div>`;
     }
   }
@@ -6811,7 +6816,7 @@ setTimeout(()=>{
   ['click','pointerdown','touchend'].forEach(evt=>document.addEventListener(evt,handleLoanButtons,true));
 
   // Re-render inmediato si el módulo ya estaba visible.
-  setTimeout(()=>{try{window.rLoans();}catch(e){console.warn('rLoans v11.10.1',e)}},300);
+  setTimeout(()=>{try{window.rLoans();}catch(e){console.warn('rLoans v11.10.2',e)}},300);
 })();
 
 window.setInstGoalTypeV113=setInstGoalTypeV113;
