@@ -1539,6 +1539,18 @@ body,#sc{background:
 .loan-pay-summary b{font-family:var(--fh);font-size:18px;}
 @media(max-width:520px){.loan-pay-actions,.loan-pay-mode{grid-template-columns:1fr}.loan-pay-actions button{width:100%;}}
 
+
+/* FIX CRÉDITOS v11.9.6 — botones Ya se cobró/Omitir siempre reciben clic */
+#loan-list button[data-loan-confirm],
+#loan-list button[data-loan-omit]{
+  position:relative!important;
+  z-index:30!important;
+  pointer-events:auto!important;
+  touch-action:manipulation!important;
+  user-select:none!important;
+  -webkit-user-select:none!important;
+}
+
 </style>
 </head>
 <body>
@@ -3875,6 +3887,16 @@ function loanPaymentToastText(ln){
   if(inf.status==='upcoming')return `Aún no llega la fecha de pago. Próximo pago: ${fmtDS(inf.dueIso)}`;
   return '';
 }
+function loanDueMonthText(iso){
+  if(!iso)return 'este período';
+  const d=parseLocalDate(iso)||new Date(iso+'T12:00:00');
+  const ms=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  return `pago de ${ms[d.getMonth()]} ${d.getFullYear()}`;
+}
+function loanDueFullLabel(iso){
+  if(!iso)return 'este período';
+  return `${loanDueMonthText(iso)} · ${fmtDS(iso)}`;
+}
 function setLoanPayMode(shouldDeduct){
   loanPayShouldDeduct=!!shouldDeduct;
   const a=document.getElementById('loanpay-mode-deduct'),b=document.getElementById('loanpay-mode-nodeduct'),w=document.getElementById('loanpay-account-wrap');
@@ -3893,7 +3915,7 @@ function openLoanPayModal(id){
   }
   const s=lStats(ln), m=LM[ln.type]||LM.other;
   const sum=document.getElementById('loanpay-summary');
-  if(sum)sum.innerHTML=`<div style="font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">${m.e} ${esc(ln.name)}</div><b>${fmt(ln.pay||0)}</b><div>Capital a crédito: ${fmt(s.np)}${s.ni>0?' · Interés aprox: '+fmt(s.ni):''}</div><div>Periodo: ${fmtDS(inf.dueIso||s.npd)} · Saldo actual: ${fmt(ln.balance||0)}</div>`;
+  if(sum)sum.innerHTML=`<div style="font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">${m.e} ${esc(ln.name)}</div><b>${fmt(ln.pay||0)}</b><div>Capital a crédito: ${fmt(s.np)}${s.ni>0?' · Interés aprox: '+fmt(s.ni):''}</div><div>Periodo: ${loanDueFullLabel(inf.dueIso||s.npd)} · Saldo actual: ${fmt(ln.balance||0)}</div>`;
   document.getElementById('loanpay-id').value=id;
   sLoanPayA='';
   setLoanPayMode(true);
@@ -3980,11 +4002,29 @@ function rLoans(){
     <div class="lpb"><div class="lpf" style="width:${s.pct}%;background:${m.c}"></div></div>
     <div style="display:flex;justify-content:space-between;font-size:9px;opacity:.4;margin-bottom:6px"><span>Pagado ${fmt(s.paid)}</span><span>${s.pct}%</span></div>
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <div style="font-size:10px;color:rgba(255,255,255,.35)">${payLabel}: <span style="font-weight:600;color:#fff">${(payInfo.dueIso||s.npd)?fmtDS(payInfo.dueIso||s.npd):'—'}</span>${s.ni>0?' · Int: '+fmt(s.ni):''}</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.35)">${payLabel}: <span style="font-weight:600;color:#fff">${(payInfo.dueIso||s.npd)?loanDueFullLabel(payInfo.dueIso||s.npd):'—'}</span>${s.ni>0?' · Int: '+fmt(s.ni):''}</div>
       <div style="font-size:10px;font-weight:700;color:${dueNow?'#ff8fa3':(s.dpu!==null&&s.dpu<=3?'#ff8fa3':'#22d3a0')}">${dueNow?'Confirmar':s.dpu===null?'—':s.dpu<=0?'¡Hoy!':s.dpu+'d'}</div>
     </div>
-    ${dueNow?`<div class="loan-pay-actions" onclick="event.stopPropagation()"><button class="confirm" onclick="openLoanPayModal('${ln.id}')">✓ Ya se cobró</button><button class="omit" onclick="omitLoanPayment('${ln.id}')">Omitir por ahora</button></div><div class="loan-pay-note">Puedes confirmar sin descontar saldo si ya venía rebajado de tu nómina.</div>`:''}
+    ${dueNow?`<div class="loan-pay-actions" onclick="event.stopPropagation()"><button type="button" class="confirm" data-loan-confirm="${ln.id}" onclick="event.preventDefault();event.stopPropagation();openLoanPayModal('${ln.id}')">✓ Ya se cobró ${loanDueMonthText(payInfo.dueIso||s.npd)}</button><button type="button" class="omit" data-loan-omit="${ln.id}" onclick="event.preventDefault();event.stopPropagation();omitLoanPayment('${ln.id}')">Omitir por ahora</button></div><div class="loan-pay-note">Puedes confirmar sin descontar saldo si ya venía rebajado de tu nómina.</div>`:''}
   </div>`;}).join('');
+}
+
+// Fix robusto: botones de pago de crédito, aunque el navegador ignore el inline onclick
+if(!window.__loanPayDelegatedClickV1196){
+  window.__loanPayDelegatedClickV1196=true;
+  document.addEventListener('click',function(ev){
+    const confirmBtn=ev.target.closest&&ev.target.closest('[data-loan-confirm]');
+    if(confirmBtn){
+      ev.preventDefault();ev.stopPropagation();
+      openLoanPayModal(confirmBtn.getAttribute('data-loan-confirm'));
+      return;
+    }
+    const omitBtn=ev.target.closest&&ev.target.closest('[data-loan-omit]');
+    if(omitBtn){
+      ev.preventDefault();ev.stopPropagation();
+      omitLoanPayment(omitBtn.getAttribute('data-loan-omit'));
+    }
+  },true);
 }
 
 // ═══ RECURRENTES ═══
